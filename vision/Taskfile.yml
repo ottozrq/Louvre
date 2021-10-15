@@ -1,0 +1,12 @@
+version: "3"
+
+dotenv:
+  - .env
+
+vars:
+  ci:
+    sh: "[[ -z $CI ]] && echo 0 || echo 1"
+
+tasks:
+  install: PYENV_VERSION=vision pip install -r requirements.test.txt
+  serve: uvicorn app:get_app --factory --reload
