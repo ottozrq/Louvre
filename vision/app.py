@@ -21,6 +21,22 @@ app = FastAPI(
                 "url": "https://vision.ottozhang.com",
             },
         },
+        {
+            "name": "Landmarks",
+            "description": "Landmark-related resources",
+            "externalDocs": {
+                "description": "External Docs",
+                "url": "https://vision.ottozhang.com",
+            },
+        },
+        {
+            "name": "Artworks",
+            "description": "Artwork-related resources",
+            "externalDocs": {
+                "description": "External Docs",
+                "url": "https://vision.ottozhang.com",
+            },
+        },
     ]
 )
 

@@ -1,0 +1,50 @@
+sqlalchemy:
+  echo: false
+vision:
+  debug: true
+  display_traceback: true
+  # cors_urls:
+  #   - "https://cityscope.staging.vianova.dev"
+  #   - "https://vianova-staging-hawkeye-explorer.s3-website.eu-central-1.amazonaws.com"
+  #   - "https://vianova.gitlab.io"
+
+##########
+# TARGETS
+##########
+
+# Targets allow you to override defaults set above
+# You choose a target by setting VISIONFLAGS_TARGET=my_target in your .env file.
+targets:
+  # Base production override
+  # Selects PRODUCTION DB for SF and PG, and Cognito settings for Prod
+  production:
+    vision:
+      host: ""
+    vision:
+      namespace: vision-production
+  # Base staging override
+  # Selects STAGING DB for SF and PG, and Cognito settings for Staging
+  staging:
+    vision_pg:
+      host: localhost
+      username: vision
+      ssl_mode: false
+    vision:
+      namespace: vision-staging
+    user_notifications:
+      lambda_name: vision-staging-user-notifications
+  local:
+    extends: production
+    vision_pg:
+      host: localhost
+      username: vision
+      ssl_mode: false
+    sqlalchemy:
+      echo: 1
+  # Use vision user for staging
+  vision_staging:
+    # Inherits the settings from `staging` target.
+    extends: staging
+  # For running the `scrape` command locally.
+  scrape:
+    extends: production

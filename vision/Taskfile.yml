@@ -10,3 +10,6 @@ vars:
 tasks:
   install: PYENV_VERSION=vision pip install -r requirements.test.txt
   serve: uvicorn app:get_app --factory --reload
+  migrate_generate: PYENV_VERSION=vision alembic revision --autogenerate
+  migrate_apply: PYENV_VERSION=vision  alembic upgrade head
+  migrate_rollback: PYENV_VERSION=vision  alembic downgrade -1
