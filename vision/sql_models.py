@@ -1,20 +1,27 @@
 # import pathlib
 import re
 import uuid
-# from typing import Any, Dict, List
 
+# from typing import Any, Dict, List
+import sqlalchemy
+from geoalchemy2 import Geography, Geometry
+from geoalchemy2.functions import ST_IsValid
 from sqlalchemy import (
     BigInteger,
+    CheckConstraint,
     Column,
     DateTime,
     Enum,
     ForeignKey,
     String,
     func,
+    select,
+    text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import ARRAY, JSON, UUID
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import column_property, relationship
+from sqlalchemy.sql.sqltypes import Float
 
 
 class _tablemixin:
@@ -82,14 +89,68 @@ def name_field(nullable=False):
     )
 
 
-class Landmark(PsqlBase):
+class GeoJsonBase:
+    geometry = Column(
+        Geography(spatial_index=False),
+        CheckConstraint(
+            ST_IsValid(sqlalchemy.literal_column("geometry").cast(Geometry))
+        ),
+        nullable=True,
+    )
+
+    @declared_attr
+    def _geojson(self):
+        return column_property(
+            select(
+                (
+                    text(
+                        """
+        CASE WHEN :include_geometries THEN
+        ST_ASGEOJSON(
+            ST_SIMPLIFY(
+                geometry::GEOMETRY,
+                :geometry_resolution_meters / 111320.0
+            )
+        )::JSON
+        END
+        """
+                    ).bindparams(geometry_resolution_meters=1, include_geometries=True),
+                )
+            )
+        )
+
+    @property
+    def geojson(self):
+        return self._geojson or {"geometry": {"type": "Polygon", "coordinates": []}}
+
+
+class Landmark(GeoJsonBase, PsqlBase):
     landmark_id = seq("landmark_id")
     landmark_name = name_field()
     country = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    cover_image = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    extra = Column(JSON, nullable=True)
+    descriptors = Column(
+        "descriptors",
+        ARRAY(Float),
+        default=[],
+        nullable=True,
+    )
 
 
-class Artwork(PsqlBase):
+class Artwork(GeoJsonBase, PsqlBase):
     artwork_id = seq("artwork_id")
     artwork_name = name_field()
     landmark_id = fk(Landmark.landmark_id)
-    landmark = rel(Landmark, back_populates="artworks")
+    landmark = rel(Landmark)
+    cover_image = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    extra = Column(JSON, nullable=True)
+    descriptors = Column(
+        "descriptors",
+        ARRAY(Float),
+        default=[],
+        nullable=True,
+    )

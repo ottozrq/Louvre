@@ -5,8 +5,9 @@ Revises: ${down_revision | comma,n}
 Create Date: ${create_date}
 
 """
+import geoalchemy2  # noqa
 from alembic import op
-import sqlalchemy as sa
+import sqlalchemy as sa  # noqa
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.

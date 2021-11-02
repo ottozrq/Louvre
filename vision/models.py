@@ -1,7 +1,331 @@
+import uuid
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, Generic, List, Literal, TypeVar, Union
+# from uuid import UUID
+
+import fastapi
+import pycountry
+import pydantic
+import pydantic.generics
+import sqlalchemy
+from fastapi import status
+from fastapi.exceptions import HTTPException
+from pydantic.types import (
+    NonNegativeInt,
+    PositiveInt,
+)
+from sqlalchemy.orm import session
+
+import sql_models as sm
+from pagination import paginate
 from utils.auto_enum import AutoEnum, auto
+from utils.utils import VisionDb
+from utils.visionmodels import AutoLink, Model, Link
 
 
 class OpenAPITag(AutoEnum):
     Artworks = auto()
-    Landmark = auto()
+    Images = auto()
+    Landmarks = auto()
     Root = auto()
+
+
+class Kind(AutoEnum):
+    artwork = auto()
+    collection = auto()
+    landmark = auto()
+
+    @property
+    def plural(self) -> str:
+        return f"{self.value}s"
+
+
+@dataclass
+class EntityQuery:
+    db: VisionDb
+    entity: "Entity"
+
+    @property
+    def query(self):
+        return self.entity.query(self.session)
+
+    @property
+    def session(self):
+        return self.db.session
+
+    def get_or_404(self, primary_key):
+        return self.entity.get_or_404(self.session, primary_key)
+
+    def from_id(self, id_value):
+        return self.entity.from_db(self.get_or_404(id_value))
+
+
+class PrimaryKey(int):
+    pass
+
+
+class Entity(Model):
+    self_link: Link
+    kind: Kind
+
+    @classmethod
+    def db(cls, db):
+        return EntityQuery(db, cls)
+
+    @classmethod
+    def query(cls, session: session.Session):
+        return session.query(cls.Config.db_model)
+
+    @classmethod
+    def _get(cls, session: session.Session, primary_key):
+        return cls.query(session).get(cls._to_id(primary_key))
+
+    @classmethod
+    def get_or_404(cls, session, primary_key):
+        record = cls._get(session, primary_key)
+        if not record:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Record not found")
+        return record
+
+    @classmethod
+    def from_db_list(cls, xs: List[sm.PsqlBase], **forward_args):
+        return [cls.from_db(x, **forward_args) for x in xs]
+
+    @classmethod
+    def _to_id(cls, x):
+        if isinstance(x, uuid.UUID):
+            return str(x)
+        return x
+
+    @classmethod
+    def link(cls, item, field=None):
+        if item is None:
+            return None
+        if isinstance(item, Path):
+            return item
+        instance_id = (
+            item
+            if type(item) in {str, int, float, uuid.UUID}
+            else getattr(item, field)
+            if field is not None
+            else cls._extract_id(item)
+        )
+        return Path(f"/{cls.Config.kind.value}s") / str(instance_id)
+
+    @classmethod
+    def _extract_id(cls, item):
+        return next(
+            getattr(item, field) for field in cls._id_fields() if hasattr(item, field)
+        )
+
+    @classmethod
+    def _id_fields(cls):
+        return (f"{cls.Config.kind}_id",)
+
+    @classmethod
+    def links(
+        cls,
+        instance: Union[fastapi.Request, sm.PsqlBase],
+        *args,
+        self_link: str = None,
+    ):
+        kind = cls.Config.kind
+        if not self_link and instance:
+            if isinstance(instance, fastapi.Request):
+                self_link = instance.url.path.rstrip("/")
+            else:
+                instance_id = cls._extract_id(instance)
+                self_link = f"/{kind.plural}/{instance_id}"
+        return dict(
+            self_link=self_link,
+            kind=kind,
+            **{
+                arg: f"{self_link}/{arg}"
+                for arg in {
+                    x
+                    for y in [
+                        args,
+                        {k for k, v in cls.__fields__.items() if v.type_ is AutoLink},
+                    ]
+                    for x in y
+                }
+            },
+        )
+
+
+@dataclass
+class Pagination:
+    request: fastapi.Request
+    page_size: PositiveInt
+    page_token: str
+
+
+EntityT = TypeVar("EntityT", Entity, Entity)
+
+
+class EntityCollection(pydantic.generics.GenericModel, Entity, Generic[EntityT]):
+    page_token: str
+    next_page_token: str
+    page_size: PositiveInt
+    total_size: NonNegativeInt
+    total_pages: NonNegativeInt
+    contents: List[EntityT]
+
+    class Config:
+        kind = Kind.collection
+
+    @classmethod
+    def from_list(cls, values: List[sm.PsqlBase], request_: fastapi.Request):
+        class FakePagination:
+            request = request_
+
+        return cls.paginate(FakePagination, values)
+
+    @classmethod
+    def collection_model(cls) -> Model:
+        return cls.__fields__["contents"].type_
+
+    @classmethod
+    def paginate(
+        cls,
+        pagination: Pagination,
+        query: Union[List[sm.PsqlBase], sqlalchemy.orm.Query],
+        **from_db_list_kwargs,
+    ):
+        if isinstance(query, list):
+            return cls(
+                contents=cls.collection_model().from_db_list(
+                    query, **from_db_list_kwargs
+                ),
+                page_token=str(1),
+                next_page_token="",
+                page_size=max(1, len(query)),
+                total_size=len(query),
+                total_pages=1,
+                **cls.links(pagination.request),
+            )
+        p = paginate(
+            query,
+            max_per_page=pagination.page_size,
+            per_page=pagination.page_size,
+            page=(pagination.page_token and int(pagination.page_token)) or 1,
+        )
+        return cls(
+            contents=cls.collection_model().from_db_list(
+                p.items, **from_db_list_kwargs
+            ),
+            page_token=str(p.page),
+            next_page_token=str(p.next_num),
+            page_size=max(1, p.per_page),
+            total_size=p.total,
+            total_pages=p.pages,
+            **cls.links(pagination.request),
+        )
+
+
+class GeometryType(AutoEnum):
+    Point = auto()
+    LineString = auto()
+    Polygon = auto()
+    MultiPolygon = auto()
+    GeometryCollection = auto()
+
+
+class GeometryElement(Model):
+    coordinates: List
+    type: GeometryType
+
+
+class GeometryCollection(Model):
+    type: GeometryType
+    geometries: List[GeometryElement]
+
+
+Geometry = Union[GeometryElement, GeometryCollection]
+
+
+class GeoJSONFeature(Model):
+    type: Literal["Feature"] = "Feature"
+    properties: Dict[str, Any]
+    geometry: Geometry
+
+
+Country = AutoEnum("Country", [country.name for country in pycountry.countries])
+
+
+class ItemPatchBase(Model):
+    cover_image: str = None
+    description: str = None
+    extra: Dict[str, Any] = None
+    geometry: Geometry = None
+
+
+class LandmarkPatch(ItemPatchBase):
+    landmark_name: str = None
+
+
+class LandmarkCreate(LandmarkPatch):
+    landmark_name: str
+    country: Country
+    city: str
+
+
+class Landmark(Entity, LandmarkCreate):
+    landmark_id: PrimaryKey
+
+    class Config:
+        db_model = sm.Landmark
+        kind = Kind.landmark
+
+    @classmethod
+    def from_db(cls, landmark: sm.Landmark):
+        return cls(
+            landmark_id=landmark.landmark_id,
+            landmark_name=landmark.landmark_name,
+            country=landmark.country,
+            city=landmark.city,
+            cover_image=landmark.cover_image,
+            description=landmark.description,
+            extra=landmark.extra,
+            geometry=landmark.geojson,
+            **cls.links(landmark),
+        )
+
+
+class LandmarkCollection(EntityCollection[Landmark]):
+    pass
+
+
+class ArtworkPatch(ItemPatchBase):
+    artwork_name: str = None
+
+
+class ArtworkCreate(ArtworkPatch):
+    artwork_name: str
+
+
+class Artwork(Entity, ArtworkCreate):
+    artwork_id: PrimaryKey
+    landmark: Link
+
+    class Config:
+        db_model = sm.Artwork
+        kind = Kind.artwork
+
+    @classmethod
+    def from_db(cls, artwork: sm.Artwork):
+        return cls(
+            artwork_id=artwork.artwork_id,
+            landmark=Landmark.link(artwork.landmark),
+            artwork_name=artwork.artwork_name,
+            cover_image=artwork.cover_image,
+            description=artwork.description,
+            extra=artwork.extra,
+            geometry=artwork.geojson,
+            **cls.links(artwork),
+        )
+
+
+class ArtworkCollection(EntityCollection[Artwork]):
+    pass

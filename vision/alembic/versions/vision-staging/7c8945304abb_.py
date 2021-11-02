@@ -1,16 +1,17 @@
 """empty message
 
-Revision ID: e8490095e2e0
-Revises:
-Create Date: 2021-10-21 23:08:43.636863
+Revision ID: 7c8945304abb
+Revises: 
+Create Date: 2021-11-02 00:46:19.527562
 
 """
+import geoalchemy2  # noqa
 from alembic import op
-import sqlalchemy as sa
-
+import sqlalchemy as sa  # noqa
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "e8490095e2e0"
+revision = "7c8945304abb"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,10 +28,26 @@ def upgrade():
             nullable=False,
         ),
         sa.Column(
+            "geometry",
+            geoalchemy2.types.Geography(
+                spatial_index=False,
+                from_text="ST_GeogFromText",
+                name="geography",
+            ),
+            nullable=True,
+        ),
+        sa.Column(
             "landmark_id", sa.BigInteger(), autoincrement=True, nullable=False
         ),
         sa.Column("landmark_name", sa.String(), nullable=False),
         sa.Column("country", sa.String(), nullable=True),
+        sa.Column("city", sa.String(), nullable=True),
+        sa.Column("cover_image", sa.String(), nullable=True),
+        sa.Column("description", sa.String(), nullable=True),
+        sa.Column(
+            "extra", postgresql.JSON(astext_type=sa.Text()), nullable=True
+        ),
+        sa.Column("descriptors", postgresql.ARRAY(sa.Float()), nullable=True),
         sa.PrimaryKeyConstraint("landmark_id"),
         sa.UniqueConstraint("landmark_id"),
         schema="vision_sources",
@@ -44,10 +61,25 @@ def upgrade():
             nullable=False,
         ),
         sa.Column(
+            "geometry",
+            geoalchemy2.types.Geography(
+                spatial_index=False,
+                from_text="ST_GeogFromText",
+                name="geography",
+            ),
+            nullable=True,
+        ),
+        sa.Column(
             "artwork_id", sa.BigInteger(), autoincrement=True, nullable=False
         ),
         sa.Column("artwork_name", sa.String(), nullable=False),
         sa.Column("landmark_id", sa.BigInteger(), nullable=False),
+        sa.Column("cover_image", sa.String(), nullable=True),
+        sa.Column("description", sa.String(), nullable=True),
+        sa.Column(
+            "extra", postgresql.JSON(astext_type=sa.Text()), nullable=True
+        ),
+        sa.Column("descriptors", postgresql.ARRAY(sa.Float()), nullable=True),
         sa.ForeignKeyConstraint(
             ["landmark_id"],
             ["vision_sources.landmark.landmark_id"],
