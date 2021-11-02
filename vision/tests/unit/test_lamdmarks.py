@@ -1,0 +1,69 @@
+from tests import ApiClient, m, f, status
+
+
+def test_get_landmarks_landmark_id(cl: ApiClient):
+    landmark_id = cl.create(f.Landmark).landmark_id
+    assert (
+        landmark_id
+        == m.Landmark.from_response(cl(f"/landmarks/{landmark_id}")).landmark_id
+    )
+
+
+def test_get_landmarks(cl: ApiClient):
+    landmark_id = cl.create(f.Landmark).landmark_id
+    assert m.LandmarkCollection.from_response(cl("/landmarks")).contents == [
+        m.Landmark(
+            cover_image="louvre.jpg",
+            description="This is Louvre",
+            extra={},
+            geometry=m.GeometryElement(coordinates=[1, 1], type=m.GeometryType.Point),
+            landmark_name="Louvre",
+            country=m.Country.France,
+            city="Paris",
+            self_link=f"/landmarks/{landmark_id}",
+            kind=m.Kind.landmark,
+            landmark_id=landmark_id,
+        )
+    ]
+
+
+def test_post_landmarks(cl: ApiClient, mocker):
+    mocker.patch("utils.algo.get_image_descriptor")
+    landmark = m.Landmark.from_response(
+        cl(
+            "/landmarks",
+            method="POST",
+            data=m.LandmarkCreate(
+                landmark_name="Louvre",
+                country=m.Country.France,
+                city="Paris",
+                cover_image="louvre.jpg",
+                description="This is Louvre",
+                extra={},
+                geometry=m.GeometryElement(
+                    coordinates=[1, 1], type=m.GeometryType.Point
+                ),
+            ),
+        )
+    )
+    assert landmark == m.Landmark(
+        cover_image="louvre.jpg",
+        description="This is Louvre",
+        extra={},
+        geometry=m.GeometryElement(coordinates=[1, 1], type=m.GeometryType.Point),
+        landmark_name="Louvre",
+        country=m.Country.France,
+        city="Paris",
+        self_link=f"/landmarks/{landmark.landmark_id}",
+        kind=m.Kind.landmark,
+        landmark_id=landmark.landmark_id,
+    )
+
+
+def test_delete_landmark_landmark_id(cl: ApiClient):
+    landmark_id = cl.create(f.Landmark).landmark_id
+    cl(
+        f"/landmarks/{landmark_id}",
+        method="DELETE",
+        status=status.HTTP_204_NO_CONTENT,
+    )

@@ -8,7 +8,7 @@ from utils.utils import VisionDb
 
 
 @app.get(
-    "/landmarks/{landmark_id}/artworks/",
+    "/landmarks/{landmark_id}/artworks",
     response_model=m.ArtworkCollection,
     tags=[TAG.Artworks],
     include_in_schema=schema_show_all,
@@ -40,7 +40,7 @@ def get_artworks_artwork_id(
 
 
 @app.post(
-    "/landmarks/{landmark_id}/artworks/",
+    "/landmarks/{landmark_id}/artworks",
     response_model=m.Artwork,
     tags=[TAG.Artworks],
     include_in_schema=schema_show_all,
@@ -65,7 +65,7 @@ def post_artworks(
 
 
 @app.delete(
-    "/artworks/{artwork_id}/",
+    "/artworks/{artwork_id}",
     response_model=Dict,
     tags=[TAG.Artworks],
     include_in_schema=schema_show_all,

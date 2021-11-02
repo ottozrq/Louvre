@@ -2,6 +2,10 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
+from utils.utils import (
+    get_postgres_sessionmaker,
+)
+
 app = FastAPI(
     title="Hawkeye",
     version=(Path(__file__).parent / "VERSION.txt").read_text(),
@@ -59,5 +63,6 @@ def get_app(*_, url=None, **__):
     if _global_app:
         return _global_app
     _global_app = app
+    _global_app.postgres_sessionmaker = get_postgres_sessionmaker(init_url=url)
 
     return _global_app

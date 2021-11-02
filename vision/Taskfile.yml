@@ -13,3 +13,20 @@ tasks:
   migrate_generate: PYENV_VERSION=vision alembic revision --autogenerate
   migrate_apply: PYENV_VERSION=vision  alembic upgrade head
   migrate_rollback: PYENV_VERSION=vision  alembic downgrade -1
+  test: |
+    PYENV_VERSION=vision \
+    VIAFLAGS_USE_ENV_SETTINGS={{.ci}} \
+    VIAFLAGS_FILE=flags.test.yml \
+    VIAFLAGS_CONTENTS_JSON='' \
+    VIAFLAGS_CONTENTS='' \
+    NAMESPACE='vianova-test' \
+    python3.8 -m py.test \
+    -vvv -x -s \
+    -W ignore::DeprecationWarning \
+    -W ignore::sqlalchemy.exc.SAWarning \
+    --cov . \
+    --cov-report html:cov_html \
+    --junit-xml test-out/report.xml \
+    --ff \
+    {{.args}} \
+    tests/unit/{{.filename}}
