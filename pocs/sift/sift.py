@@ -17,7 +17,9 @@ keypoints_2, descriptors_2 = sift.detectAndCompute(img2,None)
 
 print(len(keypoints_1), len(keypoints_2))
 print(len(descriptors_1), len(descriptors_2))
-print(descriptors_1, descriptors_2)
+
+list_1 = descriptors_1.tolist()
+list_2 = descriptors_2.tolist()
 
 bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
 
