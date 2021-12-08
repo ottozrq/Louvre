@@ -59,6 +59,38 @@ def test_post_artworks(cl: ApiClient, mocker):
     )
 
 
+def test_patch_artworks_artwork_id(cl: ApiClient, mocker):
+    landmark = cl.create(f.Landmark)
+    artwork_id = cl.create(f.Artwork, landmark=landmark).artwork_id
+    mocker.patch("utils.algo.get_image_descriptor")
+    artwork = m.Artwork.from_response(
+        cl(
+            f"/artworks/{artwork_id}",
+            method="PATCH",
+            data=m.ArtworkPatch(
+                artwork_name="Art Edit",
+                cover_image="art_edit.jpg",
+                description="This is Art Edit",
+                extra={"edit": "sth"},
+                geometry=m.GeometryElement(
+                    coordinates=[2, 2], type=m.GeometryType.Point
+                ),
+            ),
+        )
+    )
+    assert artwork == m.Artwork(
+        cover_image="art_edit.jpg",
+        description="This is Art Edit",
+        landmark=f"/landmarks/{landmark.landmark_id}",
+        extra={"edit": "sth"},
+        geometry=m.GeometryElement(coordinates=[2, 2], type=m.GeometryType.Point),
+        artwork_name="Art Edit",
+        self_link=f"/artworks/{artwork.artwork_id}",
+        kind=m.Kind.artwork,
+        artwork_id=artwork.artwork_id,
+    )
+
+
 def test_delete_artwork_artwork_id(cl: ApiClient):
     artwork_id = cl.create(f.Artwork).artwork_id
     cl(

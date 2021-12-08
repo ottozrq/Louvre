@@ -64,6 +64,34 @@ def post_artworks(
     return m.Artwork.db(db).from_id(db_artwork.artwork_id)
 
 
+@app.patch(
+    "/artworks/{artwork_id}",
+    response_model=m.Artwork,
+    tags=[TAG.Artworks],
+    include_in_schema=schema_show_all,
+)
+def patch_artworks_artwork_id(
+    artwork: m.ArtworkPatch,
+    artwork_id: int,
+    db: VisionDb = Depends(d.get_psql),
+):
+    db_artwork = m.Artwork.db(db).get_or_404(artwork_id)
+    if artwork.artwork_name:
+        db_artwork.artwork_name = artwork.artwork_name
+    if artwork.cover_image:
+        db_artwork.cover_image = artwork.cover_image
+        db_artwork.descriptors = algo.get_image_descriptor(artwork.cover_image)
+    if artwork.description:
+        db_artwork.description = artwork.description
+    if artwork.extra:
+        db_artwork.extra = artwork.extra
+    if artwork.geometry:
+        db_artwork.geometry = db_geo_feature(artwork.geometry)
+    db.session.commit()
+    db.session.refresh(db_artwork)
+    return m.Artwork.db(db).from_id(artwork_id)
+
+
 @app.delete(
     "/artworks/{artwork_id}",
     response_model=Dict,

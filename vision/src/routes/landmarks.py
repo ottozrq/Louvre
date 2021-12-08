@@ -60,6 +60,34 @@ def post_landmarks(
     return m.Landmark.db(db).from_id(db_landmark.landmark_id)
 
 
+@app.patch(
+    "/landmarks/{landmark_id}",
+    response_model=m.Landmark,
+    tags=[TAG.Landmarks],
+    include_in_schema=schema_show_all,
+)
+def patch_landmarks_landmark_id(
+    landmark: m.LandmarkPatch,
+    landmark_id: int,
+    db: VisionDb = Depends(d.get_psql),
+):
+    db_landmark = m.Landmark.db(db).get_or_404(landmark_id)
+    if landmark.landmark_name:
+        db_landmark.landmark_name = landmark.landmark_name
+    if landmark.cover_image:
+        db_landmark.cover_image = landmark.cover_image
+        db_landmark.descriptors = algo.get_image_descriptor(landmark.cover_image)
+    if landmark.description:
+        db_landmark.description = landmark.description
+    if landmark.extra:
+        db_landmark.extra = landmark.extra
+    if landmark.geometry:
+        db_landmark.geometry = db_geo_feature(landmark.geometry)
+    db.session.commit()
+    db.session.refresh(db_landmark)
+    return m.Landmark.db(db).from_id(landmark_id)
+
+
 @app.delete(
     "/landmarks/{landmark_id}",
     response_model=Dict,

@@ -16,7 +16,6 @@ def db_geo_feature(geo_feature: m.Geometry):
                 "properties": {},
             }
         )
-        print(geo_feature.dict())
         parsed = geojson.loads(geometry)
         if errors := parsed.errors():
             raise HTTPException(

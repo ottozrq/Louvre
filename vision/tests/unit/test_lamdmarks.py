@@ -60,6 +60,37 @@ def test_post_landmarks(cl: ApiClient, mocker):
     )
 
 
+def test_put_landmarks_landmark_id(cl: ApiClient, mocker):
+    mocker.patch("utils.algo.get_image_descriptor")
+    landmark_id = cl.create(f.Landmark).landmark_id
+    landmark = m.Landmark.from_response(
+        cl(
+            f"/landmarks/{landmark_id}",
+            method="PATCH",
+            data=m.LandmarkPatch(
+                landmark_name="Louvre Edit",
+                cover_image="louvre_edit.jpg",
+                description="This is Louvre edit",
+                geometry=m.GeometryElement(
+                    coordinates=[2, 2], type=m.GeometryType.Point
+                ),
+            ),
+        )
+    )
+    assert landmark == m.Landmark(
+        cover_image="louvre_edit.jpg",
+        description="This is Louvre edit",
+        extra={},
+        geometry=m.GeometryElement(coordinates=[2, 2], type=m.GeometryType.Point),
+        landmark_name="Louvre Edit",
+        country=m.Country.France,
+        city="Paris",
+        self_link=f"/landmarks/{landmark.landmark_id}",
+        kind=m.Kind.landmark,
+        landmark_id=landmark.landmark_id,
+    )
+
+
 def test_delete_landmark_landmark_id(cl: ApiClient):
     landmark_id = cl.create(f.Landmark).landmark_id
     cl(
