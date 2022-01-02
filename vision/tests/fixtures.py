@@ -31,3 +31,20 @@ class Artwork(BaseFix):
     description = "This is Art"
     extra = {}
     descriptors = []
+
+
+class Series(BaseFix):
+    MODEL = sm.Series
+    series_name = "Louvre"
+    landmark = subFactoryGet(Landmark)
+    cover_image = "louvre.jpg"
+    description = "This is Louvre introductions"
+    price = 1.0
+
+
+class Introduction(BaseFix):
+    MODEL = sm.Introduction
+    introduction_name = "Louvre"
+    artwork = subFactoryGet(Artwork)
+    series = subFactoryGet(Series)
+    introduction = {"content": "This is Louvre introductions"}

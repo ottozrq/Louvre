@@ -2,6 +2,7 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Generic, List, Literal, TypeVar, Union
+
 # from uuid import UUID
 
 import fastapi
@@ -28,6 +29,8 @@ class OpenAPITag(AutoEnum):
     Artworks = auto()
     Images = auto()
     Landmarks = auto()
+    Series = auto()
+    Introduction = auto()
     Root = auto()
 
 
@@ -35,6 +38,8 @@ class Kind(AutoEnum):
     artwork = auto()
     collection = auto()
     landmark = auto()
+    series = auto()
+    introduction = auto()
 
     @property
     def plural(self) -> str:
@@ -111,7 +116,8 @@ class Entity(Model):
             if field is not None
             else cls._extract_id(item)
         )
-        return Path(f"/{cls.Config.kind.value}s") / str(instance_id)
+        value = cls.Config.kind.value
+        return Path(f"/{value}{'' if value == 'series' else 's'}") / str(instance_id)
 
     @classmethod
     def _extract_id(cls, item):
@@ -136,7 +142,10 @@ class Entity(Model):
                 self_link = instance.url.path.rstrip("/")
             else:
                 instance_id = cls._extract_id(instance)
-                self_link = f"/{kind.plural}/{instance_id}"
+                value = kind.value
+                if value != 'series':
+                    value = kind.plural
+                self_link = f"/{value}/{instance_id}"
         return dict(
             self_link=self_link,
             kind=kind,
@@ -328,4 +337,78 @@ class Artwork(Entity, ArtworkCreate):
 
 
 class ArtworkCollection(EntityCollection[Artwork]):
+    pass
+
+
+class SeriesPatch(Model):
+    series_name: str = None
+    cover_image: str = None
+    description: str = None
+    price: float = None
+
+
+class SeriesCreate(SeriesPatch):
+    series_name: str
+    cover_image: str
+    description: str
+    price: float = 0
+
+
+class Series(Entity, SeriesCreate):
+    series_id: PrimaryKey
+    landmark: Link
+
+    class Config:
+        db_model = sm.Series
+        kind = Kind.series
+
+    @classmethod
+    def from_db(cls, series: sm.Series):
+        return cls(
+            series_id=series.series_id,
+            series_name=series.series_name,
+            landmark=Landmark.link(series.landmark),
+            cover_image=series.cover_image,
+            description=series.description,
+            price=series.price,
+            **cls.links(series),
+        )
+
+
+class SeriesCollection(EntityCollection[Series]):
+    pass
+
+
+class IntroductionPatch(Model):
+    introduction_name: str = None
+    introduction: Dict[str, Any] = None
+
+
+class IntroductionCreate(IntroductionPatch):
+    artwork_id: int
+
+
+class Introduction(Entity, IntroductionCreate):
+    introduction_id: PrimaryKey
+    series: Link
+    artwork: Link
+
+    class Config:
+        db_model = sm.Introduction
+        kind = Kind.introduction
+
+    @classmethod
+    def from_db(cls, introduction: sm.Introduction):
+        return cls(
+            introduction_id=introduction.introduction_id,
+            series=Series.link(introduction.series),
+            artwork=Artwork.link(introduction.artwork),
+            artwork_id=introduction.artwork.artwork_id,
+            introduction_name=introduction.introduction_name,
+            introduction=introduction.introduction,
+            **cls.links(introduction),
+        )
+
+
+class IntroductionCollection(EntityCollection[Introduction]):
     pass

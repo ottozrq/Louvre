@@ -12,6 +12,7 @@ from sqlalchemy import (
     Column,
     DateTime,
     Enum,
+    Float,
     ForeignKey,
     String,
     func,
@@ -21,7 +22,6 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import ARRAY, JSON, UUID
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import column_property, relationship
-from sqlalchemy.sql.sqltypes import Float
 
 
 class _tablemixin:
@@ -154,3 +154,23 @@ class Artwork(GeoJsonBase, PsqlBase):
         default=[],
         nullable=True,
     )
+
+
+class Series(PsqlBase):
+    series_id = seq("series_id")
+    series_name = name_field()
+    landmark_id = fk(Landmark.landmark_id)
+    landmark = rel(Landmark)
+    cover_image = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    price = Column(Float, nullable=True)
+
+
+class Introduction(PsqlBase):
+    introduction_id = seq("introduction_id")
+    introduction_name = name_field()
+    series_id = fk(Series.series_id)
+    series = rel(Series)
+    artwork_id = fk(Artwork.artwork_id)
+    artwork = rel(Artwork)
+    introduction = Column(JSON, nullable=True)
