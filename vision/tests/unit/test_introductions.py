@@ -1,4 +1,3 @@
-from models import Landmark
 from tests import ApiClient, m, f, status
 
 
