@@ -15,11 +15,11 @@ tasks:
   migrate_rollback: PYENV_VERSION=vision  alembic downgrade -1
   test: |
     PYENV_VERSION=vision \
-    VIAFLAGS_USE_ENV_SETTINGS={{.ci}} \
-    VIAFLAGS_FILE=flags.test.yml \
-    VIAFLAGS_CONTENTS_JSON='' \
-    VIAFLAGS_CONTENTS='' \
-    NAMESPACE='vianova-test' \
+    VISIONFLAGS_USE_ENV_SETTINGS={{.ci}} \
+    VISIONFLAGS_FILE=flags.test.yml \
+    VISIONFLAGS_CONTENTS_JSON='' \
+    VISIONFLAGS_CONTENTS='' \
+    NAMESPACE='vision-test' \
     python3.8 -m py.test \
     -vvv -x -s \
     -W ignore::DeprecationWarning \
@@ -30,3 +30,6 @@ tasks:
     --ff \
     {{.args}} \
     tests/unit/{{.filename}}
+  gen:
+    - NAMESPACE=test VISIONFLAGS_FILE=flags.test.yml VISION_DEBUG=1 python -m  commands.export_openapi --out-file ../explorer/api/openapi.json
+    - openapi-generator  generate -g typescript-axios -i ../explorer/api/openapi.json --skip-validate-spec -o ../explorer/api
