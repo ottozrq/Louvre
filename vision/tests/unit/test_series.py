@@ -17,6 +17,7 @@ def test_get_series(cl: ApiClient):
         m.Series(
             series_name="Louvre",
             cover_image="louvre.jpg",
+            lang="en",
             description="This is Louvre introductions",
             landmark=f"/landmarks/{landmark.landmark_id}",
             self_link=f"/series/{series_id}",
@@ -35,6 +36,7 @@ def test_post_series(cl: ApiClient):
             method="POST",
             data=m.SeriesCreate(
                 series_name="Art",
+                lang="en",
                 cover_image="art.jpg",
                 description="This is Art",
                 price=1.0,
@@ -44,6 +46,7 @@ def test_post_series(cl: ApiClient):
     assert series == m.Series(
         series_id=series.series_id,
         cover_image="art.jpg",
+        lang="en",
         description="This is Art",
         landmark=f"/landmarks/{landmark_id}",
         series_name="Art",
@@ -74,6 +77,7 @@ def test_patch_series_series_id(cl: ApiClient):
         description="This is Art Edit",
         landmark=f"/landmarks/{landmark.landmark_id}",
         series_name="Art Edit",
+        lang="en",
         self_link=f"/series/{series.series_id}",
         kind=m.Kind.series,
         series_id=series.series_id,

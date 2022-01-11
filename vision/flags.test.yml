@@ -1,0 +1,11 @@
+sqlalchemy:
+  echo: false
+vision:
+  debug: true
+  testing_mode: true
+  display_traceback: true
+  namespace: vianova-test
+vision_pg:
+  password: test-password
+  ssl_mode: false
+  host: test-host

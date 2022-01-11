@@ -52,6 +52,7 @@ def post_series_series_id_introduction(
     db_introduction = sm.Introduction(
         introduction_name=introduction.introduction_name,
         series_id=series_id,
+        lang=introduction.lang,
         artwork_id=introduction.artwork_id,
         introduction=introduction.introduction,
     )

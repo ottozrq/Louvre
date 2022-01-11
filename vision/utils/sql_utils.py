@@ -1,10 +1,17 @@
 import json
 import numbers
+from typing import Any, Dict
 
 import geojson
 from shapely.geometry import shape
 
 from src.routes import HTTPException, logger, m, status
+
+
+def update_json(old_json: Dict[str, Any], new_json: Dict[str, Any]):
+    for key, value in new_json.items():
+        old_json[key] = value
+    return old_json
 
 
 def db_geo_feature(geo_feature: m.Geometry):

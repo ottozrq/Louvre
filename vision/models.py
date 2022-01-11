@@ -265,17 +265,17 @@ Country = AutoEnum("Country", [country.name for country in pycountry.countries])
 
 class ItemPatchBase(Model):
     cover_image: str = None
-    description: str = None
+    description: Dict[str, Any] = None
     extra: Dict[str, Any] = None
     geometry: Geometry = None
 
 
 class LandmarkPatch(ItemPatchBase):
-    landmark_name: str = None
+    landmark_name: Dict[str, Any] = None
 
 
 class LandmarkCreate(LandmarkPatch):
-    landmark_name: str
+    landmark_name: Dict[str, Any]
     country: Country
     city: str
 
@@ -307,11 +307,11 @@ class LandmarkCollection(EntityCollection[Landmark]):
 
 
 class ArtworkPatch(ItemPatchBase):
-    artwork_name: str = None
+    artwork_name: Dict[str, Any] = None
 
 
 class ArtworkCreate(ArtworkPatch):
-    artwork_name: str
+    artwork_name: Dict[str, Any]
 
 
 class Artwork(Entity, ArtworkCreate):
@@ -349,6 +349,7 @@ class SeriesPatch(Model):
 
 class SeriesCreate(SeriesPatch):
     series_name: str
+    lang: str
     cover_image: str
     description: str
     price: float = 0
@@ -368,6 +369,7 @@ class Series(Entity, SeriesCreate):
             series_id=series.series_id,
             series_name=series.series_name,
             landmark=Landmark.link(series.landmark),
+            lang=series.lang,
             cover_image=series.cover_image,
             description=series.description,
             price=series.price,
@@ -386,6 +388,7 @@ class IntroductionPatch(Model):
 
 class IntroductionCreate(IntroductionPatch):
     artwork_id: int
+    lang: str
 
 
 class Introduction(Entity, IntroductionCreate):
@@ -404,6 +407,7 @@ class Introduction(Entity, IntroductionCreate):
             series=Series.link(introduction.series),
             artwork=Artwork.link(introduction.artwork),
             artwork_id=introduction.artwork.artwork_id,
+            lang=introduction.lang,
             introduction_name=introduction.introduction_name,
             introduction=introduction.introduction,
             **cls.links(introduction),

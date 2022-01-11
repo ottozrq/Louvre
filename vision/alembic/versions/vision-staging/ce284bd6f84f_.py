@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 179abc696f44
+Revision ID: ce284bd6f84f
 Revises: 
-Create Date: 2022-01-04 22:57:15.584509
+Create Date: 2022-01-14 19:30:49.659191
 
 """
 import geoalchemy2  # noqa
@@ -11,7 +11,7 @@ import sqlalchemy as sa  # noqa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "179abc696f44"
+revision = "ce284bd6f84f"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,11 +39,19 @@ def upgrade():
         sa.Column(
             "landmark_id", sa.BigInteger(), autoincrement=True, nullable=False
         ),
-        sa.Column("landmark_name", sa.String(), nullable=False),
+        sa.Column(
+            "landmark_name",
+            postgresql.JSON(astext_type=sa.Text()),
+            nullable=False,
+        ),
         sa.Column("country", sa.String(), nullable=True),
         sa.Column("city", sa.String(), nullable=True),
         sa.Column("cover_image", sa.String(), nullable=True),
-        sa.Column("description", sa.String(), nullable=True),
+        sa.Column(
+            "description",
+            postgresql.JSON(astext_type=sa.Text()),
+            nullable=True,
+        ),
         sa.Column(
             "extra", postgresql.JSON(astext_type=sa.Text()), nullable=True
         ),
@@ -72,10 +80,18 @@ def upgrade():
         sa.Column(
             "artwork_id", sa.BigInteger(), autoincrement=True, nullable=False
         ),
-        sa.Column("artwork_name", sa.String(), nullable=False),
+        sa.Column(
+            "artwork_name",
+            postgresql.JSON(astext_type=sa.Text()),
+            nullable=False,
+        ),
         sa.Column("landmark_id", sa.BigInteger(), nullable=False),
         sa.Column("cover_image", sa.String(), nullable=True),
-        sa.Column("description", sa.String(), nullable=True),
+        sa.Column(
+            "description",
+            postgresql.JSON(astext_type=sa.Text()),
+            nullable=True,
+        ),
         sa.Column(
             "extra", postgresql.JSON(astext_type=sa.Text()), nullable=True
         ),
@@ -110,8 +126,9 @@ def upgrade():
         ),
         sa.Column("series_name", sa.String(), nullable=False),
         sa.Column("landmark_id", sa.BigInteger(), nullable=False),
+        sa.Column("lang", sa.String(), nullable=False),
         sa.Column("cover_image", sa.String(), nullable=True),
-        sa.Column("description", sa.String(), nullable=True),
+        sa.Column("description", sa.String(), nullable=False),
         sa.Column("price", sa.Float(), nullable=True),
         sa.ForeignKeyConstraint(
             ["landmark_id"],
@@ -147,6 +164,7 @@ def upgrade():
         sa.Column("introduction_name", sa.String(), nullable=False),
         sa.Column("series_id", sa.BigInteger(), nullable=False),
         sa.Column("artwork_id", sa.BigInteger(), nullable=False),
+        sa.Column("lang", sa.String(), nullable=False),
         sa.Column(
             "introduction",
             postgresql.JSON(astext_type=sa.Text()),

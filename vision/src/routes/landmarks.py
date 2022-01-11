@@ -3,7 +3,7 @@ from typing import Dict
 from fastapi import Depends
 
 from src.routes import algo, app, d, delete_response, m, schema_show_all, sm, TAG
-from utils.sql_utils import db_geo_feature
+from utils.sql_utils import db_geo_feature, update_json
 from utils.utils import VisionDb
 
 
@@ -72,15 +72,20 @@ def patch_landmarks_landmark_id(
     db: VisionDb = Depends(d.get_psql),
 ):
     db_landmark = m.Landmark.db(db).get_or_404(landmark_id)
+    landmark_model = m.Landmark.db(db).from_id(landmark_id)
     if landmark.landmark_name:
-        db_landmark.landmark_name = landmark.landmark_name
+        db_landmark.landmark_name = update_json(
+            landmark_model.landmark_name, landmark.landmark_name
+        )
     if landmark.cover_image:
         db_landmark.cover_image = landmark.cover_image
         db_landmark.descriptors = algo.get_image_descriptor(landmark.cover_image)
     if landmark.description:
-        db_landmark.description = landmark.description
+        db_landmark.description = update_json(
+            landmark_model.description, landmark.description
+        )
     if landmark.extra:
-        db_landmark.extra = landmark.extra
+        db_landmark.extra = update_json(landmark_model.extra, landmark.extra)
     if landmark.geometry:
         db_landmark.geometry = db_geo_feature(landmark.geometry)
     db.session.commit()

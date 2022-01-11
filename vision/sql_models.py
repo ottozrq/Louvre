@@ -126,11 +126,11 @@ class GeoJsonBase:
 
 class Landmark(GeoJsonBase, PsqlBase):
     landmark_id = seq("landmark_id")
-    landmark_name = name_field()
+    landmark_name = Column(JSON, nullable=False)
     country = Column(String, nullable=True)
     city = Column(String, nullable=True)
     cover_image = Column(String, nullable=True)
-    description = Column(String, nullable=True)
+    description = Column(JSON, nullable=True)
     extra = Column(JSON, nullable=True)
     descriptors = Column(
         "descriptors",
@@ -142,11 +142,11 @@ class Landmark(GeoJsonBase, PsqlBase):
 
 class Artwork(GeoJsonBase, PsqlBase):
     artwork_id = seq("artwork_id")
-    artwork_name = name_field()
+    artwork_name = Column(JSON, nullable=False)
     landmark_id = fk(Landmark.landmark_id)
     landmark = rel(Landmark)
     cover_image = Column(String, nullable=True)
-    description = Column(String, nullable=True)
+    description = Column(JSON, nullable=True)
     extra = Column(JSON, nullable=True)
     descriptors = Column(
         "descriptors",
@@ -161,8 +161,9 @@ class Series(PsqlBase):
     series_name = name_field()
     landmark_id = fk(Landmark.landmark_id)
     landmark = rel(Landmark)
+    lang = Column(String, default="en", nullable=False)
     cover_image = Column(String, nullable=True)
-    description = Column(String, nullable=True)
+    description = Column(String, nullable=False)
     price = Column(Float, nullable=True)
 
 
@@ -173,4 +174,5 @@ class Introduction(PsqlBase):
     series = rel(Series)
     artwork_id = fk(Artwork.artwork_id)
     artwork = rel(Artwork)
+    lang = Column(String, default="en", nullable=False)
     introduction = Column(JSON, nullable=True)

@@ -13,7 +13,7 @@ from utils.utils import VisionDb, postgres_session
 
 class _Bearer(OAuth2PasswordBearer):
     async def __call__(self, request: Request) -> Optional[str]:
-        return not flags.VianovaFlags.get().superuser_email and await super(
+        return not flags.VisionFlags.get().superuser_email and await super(
             _Bearer, self
         ).__call__(request)
 

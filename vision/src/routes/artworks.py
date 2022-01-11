@@ -3,7 +3,7 @@ from typing import Dict
 from fastapi import Depends
 
 from src.routes import algo, app, d, delete_response, m, schema_show_all, sm, TAG
-from utils.sql_utils import db_geo_feature
+from utils.sql_utils import update_json, db_geo_feature
 from utils.utils import VisionDb
 
 
@@ -76,15 +76,22 @@ def patch_artworks_artwork_id(
     db: VisionDb = Depends(d.get_psql),
 ):
     db_artwork = m.Artwork.db(db).get_or_404(artwork_id)
+    artwork_model = m.Artwork.db(db).from_id(artwork_id)
     if artwork.artwork_name:
-        db_artwork.artwork_name = artwork.artwork_name
+        db_artwork.artwork_name = update_json(
+            artwork_model.artwork_name, artwork.artwork_name
+        )
     if artwork.cover_image:
         db_artwork.cover_image = artwork.cover_image
         db_artwork.descriptors = algo.get_image_descriptor(artwork.cover_image)
     if artwork.description:
-        db_artwork.description = artwork.description
+        db_artwork.description = update_json(
+            artwork_model.description, artwork.description
+        )
     if artwork.extra:
-        db_artwork.extra = artwork.extra
+        db_artwork.extra = update_json(
+            artwork_model.extra, artwork.extra
+        )
     if artwork.geometry:
         db_artwork.geometry = db_geo_feature(artwork.geometry)
     db.session.commit()

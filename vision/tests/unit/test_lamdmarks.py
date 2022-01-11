@@ -14,10 +14,10 @@ def test_get_landmarks(cl: ApiClient):
     assert m.LandmarkCollection.from_response(cl("/landmarks")).contents == [
         m.Landmark(
             cover_image="louvre.jpg",
-            description="This is Louvre",
+            description={"en": "This is Louvre"},
             extra={},
             geometry=m.GeometryElement(coordinates=[1, 1], type=m.GeometryType.Point),
-            landmark_name="Louvre",
+            landmark_name={"en": "Louvre"},
             country=m.Country.France,
             city="Paris",
             self_link=f"/landmarks/{landmark_id}",
@@ -34,11 +34,11 @@ def test_post_landmarks(cl: ApiClient, mocker):
             "/landmarks",
             method="POST",
             data=m.LandmarkCreate(
-                landmark_name="Louvre",
+                landmark_name={"en": "Louvre"},
                 country=m.Country.France,
                 city="Paris",
                 cover_image="louvre.jpg",
-                description="This is Louvre",
+                description={"en": "This is Louvre"},
                 extra={},
                 geometry=m.GeometryElement(
                     coordinates=[1, 1], type=m.GeometryType.Point
@@ -48,10 +48,10 @@ def test_post_landmarks(cl: ApiClient, mocker):
     )
     assert landmark == m.Landmark(
         cover_image="louvre.jpg",
-        description="This is Louvre",
+        description={"en": "This is Louvre"},
         extra={},
         geometry=m.GeometryElement(coordinates=[1, 1], type=m.GeometryType.Point),
-        landmark_name="Louvre",
+        landmark_name={"en": "Louvre"},
         country=m.Country.France,
         city="Paris",
         self_link=f"/landmarks/{landmark.landmark_id}",
@@ -68,9 +68,9 @@ def test_put_landmarks_landmark_id(cl: ApiClient, mocker):
             f"/landmarks/{landmark_id}",
             method="PATCH",
             data=m.LandmarkPatch(
-                landmark_name="Louvre Edit",
+                landmark_name={"fr": "Louvre fr"},
                 cover_image="louvre_edit.jpg",
-                description="This is Louvre edit",
+                description={"en": "This is Louvre edit"},
                 geometry=m.GeometryElement(
                     coordinates=[2, 2], type=m.GeometryType.Point
                 ),
@@ -79,10 +79,10 @@ def test_put_landmarks_landmark_id(cl: ApiClient, mocker):
     )
     assert landmark == m.Landmark(
         cover_image="louvre_edit.jpg",
-        description="This is Louvre edit",
+        description={"en": "This is Louvre edit"},
         extra={},
         geometry=m.GeometryElement(coordinates=[2, 2], type=m.GeometryType.Point),
-        landmark_name="Louvre Edit",
+        landmark_name={"en": "Louvre", "fr": "Louvre fr"},
         country=m.Country.France,
         city="Paris",
         self_link=f"/landmarks/{landmark.landmark_id}",

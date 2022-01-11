@@ -18,7 +18,7 @@ servers = (
         url="/"
         if VF.debug
         else "https://127.0.0.1"
-        if "vianova-production" in VF.namespace
+        if "vision-production" in VF.namespace
         else "https://vision.ottozhang.com",
         description="Vision API",
     ),
