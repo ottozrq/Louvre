@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --ignore-path ./.gitignore --write '{components,pages,styles}/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
