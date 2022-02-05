@@ -5,6 +5,7 @@ from src.routes import (
     introductions,
     landmarks,
     series,
+    users,
 )
 
 __all__ = (
@@ -14,4 +15,5 @@ __all__ = (
     introductions,
     landmarks,
     series,
+    users,
 )

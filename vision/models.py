@@ -1,9 +1,8 @@
 import uuid
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generic, List, Literal, TypeVar, Union
-
-# from uuid import UUID
 
 import fastapi
 import pycountry
@@ -28,18 +27,20 @@ from utils.visionmodels import AutoLink, Model, Link
 class OpenAPITag(AutoEnum):
     Artworks = auto()
     Images = auto()
+    Introductions = auto()
     Landmarks = auto()
-    Series = auto()
-    Introduction = auto()
     Root = auto()
+    Series = auto()
+    Users = auto()
 
 
 class Kind(AutoEnum):
     artwork = auto()
     collection = auto()
+    introduction = auto()
     landmark = auto()
     series = auto()
-    introduction = auto()
+    user = auto()
 
     @property
     def plural(self) -> str:
@@ -263,6 +264,55 @@ class GeoJSONFeature(Model):
 Country = AutoEnum("Country", [country.name for country in pycountry.countries])
 
 
+class UserPatch(Model):
+    first_name: str = None
+    last_name: str = None
+    language: sm.Language = None
+    role: sm.UserRole = None
+    extras: Dict[str, Any] = {}
+
+
+class UserBase(UserPatch):
+    user_email: str
+    first_name: str = ""
+    last_name: str = ""
+    language: sm.Language = sm.Language.en
+    role: sm.UserRole = sm.UserRole.visitor
+    extras: Dict[str, Any] = {}
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class User(Entity, UserBase):
+    user_id: uuid.UUID
+    date_joined: datetime = None
+
+    class Config:
+        db_model = sm.User
+        kind = Kind.user
+
+    @classmethod
+    def from_db(cls, user: sm.User):
+        return cls(
+            user_id=user.user_id,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            user_email=user.user_email,
+            language=user.language,
+            date_joined=user.date_joined,
+            extra=user.extras,
+            role=user.role,
+            **cls.links(user),
+        )
+
+
+class LoginResponse(Model):
+    access_token: str
+    token_type: Literal["bearer"] = "bearer"
+
+
 class ItemPatchBase(Model):
     cover_image: str = None
     description: Dict[str, Any] = None
@@ -341,6 +391,7 @@ class ArtworkCollection(EntityCollection[Artwork]):
 
 
 class SeriesPatch(Model):
+    language: sm.Language = sm.Language.en
     series_name: str = None
     cover_image: str = None
     description: str = None
@@ -349,7 +400,6 @@ class SeriesPatch(Model):
 
 class SeriesCreate(SeriesPatch):
     series_name: str
-    lang: str
     cover_image: str
     description: str
     price: float = 0
@@ -369,7 +419,7 @@ class Series(Entity, SeriesCreate):
             series_id=series.series_id,
             series_name=series.series_name,
             landmark=Landmark.link(series.landmark),
-            lang=series.lang,
+            language=series.language,
             cover_image=series.cover_image,
             description=series.description,
             price=series.price,
@@ -384,11 +434,11 @@ class SeriesCollection(EntityCollection[Series]):
 class IntroductionPatch(Model):
     introduction_name: str = None
     introduction: Dict[str, Any] = None
+    language: sm.Language = sm.Language.en
 
 
 class IntroductionCreate(IntroductionPatch):
     artwork_id: int
-    lang: str
 
 
 class Introduction(Entity, IntroductionCreate):
@@ -407,7 +457,7 @@ class Introduction(Entity, IntroductionCreate):
             series=Series.link(introduction.series),
             artwork=Artwork.link(introduction.artwork),
             artwork_id=introduction.artwork.artwork_id,
-            lang=introduction.lang,
+            language=introduction.language,
             introduction_name=introduction.introduction_name,
             introduction=introduction.introduction,
             **cls.links(introduction),

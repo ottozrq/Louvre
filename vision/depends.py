@@ -1,12 +1,13 @@
 import logging
 from typing import Optional
 
-from fastapi import Request
+from fastapi import Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import PositiveInt
 from pydantic.types import constr
 
 import models as m
+import sql_models as sm
 from utils import flags
 from utils.utils import VisionDb, postgres_session
 
@@ -35,3 +36,24 @@ def get_pagination(
     page_size: PositiveInt = None,
 ):
     return m.Pagination(request=request, page_size=page_size, page_token=page_token)
+
+
+def get_user_id(
+    request: Request,
+    _=Depends(security),
+) -> str:
+    return str(request.user.user_uuid)
+
+
+def get_user_email(
+    request: Request,
+    _=Depends(security),
+) -> str:
+    return str(request.user.user_email)
+
+
+def get_logged_in_user(
+    user_id=Depends(get_user_id),
+    db=Depends(get_psql),
+) -> sm.User:
+    return m.User.db(db).get_or_404(user_id)

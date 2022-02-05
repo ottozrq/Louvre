@@ -37,7 +37,7 @@ class Series(BaseFix):
     MODEL = sm.Series
     series_name = "Louvre"
     landmark = subFactoryGet(Landmark)
-    langs = "en"
+    language = sm.Language.en
     cover_image = "louvre.jpg"
     description = "This is Louvre introductions"
     price = 1.0
@@ -48,5 +48,5 @@ class Introduction(BaseFix):
     introduction_name = "Louvre"
     artwork = subFactoryGet(Artwork)
     series = subFactoryGet(Series)
-    lang = "en"
+    language = sm.Language.en
     introduction = {"content": "This is Louvre introductions"}

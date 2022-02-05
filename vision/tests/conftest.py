@@ -97,6 +97,7 @@ def _api_client(app, monkeypatch, mocker):
             fix=fix,
             session=session,
             mocks=mocks,
+            user=None,
         )
     finally:
         session.remove()

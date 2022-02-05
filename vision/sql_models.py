@@ -8,6 +8,7 @@ from geoalchemy2 import Geography, Geometry
 from geoalchemy2.functions import ST_IsValid
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     CheckConstraint,
     Column,
     DateTime,
@@ -22,6 +23,8 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import ARRAY, JSON, UUID
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import column_property, relationship
+
+from utils.auto_enum import AutoEnum, auto
 
 
 class _tablemixin:
@@ -65,6 +68,18 @@ def uuid_field(name=None, primary_key=False, default=False):
         default=uuid.uuid4 if default else None,
         unique=True,
         nullable=False,
+    )
+
+
+class Language(AutoEnum):
+    cn = auto()
+    en = auto()
+    fr = auto()
+
+
+def _language_column():
+    return enum_field(
+        Language, server_default=Language.en, default=Language.en, nullable=False
     )
 
 
@@ -124,6 +139,29 @@ class GeoJsonBase:
         return self._geojson or {"geometry": {"type": "Polygon", "coordinates": []}}
 
 
+class UserRole(AutoEnum):
+    admin = auto()
+    editor = auto()
+    visitor = auto()
+
+
+class User(PsqlBase):
+    user_id = uuid_field(primary_key=True)
+    user_email = Column(
+        String,
+        unique=True,
+        nullable=False,
+    )
+    password = Column(String, nullable=False)
+    first_name = name_field()
+    last_name = name_field()
+    language = _language_column()
+    date_joined = Column(DateTime(True), nullable=False, server_default=func.now())
+    is_superuser = Column(Boolean, server_default="FALSE", nullable=False)
+    role = enum_field(UserRole, server_default=UserRole.visitor, nullable=False)
+    extras = Column(JSON, nullable=True)
+
+
 class Landmark(GeoJsonBase, PsqlBase):
     landmark_id = seq("landmark_id")
     landmark_name = Column(JSON, nullable=False)
@@ -161,7 +199,7 @@ class Series(PsqlBase):
     series_name = name_field()
     landmark_id = fk(Landmark.landmark_id)
     landmark = rel(Landmark)
-    lang = Column(String, default="en", nullable=False)
+    language = _language_column()
     cover_image = Column(String, nullable=True)
     description = Column(String, nullable=False)
     price = Column(Float, nullable=True)
@@ -174,5 +212,5 @@ class Introduction(PsqlBase):
     series = rel(Series)
     artwork_id = fk(Artwork.artwork_id)
     artwork = rel(Artwork)
-    lang = Column(String, default="en", nullable=False)
+    language = _language_column()
     introduction = Column(JSON, nullable=True)

@@ -5,6 +5,7 @@ vision:
   testing_mode: true
   display_traceback: true
   namespace: vianova-test
+  login_secret: test111
 vision_pg:
   password: test-password
   ssl_mode: false

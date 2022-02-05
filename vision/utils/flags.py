@@ -50,6 +50,8 @@ class VisionFlags(Flags):
         fields = {"namespace": {"env": "namespace"}}
 
     namespace: str
+    login_secret: str
+    superuser_email: str = None
 
     # cognito_cert_1: str = Secret("jwt_public_key_cognito_1")
     # cognito_cert_2: str = Secret("jwt_public_key_cognito_2")

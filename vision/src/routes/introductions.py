@@ -9,7 +9,7 @@ from utils.utils import VisionDb
 @app.get(
     "/series/{series_id}/introductions",
     response_model=m.IntroductionCollection,
-    tags=[TAG.Introduction],
+    tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
 def get_series_series_id_introductions(
@@ -28,7 +28,7 @@ def get_series_series_id_introductions(
 @app.get(
     "/introductions/{introduction_id}",
     response_model=m.Introduction,
-    tags=[TAG.Introduction],
+    tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
 def get_introductions_introduction_id(
@@ -41,7 +41,7 @@ def get_introductions_introduction_id(
 @app.post(
     "/series/{series_id}/introductions",
     response_model=m.Introduction,
-    tags=[TAG.Introduction],
+    tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
 def post_series_series_id_introduction(
@@ -52,7 +52,7 @@ def post_series_series_id_introduction(
     db_introduction = sm.Introduction(
         introduction_name=introduction.introduction_name,
         series_id=series_id,
-        lang=introduction.lang,
+        language=introduction.language,
         artwork_id=introduction.artwork_id,
         introduction=introduction.introduction,
     )
@@ -64,7 +64,7 @@ def post_series_series_id_introduction(
 @app.patch(
     "/introductions/{introduction_id}",
     response_model=m.Introduction,
-    tags=[TAG.Introduction],
+    tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
 def patch_introduction_introduction_id(
@@ -85,7 +85,7 @@ def patch_introduction_introduction_id(
 @app.delete(
     "/introductions/{introduction_id}",
     response_model=Dict,
-    tags=[TAG.Introduction],
+    tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
 def delete_series_series_id(

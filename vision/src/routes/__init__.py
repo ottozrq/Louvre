@@ -1,7 +1,7 @@
 import logging
 from typing import Dict
 
-from fastapi import HTTPException, Response, status
+from fastapi import Depends, HTTPException, Response, status
 
 import depends as d
 import models as m
@@ -29,6 +29,7 @@ __all__ = [
     "algo",
     "app",
     "d",
+    "Depends",
     "m",
     "sm",
     "schema_show_all",
