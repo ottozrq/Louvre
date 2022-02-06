@@ -1,6 +1,12 @@
-from src.routes import app, TAG
+from src.routes import app, m, TAG
 
 
-@app.get("/", tags=[TAG.Root])
+@app.get("/", response_model=m.Root, tags=[TAG.Root])
 def read_root():
-    return {"Hello": "Vision"}
+    return m.Root(
+        **{
+            **{k: f"/{k}" for k in m.Root.schema()["required"]},
+            "openapi": "/openapi.json",
+            "docs": "/docs",
+        }
+    )

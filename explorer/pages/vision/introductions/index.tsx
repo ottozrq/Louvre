@@ -5,12 +5,12 @@ import api from "../../../components/api";
 import ApiResourcePage from "../../../components/api_resource_page";
 import ApiCollectionPage from "../../../components/api_collection";
 
-export default function Landmarks() {
+export default function Introductions() {
   const router = useRouter();
   const series_id = 1
   return (
     <ApiResourcePage
-      title="Landmarks"
+      title="Introductions"
       getter={() => api.introductions.getSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsGet(series_id)}
       childrenCallback={(data) => (
         <>

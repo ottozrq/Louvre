@@ -60,4 +60,4 @@ def get_logged_in_user(
 
 
 def superuser_email() -> str:
-    return flags.VianovaFlags.get().superuser_email
+    return flags.VisionFlags.get().superuser_email

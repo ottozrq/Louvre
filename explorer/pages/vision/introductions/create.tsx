@@ -2,7 +2,7 @@ import { Paper, TextField, Button, Select, MenuItem } from "@material-ui/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-import { SeriesCreate, Landmark, Series, IntroductionCreate, Artwork } from "../../../api";
+import { SeriesCreate, Landmark, Series, IntroductionCreate, Artwork, Language } from "../../../api";
 import api from "../../../components/api";
 import Layout from "../../../components/layout";
 
@@ -109,11 +109,11 @@ export default function IntroductionCreatePage() {
           const introductionCreate: IntroductionCreate = {
             introduction_name: introduction.introduction_name,
             artwork_id: introduction.artwork_id,
-            lang: introduction.lang,
+            language: Language[introduction.language],
             introduction: introduction.introduction,
           };
           router.push(
-            `/vision${(await api.introductions.postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(introduction.artwork_id, introductionCreate)).data.self_link
+            `/vision${(await api.introductions.postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(introduction.artwork_id, introductionCreate)).data.self_link
             }`
           );
         }}
@@ -126,6 +126,6 @@ interface IntroductionCreateInterface {
   introduction_name?: string,
   artwork_id?: number,
   series_id?: number,
-  lang?: string,
+  language?: string,
   introduction?: object,
 }

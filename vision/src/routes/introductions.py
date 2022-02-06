@@ -7,7 +7,7 @@ from utils.utils import VisionDb
 
 
 @app.get(
-    "/series/{series_id}/introductions",
+    "/series/{series_id}/introductions/",
     response_model=m.IntroductionCollection,
     tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
@@ -16,6 +16,7 @@ def get_series_series_id_introductions(
     series_id: int,
     pagination: m.Pagination = Depends(d.get_pagination),
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     return m.IntroductionCollection.paginate(
         pagination,
@@ -26,7 +27,7 @@ def get_series_series_id_introductions(
 
 
 @app.get(
-    "/introductions/{introduction_id}",
+    "/introductions/{introduction_id}/",
     response_model=m.Introduction,
     tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
@@ -34,17 +35,18 @@ def get_series_series_id_introductions(
 def get_introductions_introduction_id(
     introduction_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     return m.Introduction.db(db).from_id(introduction_id)
 
 
 @app.post(
-    "/series/{series_id}/introductions",
+    "/series/{series_id}/introductions/",
     response_model=m.Introduction,
     tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
-def post_series_series_id_introduction(
+def post_series_series_id_introductions(
     series_id: int,
     introduction: m.IntroductionCreate,
     db: VisionDb = Depends(d.get_psql),
@@ -63,12 +65,12 @@ def post_series_series_id_introduction(
 
 
 @app.patch(
-    "/introductions/{introduction_id}",
+    "/introductions/{introduction_id}/",
     response_model=m.Introduction,
     tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
-def patch_introduction_introduction_id(
+def patch_introductions_introduction_id(
     introduction: m.IntroductionPatch,
     introduction_id: int,
     db: VisionDb = Depends(d.get_psql),
@@ -85,16 +87,16 @@ def patch_introduction_introduction_id(
 
 
 @app.delete(
-    "/introductions/{introduction_id}",
+    "/introductions/{introduction_id}/",
     response_model=Dict,
     tags=[TAG.Introductions],
     include_in_schema=schema_show_all,
 )
-def delete_series_series_id(
+def delete_introductions_introductions_id(
     introduction_id: int,
     db: VisionDb = Depends(d.get_psql),
     user: sm.User = Depends(d.get_logged_in_user),
 ):
-    db.session.delete(m.Series.db(db).get_or_404(introduction_id))
+    db.session.delete(m.Introduction.db(db).get_or_404(introduction_id))
     db.session.commit()
     return delete_response

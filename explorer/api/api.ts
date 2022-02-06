@@ -537,6 +537,19 @@ export interface HTTPValidationError {
 /**
  * 
  * @export
+ * @interface ImageUploadResponse
+ */
+export interface ImageUploadResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageUploadResponse
+     */
+    'file_path': string;
+}
+/**
+ * 
+ * @export
  * @interface Introduction
  */
 export interface Introduction {
@@ -554,16 +567,16 @@ export interface Introduction {
     'introduction'?: object;
     /**
      * 
+     * @type {Language}
+     * @memberof Introduction
+     */
+    'language'?: Language;
+    /**
+     * 
      * @type {number}
      * @memberof Introduction
      */
     'artwork_id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Introduction
-     */
-    'lang': string;
     /**
      * 
      * @type {string}
@@ -670,16 +683,16 @@ export interface IntroductionCreate {
     'introduction'?: object;
     /**
      * 
+     * @type {Language}
+     * @memberof IntroductionCreate
+     */
+    'language'?: Language;
+    /**
+     * 
      * @type {number}
      * @memberof IntroductionCreate
      */
     'artwork_id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof IntroductionCreate
-     */
-    'lang': string;
 }
 /**
  * 
@@ -699,6 +712,12 @@ export interface IntroductionPatch {
      * @memberof IntroductionPatch
      */
     'introduction'?: object;
+    /**
+     * 
+     * @type {Language}
+     * @memberof IntroductionPatch
+     */
+    'language'?: Language;
 }
 /**
  * An enumeration.
@@ -709,9 +728,10 @@ export interface IntroductionPatch {
 export enum Kind {
     Artwork = 'artwork',
     Collection = 'collection',
+    Introduction = 'introduction',
     Landmark = 'landmark',
     Series = 'series',
-    Introduction = 'introduction'
+    User = 'user'
 }
 
 /**
@@ -923,11 +943,126 @@ export interface LandmarkPatch {
     'landmark_name'?: object;
 }
 /**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+
+export enum Language {
+    Cn = 'cn',
+    En = 'en',
+    Fr = 'fr'
+}
+
+/**
+ * 
+ * @export
+ * @interface LoginResponse
+ */
+export interface LoginResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginResponse
+     */
+    'access_token': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginResponse
+     */
+    'token_type'?: LoginResponseTokenTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum LoginResponseTokenTypeEnum {
+    Bearer = 'bearer'
+}
+
+/**
+ * 
+ * @export
+ * @interface ResetPasswordRequest
+ */
+export interface ResetPasswordRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResetPasswordRequest
+     */
+    'old_password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResetPasswordRequest
+     */
+    'new_password': string;
+}
+/**
+ * 
+ * @export
+ * @interface ResetPasswordResponse
+ */
+export interface ResetPasswordResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ResetPasswordResponse
+     */
+    'success'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface Root
+ */
+export interface Root {
+    /**
+     * 
+     * @type {string}
+     * @memberof Root
+     */
+    'users': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Root
+     */
+    'landmarks': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Root
+     */
+    'artworks': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Root
+     */
+    'series': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Root
+     */
+    'introductions': string;
+}
+/**
  * 
  * @export
  * @interface Series
  */
 export interface Series {
+    /**
+     * 
+     * @type {Language}
+     * @memberof Series
+     */
+    'language'?: Language;
     /**
      * 
      * @type {string}
@@ -952,12 +1087,6 @@ export interface Series {
      * @memberof Series
      */
     'price'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Series
-     */
-    'lang': string;
     /**
      * 
      * @type {string}
@@ -1046,6 +1175,12 @@ export interface SeriesCollection {
 export interface SeriesCreate {
     /**
      * 
+     * @type {Language}
+     * @memberof SeriesCreate
+     */
+    'language'?: Language;
+    /**
+     * 
      * @type {string}
      * @memberof SeriesCreate
      */
@@ -1068,12 +1203,6 @@ export interface SeriesCreate {
      * @memberof SeriesCreate
      */
     'price'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof SeriesCreate
-     */
-    'lang': string;
 }
 /**
  * 
@@ -1081,6 +1210,12 @@ export interface SeriesCreate {
  * @interface SeriesPatch
  */
 export interface SeriesPatch {
+    /**
+     * 
+     * @type {Language}
+     * @memberof SeriesPatch
+     */
+    'language'?: Language;
     /**
      * 
      * @type {string}
@@ -1106,6 +1241,134 @@ export interface SeriesPatch {
      */
     'price'?: number;
 }
+/**
+ * 
+ * @export
+ * @interface User
+ */
+export interface User {
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'first_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'last_name'?: string;
+    /**
+     * 
+     * @type {Language}
+     * @memberof User
+     */
+    'language'?: Language;
+    /**
+     * 
+     * @type {UserRole}
+     * @memberof User
+     */
+    'role'?: UserRole;
+    /**
+     * 
+     * @type {object}
+     * @memberof User
+     */
+    'extras'?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'user_email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof User
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'user_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'date_joined'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserCreate
+ */
+export interface UserCreate {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCreate
+     */
+    'first_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCreate
+     */
+    'last_name'?: string;
+    /**
+     * 
+     * @type {Language}
+     * @memberof UserCreate
+     */
+    'language'?: Language;
+    /**
+     * 
+     * @type {UserRole}
+     * @memberof UserCreate
+     */
+    'role'?: UserRole;
+    /**
+     * 
+     * @type {object}
+     * @memberof UserCreate
+     */
+    'extras'?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCreate
+     */
+    'user_email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCreate
+     */
+    'password': string;
+}
+/**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+
+export enum UserRole {
+    Admin = 'admin',
+    Editor = 'editor',
+    Visitor = 'visitor'
+}
+
 /**
  * 
  * @export
@@ -1148,7 +1411,7 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
         deleteArtworksArtworkIdArtworksArtworkIdDelete: async (artworkId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'artworkId' is not null or undefined
             assertParamExists('deleteArtworksArtworkIdArtworksArtworkIdDelete', 'artworkId', artworkId)
-            const localVarPath = `/artworks/{artwork_id}`
+            const localVarPath = `/artworks/{artwork_id}/`
                 .replace(`{${"artwork_id"}}`, encodeURIComponent(String(artworkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1160,6 +1423,10 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -1182,7 +1449,7 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
         getArtworksArtworkIdArtworksArtworkIdGet: async (artworkId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'artworkId' is not null or undefined
             assertParamExists('getArtworksArtworkIdArtworksArtworkIdGet', 'artworkId', artworkId)
-            const localVarPath = `/artworks/{artwork_id}`
+            const localVarPath = `/artworks/{artwork_id}/`
                 .replace(`{${"artwork_id"}}`, encodeURIComponent(String(artworkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1218,7 +1485,7 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
         getArtworksLandmarksLandmarkIdArtworksGet: async (landmarkId: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'landmarkId' is not null or undefined
             assertParamExists('getArtworksLandmarksLandmarkIdArtworksGet', 'landmarkId', landmarkId)
-            const localVarPath = `/landmarks/{landmark_id}/artworks`
+            const localVarPath = `/landmarks/{landmark_id}/artworks/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1263,7 +1530,7 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
             assertParamExists('patchArtworksArtworkIdArtworksArtworkIdPatch', 'artworkId', artworkId)
             // verify required parameter 'artworkPatch' is not null or undefined
             assertParamExists('patchArtworksArtworkIdArtworksArtworkIdPatch', 'artworkPatch', artworkPatch)
-            const localVarPath = `/artworks/{artwork_id}`
+            const localVarPath = `/artworks/{artwork_id}/`
                 .replace(`{${"artwork_id"}}`, encodeURIComponent(String(artworkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1275,6 +1542,10 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -1303,7 +1574,7 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
             assertParamExists('postArtworksLandmarksLandmarkIdArtworksPost', 'landmarkId', landmarkId)
             // verify required parameter 'artworkCreate' is not null or undefined
             assertParamExists('postArtworksLandmarksLandmarkIdArtworksPost', 'artworkCreate', artworkCreate)
-            const localVarPath = `/landmarks/{landmark_id}/artworks`
+            const localVarPath = `/landmarks/{landmark_id}/artworks/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1315,6 +1586,10 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -1558,7 +1833,7 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('deleteImageImagesDirFilePathDelete', 'dir', dir)
             // verify required parameter 'filePath' is not null or undefined
             assertParamExists('deleteImageImagesDirFilePathDelete', 'filePath', filePath)
-            const localVarPath = `/images/{dir}/{file_path}`
+            const localVarPath = `/images/{dir}/{file_path}/`
                 .replace(`{${"dir"}}`, encodeURIComponent(String(dir)))
                 .replace(`{${"file_path"}}`, encodeURIComponent(String(filePath)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1593,7 +1868,7 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
         detectImageImagesDetectPost: async (image: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'image' is not null or undefined
             assertParamExists('detectImageImagesDetectPost', 'image', image)
-            const localVarPath = `/images/detect`;
+            const localVarPath = `/images/detect/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1637,7 +1912,7 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('getImageImagesDirFilePathGet', 'dir', dir)
             // verify required parameter 'filePath' is not null or undefined
             assertParamExists('getImageImagesDirFilePathGet', 'filePath', filePath)
-            const localVarPath = `/images/{dir}/{file_path}`
+            const localVarPath = `/images/{dir}/{file_path}/`
                 .replace(`{${"dir"}}`, encodeURIComponent(String(dir)))
                 .replace(`{${"file_path"}}`, encodeURIComponent(String(filePath)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1670,12 +1945,12 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postImageImagesUploadDirPost: async (dir: string, image: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postImageImagesDirPost: async (dir: string, image: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'dir' is not null or undefined
-            assertParamExists('postImageImagesUploadDirPost', 'dir', dir)
+            assertParamExists('postImageImagesDirPost', 'dir', dir)
             // verify required parameter 'image' is not null or undefined
-            assertParamExists('postImageImagesUploadDirPost', 'image', image)
-            const localVarPath = `/images/upload/{dir}`
+            assertParamExists('postImageImagesDirPost', 'image', image)
+            const localVarPath = `/images/{dir}/`
                 .replace(`{${"dir"}}`, encodeURIComponent(String(dir)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1760,8 +2035,8 @@ export const ImagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postImageImagesUploadDirPost(dir: string, image: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postImageImagesUploadDirPost(dir, image, options);
+        async postImageImagesDirPost(dir: string, image: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageUploadResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postImageImagesDirPost(dir, image, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1814,8 +2089,8 @@ export const ImagesApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postImageImagesUploadDirPost(dir: string, image: any, options?: any): AxiosPromise<any> {
-            return localVarFp.postImageImagesUploadDirPost(dir, image, options).then((request) => request(axios, basePath));
+        postImageImagesDirPost(dir: string, image: any, options?: any): AxiosPromise<ImageUploadResponse> {
+            return localVarFp.postImageImagesDirPost(dir, image, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1874,29 +2149,29 @@ export class ImagesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ImagesApi
      */
-    public postImageImagesUploadDirPost(dir: string, image: any, options?: AxiosRequestConfig) {
-        return ImagesApiFp(this.configuration).postImageImagesUploadDirPost(dir, image, options).then((request) => request(this.axios, this.basePath));
+    public postImageImagesDirPost(dir: string, image: any, options?: AxiosRequestConfig) {
+        return ImagesApiFp(this.configuration).postImageImagesDirPost(dir, image, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * IntroductionApi - axios parameter creator
+ * IntroductionsApi - axios parameter creator
  * @export
  */
-export const IntroductionApiAxiosParamCreator = function (configuration?: Configuration) {
+export const IntroductionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Delete Series Series Id
+         * @summary Delete Introductions Introductions Id
          * @param {number} introductionId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteSeriesSeriesIdIntroductionsIntroductionIdDelete: async (introductionId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete: async (introductionId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'introductionId' is not null or undefined
-            assertParamExists('deleteSeriesSeriesIdIntroductionsIntroductionIdDelete', 'introductionId', introductionId)
-            const localVarPath = `/introductions/{introduction_id}`
+            assertParamExists('deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete', 'introductionId', introductionId)
+            const localVarPath = `/introductions/{introduction_id}/`
                 .replace(`{${"introduction_id"}}`, encodeURIComponent(String(introductionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1908,6 +2183,10 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -1930,7 +2209,7 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
         getIntroductionsIntroductionIdIntroductionsIntroductionIdGet: async (introductionId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'introductionId' is not null or undefined
             assertParamExists('getIntroductionsIntroductionIdIntroductionsIntroductionIdGet', 'introductionId', introductionId)
-            const localVarPath = `/introductions/{introduction_id}`
+            const localVarPath = `/introductions/{introduction_id}/`
                 .replace(`{${"introduction_id"}}`, encodeURIComponent(String(introductionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1942,6 +2221,10 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -1966,7 +2249,7 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
         getSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsGet: async (seriesId: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'seriesId' is not null or undefined
             assertParamExists('getSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsGet', 'seriesId', seriesId)
-            const localVarPath = `/series/{series_id}/introductions`
+            const localVarPath = `/series/{series_id}/introductions/`
                 .replace(`{${"series_id"}}`, encodeURIComponent(String(seriesId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1978,6 +2261,10 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
             if (pageToken !== undefined) {
                 localVarQueryParameter['page_token'] = pageToken;
@@ -2000,18 +2287,18 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
-         * @summary Patch Introduction Introduction Id
+         * @summary Patch Introductions Introduction Id
          * @param {number} introductionId 
          * @param {IntroductionPatch} introductionPatch 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch: async (introductionId: number, introductionPatch: IntroductionPatch, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch: async (introductionId: number, introductionPatch: IntroductionPatch, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'introductionId' is not null or undefined
-            assertParamExists('patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch', 'introductionId', introductionId)
+            assertParamExists('patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch', 'introductionId', introductionId)
             // verify required parameter 'introductionPatch' is not null or undefined
-            assertParamExists('patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch', 'introductionPatch', introductionPatch)
-            const localVarPath = `/introductions/{introduction_id}`
+            assertParamExists('patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch', 'introductionPatch', introductionPatch)
+            const localVarPath = `/introductions/{introduction_id}/`
                 .replace(`{${"introduction_id"}}`, encodeURIComponent(String(introductionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2023,6 +2310,10 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2040,18 +2331,18 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
-         * @summary Post Series Series Id Introduction
+         * @summary Post Series Series Id Introductions
          * @param {number} seriesId 
          * @param {IntroductionCreate} introductionCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost: async (seriesId: number, introductionCreate: IntroductionCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost: async (seriesId: number, introductionCreate: IntroductionCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'seriesId' is not null or undefined
-            assertParamExists('postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost', 'seriesId', seriesId)
+            assertParamExists('postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost', 'seriesId', seriesId)
             // verify required parameter 'introductionCreate' is not null or undefined
-            assertParamExists('postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost', 'introductionCreate', introductionCreate)
-            const localVarPath = `/series/{series_id}/introductions`
+            assertParamExists('postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost', 'introductionCreate', introductionCreate)
+            const localVarPath = `/series/{series_id}/introductions/`
                 .replace(`{${"series_id"}}`, encodeURIComponent(String(seriesId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2063,6 +2354,10 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2082,21 +2377,21 @@ export const IntroductionApiAxiosParamCreator = function (configuration?: Config
 };
 
 /**
- * IntroductionApi - functional programming interface
+ * IntroductionsApi - functional programming interface
  * @export
  */
-export const IntroductionApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = IntroductionApiAxiosParamCreator(configuration)
+export const IntroductionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = IntroductionsApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @summary Delete Series Series Id
+         * @summary Delete Introductions Introductions Id
          * @param {number} introductionId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteSeriesSeriesIdIntroductionsIntroductionIdDelete(introductionId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSeriesSeriesIdIntroductionsIntroductionIdDelete(introductionId, options);
+        async deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete(introductionId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete(introductionId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2125,47 +2420,47 @@ export const IntroductionApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Patch Introduction Introduction Id
+         * @summary Patch Introductions Introduction Id
          * @param {number} introductionId 
          * @param {IntroductionPatch} introductionPatch 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch(introductionId: number, introductionPatch: IntroductionPatch, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Introduction>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch(introductionId, introductionPatch, options);
+        async patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch(introductionId: number, introductionPatch: IntroductionPatch, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Introduction>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch(introductionId, introductionPatch, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @summary Post Series Series Id Introduction
+         * @summary Post Series Series Id Introductions
          * @param {number} seriesId 
          * @param {IntroductionCreate} introductionCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(seriesId: number, introductionCreate: IntroductionCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Introduction>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(seriesId, introductionCreate, options);
+        async postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(seriesId: number, introductionCreate: IntroductionCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Introduction>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(seriesId, introductionCreate, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * IntroductionApi - factory interface
+ * IntroductionsApi - factory interface
  * @export
  */
-export const IntroductionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = IntroductionApiFp(configuration)
+export const IntroductionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = IntroductionsApiFp(configuration)
     return {
         /**
          * 
-         * @summary Delete Series Series Id
+         * @summary Delete Introductions Introductions Id
          * @param {number} introductionId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteSeriesSeriesIdIntroductionsIntroductionIdDelete(introductionId: number, options?: any): AxiosPromise<object> {
-            return localVarFp.deleteSeriesSeriesIdIntroductionsIntroductionIdDelete(introductionId, options).then((request) => request(axios, basePath));
+        deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete(introductionId: number, options?: any): AxiosPromise<object> {
+            return localVarFp.deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete(introductionId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2191,46 +2486,46 @@ export const IntroductionApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 
-         * @summary Patch Introduction Introduction Id
+         * @summary Patch Introductions Introduction Id
          * @param {number} introductionId 
          * @param {IntroductionPatch} introductionPatch 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch(introductionId: number, introductionPatch: IntroductionPatch, options?: any): AxiosPromise<Introduction> {
-            return localVarFp.patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch(introductionId, introductionPatch, options).then((request) => request(axios, basePath));
+        patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch(introductionId: number, introductionPatch: IntroductionPatch, options?: any): AxiosPromise<Introduction> {
+            return localVarFp.patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch(introductionId, introductionPatch, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Post Series Series Id Introduction
+         * @summary Post Series Series Id Introductions
          * @param {number} seriesId 
          * @param {IntroductionCreate} introductionCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(seriesId: number, introductionCreate: IntroductionCreate, options?: any): AxiosPromise<Introduction> {
-            return localVarFp.postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(seriesId, introductionCreate, options).then((request) => request(axios, basePath));
+        postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(seriesId: number, introductionCreate: IntroductionCreate, options?: any): AxiosPromise<Introduction> {
+            return localVarFp.postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(seriesId, introductionCreate, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * IntroductionApi - object-oriented interface
+ * IntroductionsApi - object-oriented interface
  * @export
- * @class IntroductionApi
+ * @class IntroductionsApi
  * @extends {BaseAPI}
  */
-export class IntroductionApi extends BaseAPI {
+export class IntroductionsApi extends BaseAPI {
     /**
      * 
-     * @summary Delete Series Series Id
+     * @summary Delete Introductions Introductions Id
      * @param {number} introductionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IntroductionApi
+     * @memberof IntroductionsApi
      */
-    public deleteSeriesSeriesIdIntroductionsIntroductionIdDelete(introductionId: number, options?: AxiosRequestConfig) {
-        return IntroductionApiFp(this.configuration).deleteSeriesSeriesIdIntroductionsIntroductionIdDelete(introductionId, options).then((request) => request(this.axios, this.basePath));
+    public deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete(introductionId: number, options?: AxiosRequestConfig) {
+        return IntroductionsApiFp(this.configuration).deleteIntroductionsIntroductionsIdIntroductionsIntroductionIdDelete(introductionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2239,10 +2534,10 @@ export class IntroductionApi extends BaseAPI {
      * @param {number} introductionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IntroductionApi
+     * @memberof IntroductionsApi
      */
     public getIntroductionsIntroductionIdIntroductionsIntroductionIdGet(introductionId: number, options?: AxiosRequestConfig) {
-        return IntroductionApiFp(this.configuration).getIntroductionsIntroductionIdIntroductionsIntroductionIdGet(introductionId, options).then((request) => request(this.axios, this.basePath));
+        return IntroductionsApiFp(this.configuration).getIntroductionsIntroductionIdIntroductionsIntroductionIdGet(introductionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2253,36 +2548,36 @@ export class IntroductionApi extends BaseAPI {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IntroductionApi
+     * @memberof IntroductionsApi
      */
     public getSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsGet(seriesId: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return IntroductionApiFp(this.configuration).getSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsGet(seriesId, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+        return IntroductionsApiFp(this.configuration).getSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsGet(seriesId, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Patch Introduction Introduction Id
+     * @summary Patch Introductions Introduction Id
      * @param {number} introductionId 
      * @param {IntroductionPatch} introductionPatch 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IntroductionApi
+     * @memberof IntroductionsApi
      */
-    public patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch(introductionId: number, introductionPatch: IntroductionPatch, options?: AxiosRequestConfig) {
-        return IntroductionApiFp(this.configuration).patchIntroductionIntroductionIdIntroductionsIntroductionIdPatch(introductionId, introductionPatch, options).then((request) => request(this.axios, this.basePath));
+    public patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch(introductionId: number, introductionPatch: IntroductionPatch, options?: AxiosRequestConfig) {
+        return IntroductionsApiFp(this.configuration).patchIntroductionsIntroductionIdIntroductionsIntroductionIdPatch(introductionId, introductionPatch, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Post Series Series Id Introduction
+     * @summary Post Series Series Id Introductions
      * @param {number} seriesId 
      * @param {IntroductionCreate} introductionCreate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IntroductionApi
+     * @memberof IntroductionsApi
      */
-    public postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(seriesId: number, introductionCreate: IntroductionCreate, options?: AxiosRequestConfig) {
-        return IntroductionApiFp(this.configuration).postSeriesSeriesIdIntroductionSeriesSeriesIdIntroductionsPost(seriesId, introductionCreate, options).then((request) => request(this.axios, this.basePath));
+    public postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(seriesId: number, introductionCreate: IntroductionCreate, options?: AxiosRequestConfig) {
+        return IntroductionsApiFp(this.configuration).postSeriesSeriesIdIntroductionsSeriesSeriesIdIntroductionsPost(seriesId, introductionCreate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2303,7 +2598,7 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
         deleteLandmarksLandmarkIdLandmarksLandmarkIdDelete: async (landmarkId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'landmarkId' is not null or undefined
             assertParamExists('deleteLandmarksLandmarkIdLandmarksLandmarkIdDelete', 'landmarkId', landmarkId)
-            const localVarPath = `/landmarks/{landmark_id}`
+            const localVarPath = `/landmarks/{landmark_id}/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2315,6 +2610,10 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2337,7 +2636,7 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
         getLandmarksLandmarkIdLandmarksLandmarkIdGet: async (landmarkId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'landmarkId' is not null or undefined
             assertParamExists('getLandmarksLandmarkIdLandmarksLandmarkIdGet', 'landmarkId', landmarkId)
-            const localVarPath = `/landmarks/{landmark_id}`
+            const localVarPath = `/landmarks/{landmark_id}/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2370,7 +2669,7 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
          * @throws {RequiredError}
          */
         getLandmarksLandmarksGet: async (pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/landmarks`;
+            const localVarPath = `/landmarks/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2414,7 +2713,7 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
             assertParamExists('patchLandmarksLandmarkIdLandmarksLandmarkIdPatch', 'landmarkId', landmarkId)
             // verify required parameter 'landmarkPatch' is not null or undefined
             assertParamExists('patchLandmarksLandmarkIdLandmarksLandmarkIdPatch', 'landmarkPatch', landmarkPatch)
-            const localVarPath = `/landmarks/{landmark_id}`
+            const localVarPath = `/landmarks/{landmark_id}/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2426,6 +2725,10 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2451,7 +2754,7 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
         postLandmarksLandmarksPost: async (landmarkCreate: LandmarkCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'landmarkCreate' is not null or undefined
             assertParamExists('postLandmarksLandmarksPost', 'landmarkCreate', landmarkCreate)
-            const localVarPath = `/landmarks`;
+            const localVarPath = `/landmarks/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2462,6 +2765,10 @@ export const LandmarksApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2716,6 +3023,110 @@ export const RootApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Register
+         * @param {UserCreate} userCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerRegisterPost: async (userCreate: UserCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userCreate' is not null or undefined
+            assertParamExists('registerRegisterPost', 'userCreate', userCreate)
+            const localVarPath = `/register/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userCreate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Token
+         * @param {string} username 
+         * @param {string} password 
+         * @param {string} [grantType] 
+         * @param {string} [scope] 
+         * @param {string} [clientId] 
+         * @param {string} [clientSecret] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenTokenPost: async (username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('tokenTokenPost', 'username', username)
+            // verify required parameter 'password' is not null or undefined
+            assertParamExists('tokenTokenPost', 'password', password)
+            const localVarPath = `/token/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new URLSearchParams();
+
+
+            if (grantType !== undefined) { 
+                localVarFormParams.set('grant_type', grantType as any);
+            }
+    
+            if (username !== undefined) { 
+                localVarFormParams.set('username', username as any);
+            }
+    
+            if (password !== undefined) { 
+                localVarFormParams.set('password', password as any);
+            }
+    
+            if (scope !== undefined) { 
+                localVarFormParams.set('scope', scope as any);
+            }
+    
+            if (clientId !== undefined) { 
+                localVarFormParams.set('client_id', clientId as any);
+            }
+    
+            if (clientSecret !== undefined) { 
+                localVarFormParams.set('client_secret', clientSecret as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams.toString();
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2732,8 +3143,35 @@ export const RootApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async readRootGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async readRootGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Root>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.readRootGet(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Register
+         * @param {UserCreate} userCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registerRegisterPost(userCreate: UserCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registerRegisterPost(userCreate, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Token
+         * @param {string} username 
+         * @param {string} password 
+         * @param {string} [grantType] 
+         * @param {string} [scope] 
+         * @param {string} [clientId] 
+         * @param {string} [clientSecret] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async tokenTokenPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tokenTokenPost(username, password, grantType, scope, clientId, clientSecret, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2752,8 +3190,33 @@ export const RootApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readRootGet(options?: any): AxiosPromise<any> {
+        readRootGet(options?: any): AxiosPromise<Root> {
             return localVarFp.readRootGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Register
+         * @param {UserCreate} userCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerRegisterPost(userCreate: UserCreate, options?: any): AxiosPromise<User> {
+            return localVarFp.registerRegisterPost(userCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Token
+         * @param {string} username 
+         * @param {string} password 
+         * @param {string} [grantType] 
+         * @param {string} [scope] 
+         * @param {string} [clientId] 
+         * @param {string} [clientSecret] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenTokenPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<LoginResponse> {
+            return localVarFp.tokenTokenPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2775,6 +3238,35 @@ export class RootApi extends BaseAPI {
     public readRootGet(options?: AxiosRequestConfig) {
         return RootApiFp(this.configuration).readRootGet(options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @summary Register
+     * @param {UserCreate} userCreate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RootApi
+     */
+    public registerRegisterPost(userCreate: UserCreate, options?: AxiosRequestConfig) {
+        return RootApiFp(this.configuration).registerRegisterPost(userCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Token
+     * @param {string} username 
+     * @param {string} password 
+     * @param {string} [grantType] 
+     * @param {string} [scope] 
+     * @param {string} [clientId] 
+     * @param {string} [clientSecret] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RootApi
+     */
+    public tokenTokenPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: AxiosRequestConfig) {
+        return RootApiFp(this.configuration).tokenTokenPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -2794,7 +3286,7 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
         deleteSeriesSeriesIdSeriesSeriesIdDelete: async (seriesId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'seriesId' is not null or undefined
             assertParamExists('deleteSeriesSeriesIdSeriesSeriesIdDelete', 'seriesId', seriesId)
-            const localVarPath = `/series/{series_id}`
+            const localVarPath = `/series/{series_id}/`
                 .replace(`{${"series_id"}}`, encodeURIComponent(String(seriesId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2806,6 +3298,10 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2830,7 +3326,7 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
         getLandmarksLandmarkIdSeriesLandmarksLandmarkIdSeriesGet: async (landmarkId: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'landmarkId' is not null or undefined
             assertParamExists('getLandmarksLandmarkIdSeriesLandmarksLandmarkIdSeriesGet', 'landmarkId', landmarkId)
-            const localVarPath = `/landmarks/{landmark_id}/series`
+            const localVarPath = `/landmarks/{landmark_id}/series/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2872,7 +3368,7 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
         getSeriesSeriesIdSeriesSeriesIdGet: async (seriesId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'seriesId' is not null or undefined
             assertParamExists('getSeriesSeriesIdSeriesSeriesIdGet', 'seriesId', seriesId)
-            const localVarPath = `/series/{series_id}`
+            const localVarPath = `/series/{series_id}/`
                 .replace(`{${"series_id"}}`, encodeURIComponent(String(seriesId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2909,7 +3405,7 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('patchSeriesSeriesIdSeriesSeriesIdPatch', 'seriesId', seriesId)
             // verify required parameter 'seriesPatch' is not null or undefined
             assertParamExists('patchSeriesSeriesIdSeriesSeriesIdPatch', 'seriesPatch', seriesPatch)
-            const localVarPath = `/series/{series_id}`
+            const localVarPath = `/series/{series_id}/`
                 .replace(`{${"series_id"}}`, encodeURIComponent(String(seriesId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2921,6 +3417,10 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -2949,7 +3449,7 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('postLandmarksLandmarkIdSeriesLandmarksLandmarkIdSeriesPost', 'landmarkId', landmarkId)
             // verify required parameter 'seriesCreate' is not null or undefined
             assertParamExists('postLandmarksLandmarkIdSeriesLandmarksLandmarkIdSeriesPost', 'seriesCreate', seriesCreate)
-            const localVarPath = `/landmarks/{landmark_id}/series`
+            const localVarPath = `/landmarks/{landmark_id}/series/`
                 .replace(`{${"landmark_id"}}`, encodeURIComponent(String(landmarkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2961,6 +3461,10 @@ export const SeriesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
     
@@ -3181,6 +3685,117 @@ export class SeriesApi extends BaseAPI {
      */
     public postLandmarksLandmarkIdSeriesLandmarksLandmarkIdSeriesPost(landmarkId: number, seriesCreate: SeriesCreate, options?: AxiosRequestConfig) {
         return SeriesApiFp(this.configuration).postLandmarksLandmarkIdSeriesLandmarksLandmarkIdSeriesPost(landmarkId, seriesCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UsersApi - axios parameter creator
+ * @export
+ */
+export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Reset User Password
+         * @param {ResetPasswordRequest} resetPasswordRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        resetUserPasswordResetPasswordPost: async (resetPasswordRequest: ResetPasswordRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resetPasswordRequest' is not null or undefined
+            assertParamExists('resetUserPasswordResetPasswordPost', 'resetPasswordRequest', resetPasswordRequest)
+            const localVarPath = `/reset_password/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(resetPasswordRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UsersApi - functional programming interface
+ * @export
+ */
+export const UsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Reset User Password
+         * @param {ResetPasswordRequest} resetPasswordRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async resetUserPasswordResetPasswordPost(resetPasswordRequest: ResetPasswordRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResetPasswordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.resetUserPasswordResetPasswordPost(resetPasswordRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UsersApi - factory interface
+ * @export
+ */
+export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UsersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Reset User Password
+         * @param {ResetPasswordRequest} resetPasswordRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        resetUserPasswordResetPasswordPost(resetPasswordRequest: ResetPasswordRequest, options?: any): AxiosPromise<ResetPasswordResponse> {
+            return localVarFp.resetUserPasswordResetPasswordPost(resetPasswordRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UsersApi - object-oriented interface
+ * @export
+ * @class UsersApi
+ * @extends {BaseAPI}
+ */
+export class UsersApi extends BaseAPI {
+    /**
+     * 
+     * @summary Reset User Password
+     * @param {ResetPasswordRequest} resetPasswordRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public resetUserPasswordResetPasswordPost(resetPasswordRequest: ResetPasswordRequest, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).resetUserPasswordResetPasswordPost(resetPasswordRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

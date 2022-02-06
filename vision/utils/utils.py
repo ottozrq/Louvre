@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
+import casbin
 import jinja2
 import psycopg2.extras
 from postgis.psycopg import register
@@ -95,3 +96,18 @@ def postgres_session():
         yield VisionDb(session, get_postgres_sessionmaker().engine)
     finally:
         session.close()
+
+
+class VisionEnforcer:
+    def __init__(self) -> None:
+        self.enforcer = casbin.Enforcer(
+            str(Path(__file__).parent / "rbac/model.conf"),
+            str(Path(__file__).parent / "rbac/policy.csv"),
+        )
+        self.enforcer.logger.error = self.enforcer.logger.info
+
+    def enforce(self, role, path, method):
+        return self.enforcer.enforce(role, path, method)
+
+
+enforcer = VisionEnforcer()

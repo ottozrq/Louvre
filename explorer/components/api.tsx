@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   ArtworksApiFactory,
   Configuration,
-  IntroductionApiFactory,
+  IntroductionsApiFactory,
   ImagesApiFactory,
   LandmarksApiFactory,
   RootApiFactory,
@@ -26,7 +26,7 @@ export function setApiBasePath(s: string) {
 const api = {
   artworks: ArtworksApiFactory(config),
   landmarks: LandmarksApiFactory(config),
-  introductions: IntroductionApiFactory(config),
+  introductions: IntroductionsApiFactory(config),
   images: ImagesApiFactory(config),
   root: RootApiFactory(config),
   series: SeriesApiFactory(config),

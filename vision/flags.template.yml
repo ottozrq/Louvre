@@ -22,6 +22,7 @@ targets:
       host: ""
     vision:
       namespace: vision-production
+      login_secret:
   # Base staging override
   # Selects STAGING DB for SF and PG, and Cognito settings for Staging
   staging:
@@ -31,6 +32,7 @@ targets:
       ssl_mode: false
     vision:
       namespace: vision-staging
+      login_secret:
     user_notifications:
       lambda_name: vision-staging-user-notifications
   local:

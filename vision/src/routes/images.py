@@ -30,17 +30,22 @@ def _delete_image(dir: str, file_path: str):
     os.remove(os.path.join("images", file_path))
 
 
+class ImageUploadResponse(m.Model):
+    file_path: str
+
+
 @app.post(
-    "/images/upload/{dir}",
+    "/images/{dir}/",
     tags=[TAG.Images],
+    response_model=ImageUploadResponse,
     include_in_schema=schema_show_all,
 )
 def post_image(dir: str, image: UploadFile = File(...)):
-    return {"file_path": _save_image(dir, image)}
+    return ImageUploadResponse(file_path=_save_image(dir, image))
 
 
 @app.get(
-    "/images/{dir}/{file_path}",
+    "/images/{dir}/{file_path}/",
     tags=[TAG.Images],
     include_in_schema=schema_show_all,
 )
@@ -49,7 +54,7 @@ def get_image(dir: str, file_path: str):
 
 
 @app.delete(
-    "/images/{dir}/{file_path}",
+    "/images/{dir}/{file_path}/",
     tags=[TAG.Images],
     include_in_schema=schema_show_all,
 )
@@ -59,7 +64,7 @@ def delete_image(dir: str, file_path: str):
 
 
 @app.post(
-    "/images/detect",
+    "/images/detect/",
     response_model=m.Artwork,
     tags=[TAG.Images],
     include_in_schema=schema_show_all,

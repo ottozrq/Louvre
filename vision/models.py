@@ -261,6 +261,14 @@ class GeoJSONFeature(Model):
     geometry: Geometry
 
 
+class Root(Model):
+    users: Link
+    landmarks: Link
+    artworks: Link
+    series: Link
+    introductions: Link
+
+
 Country = AutoEnum("Country", [country.name for country in pycountry.countries])
 
 

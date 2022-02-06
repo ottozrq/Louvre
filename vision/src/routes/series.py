@@ -7,7 +7,7 @@ from utils.utils import VisionDb
 
 
 @app.get(
-    "/landmarks/{landmark_id}/series",
+    "/landmarks/{landmark_id}/series/",
     response_model=m.SeriesCollection,
     tags=[TAG.Series],
     include_in_schema=schema_show_all,
@@ -26,7 +26,7 @@ def get_landmarks_landmark_id_series(
 
 
 @app.get(
-    "/series/{series_id}",
+    "/series/{series_id}/",
     response_model=m.Series,
     tags=[TAG.Series],
     include_in_schema=schema_show_all,
@@ -39,7 +39,7 @@ def get_series_series_id(
 
 
 @app.post(
-    "/landmarks/{landmark_id}/series",
+    "/landmarks/{landmark_id}/series/",
     response_model=m.Series,
     tags=[TAG.Series],
     include_in_schema=schema_show_all,
@@ -63,7 +63,7 @@ def post_landmarks_landmark_id_series(
 
 
 @app.patch(
-    "/series/{series_id}",
+    "/series/{series_id}/",
     response_model=m.Series,
     tags=[TAG.Series],
     include_in_schema=schema_show_all,
@@ -89,7 +89,7 @@ def patch_series_series_id(
 
 
 @app.delete(
-    "/series/{series_id}",
+    "/series/{series_id}/",
     response_model=Dict,
     tags=[TAG.Series],
     include_in_schema=schema_show_all,

@@ -5,11 +5,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.models import Server
 from starlette.middleware.authentication import AuthenticationMiddleware
-
+from starlette_context.middleware import RawContextMiddleware
 
 from middleware.authentication import VisionAuthBackend, authentication_on_error
+from middleware.authorization import CasbinMiddleware
 from utils import flags
 from utils.utils import (
+    enforcer,
     get_postgres_sessionmaker,
 )
 
@@ -107,11 +109,13 @@ def get_app(*_, url=None, **__):
         return _global_app
     _global_app = app
     _global_app.postgres_sessionmaker = get_postgres_sessionmaker(init_url=url)
+    _global_app.add_middleware(CasbinMiddleware, enforcer=enforcer)
     _global_app.add_middleware(
         AuthenticationMiddleware,
         backend=VisionAuthBackend(),
         on_error=authentication_on_error,
     )
+    _global_app.add_middleware(RawContextMiddleware)
     _global_app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
