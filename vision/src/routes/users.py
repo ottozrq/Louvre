@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 
-from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 import jwt
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+from passlib.context import CryptContext
 
 import depends as d
-from passlib.context import CryptContext
 from src.routes import app, Depends, HTTPException, m, schema_show_all, sm, status, TAG
 from utils import flags
 from utils.utils import VisionDb

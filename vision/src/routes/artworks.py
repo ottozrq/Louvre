@@ -49,6 +49,7 @@ def post_artworks(
     landmark_id: int,
     artwork: m.ArtworkCreate,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_artwork = sm.Artwork(
         artwork_name=artwork.artwork_name,
@@ -74,6 +75,7 @@ def patch_artworks_artwork_id(
     artwork: m.ArtworkPatch,
     artwork_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_artwork = m.Artwork.db(db).get_or_404(artwork_id)
     artwork_model = m.Artwork.db(db).from_id(artwork_id)
@@ -108,6 +110,7 @@ def patch_artworks_artwork_id(
 def delete_artworks_artwork_id(
     artwork_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db.session.delete(m.Artwork.db(db).get_or_404(artwork_id))
     db.session.commit()

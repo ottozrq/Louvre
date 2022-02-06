@@ -57,3 +57,7 @@ def get_logged_in_user(
     db=Depends(get_psql),
 ) -> sm.User:
     return m.User.db(db).get_or_404(user_id)
+
+
+def superuser_email() -> str:
+    return flags.VianovaFlags.get().superuser_email

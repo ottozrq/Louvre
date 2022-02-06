@@ -48,6 +48,7 @@ def post_landmarks_landmark_id_series(
     landmark_id: int,
     series: m.SeriesCreate,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_series = sm.Series(
         series_name=series.series_name,
@@ -71,6 +72,7 @@ def patch_series_series_id(
     series: m.SeriesPatch,
     series_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_series = m.Series.db(db).get_or_404(series_id)
     if series.series_name:
@@ -95,6 +97,7 @@ def patch_series_series_id(
 def delete_series_series_id(
     series_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db.session.delete(m.Series.db(db).get_or_404(series_id))
     db.session.commit()

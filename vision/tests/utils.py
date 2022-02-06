@@ -12,7 +12,7 @@ from starlette import testclient
 import depends as d
 import models as m
 import sql_models as sm
-# from middleware import authentication
+from middleware import authentication
 
 from .sqlalchemy_fixture_factory.sqla_fix_fact import BaseFix, SqlaFixFact
 
@@ -20,6 +20,7 @@ from .sqlalchemy_fixture_factory.sqla_fix_fact import BaseFix, SqlaFixFact
 @dataclass
 class Mocks:
     # mocks are overridden in conftest.py
+    auth_backend: MagicMock
     mocker: pytest_mock.MockerFixture
 
     @classmethod
@@ -32,9 +33,9 @@ class Mocks:
                     for k, v in cls.__dataclass_fields__.items()
                     if v.type is MagicMock
                 },
-                # "auth_backend": mocker.patch(
-                #     "middleware.authentication.VisionAuthBackend.vision_user"
-                # ),
+                "auth_backend": mocker.patch(
+                    "middleware.authentication.VisionAuthBackend.vision_user"
+                ),
             },
         )
 
@@ -48,7 +49,7 @@ class ApiClient:
     app: fastapi.FastAPI
     mocks: Mocks
     user: sm.User
-    # default_user: sm.User
+    default_user: sm.User
 
     def create(self, fixture: BaseFix, *args, **kwargs):
         return fixture(self.fix, *args, **kwargs).create()
@@ -62,7 +63,7 @@ class ApiClient:
     def login(
         self,
         user: Union[m.User, sm.User, uuid.UUID, str] = None,
-        # superuser: bool = None,
+        superuser: bool = None,
     ):
         user = user or self.default_user
         user_id = uuid.UUID(str(getattr(user, "user_id", user)))
@@ -72,8 +73,8 @@ class ApiClient:
             else m.User.db(self.db).from_id(user_id)
         )
         self.user = m.User.db(self.db).get_or_404(user_id)
-        # superuser_email = superuser and user.email
-        # self.app.dependency_overrides[d.superuser_email] = lambda: superuser_email
+        superuser_email = superuser and user.user_email
+        self.app.dependency_overrides[d.superuser_email] = lambda: superuser_email
         self.app.dependency_overrides[d.get_user_id] = lambda: user_id
         return self
 
@@ -88,12 +89,12 @@ class ApiClient:
         as_dict=False,
         **kwargs,
     ):
-        # self.session.refresh(self.user or self.default_user)
-        # self.mocks.auth_backend.return_value = (
-        #     authentication.VisionAuthUser.from_user(m.User.from_db(self.user))
-        #     if self.user
-        #     else None
-        # )
+        self.session.refresh(self.user or self.default_user)
+        self.mocks.auth_backend.return_value = (
+            authentication.VisionAuthUser.from_user(m.User.from_db(self.user))
+            if self.user
+            else None
+        )
         response = self.client.request(
             url=str(getattr(url, "self_link", url)),
             allow_redirects=True,

@@ -44,6 +44,7 @@ def get_landmarks_landmark_id(
 def post_landmarks(
     landmark: m.LandmarkCreate,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_landmark = sm.Landmark(
         landmark_name=landmark.landmark_name,
@@ -70,6 +71,7 @@ def patch_landmarks_landmark_id(
     landmark: m.LandmarkPatch,
     landmark_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_landmark = m.Landmark.db(db).get_or_404(landmark_id)
     landmark_model = m.Landmark.db(db).from_id(landmark_id)
@@ -102,6 +104,7 @@ def patch_landmarks_landmark_id(
 def delete_landmarks_landmark_id(
     landmark_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db.session.delete(m.Landmark.db(db).get_or_404(landmark_id))
     db.session.commit()

@@ -1,4 +1,4 @@
-# from datetime import datetime
+from datetime import datetime
 
 # import models as m
 import sql_models as sm
@@ -50,3 +50,13 @@ class Introduction(BaseFix):
     series = subFactoryGet(Series)
     language = sm.Language.en
     introduction = {"content": "This is Louvre introductions"}
+
+
+class User(BaseFix):
+    MODEL = sm.User
+    user_email = "otto@example.com"
+    first_name = "Otto"
+    last_name = "Zhang"
+    language = sm.Language.en
+    date_joined = datetime(1970, 1, 1)
+    extra = {}

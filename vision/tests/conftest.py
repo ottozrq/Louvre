@@ -4,15 +4,19 @@ import pytest
 import sqlalchemy
 import testing.postgresql
 from fastapi import testclient
+from passlib.context import CryptContext
 from sqlalchemy.orm import scoped_session
 
 import depends as d
 import sql_models as sm
 from app import get_app
+from tests import fixtures as fixts
 from tests import utils
 from utils.utils import VisionDb
 
 from .sqlalchemy_fixture_factory.sqla_fix_fact import SqlaFixFact
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @pytest.fixture(scope="session")
@@ -98,6 +102,7 @@ def _api_client(app, monkeypatch, mocker):
             session=session,
             mocks=mocks,
             user=None,
+            default_user=None,
         )
     finally:
         session.remove()
@@ -117,5 +122,19 @@ def cl(api_client) -> utils.ApiClient:
 
 
 @pytest.fixture
-def api_client(_api_client: utils.ApiClient) -> utils.ApiClient:
+def api_client(_api_client: utils.ApiClient, user_admin) -> utils.ApiClient:
+    _api_client.user = user_admin
+    _api_client.default_user = _api_client.user
+    _api_client.login(user_admin, superuser=True)
     yield _api_client
+
+
+@pytest.fixture
+def user_admin(fix):
+    return fixts.User(
+        fix,
+        user_email="otto@ottozhang.com",
+        password=pwd_context.hash("666666"),
+        user_id="00000000-0000-0000-0000-000000000001",
+        role=sm.UserRole.admin,
+    ).create()

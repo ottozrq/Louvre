@@ -48,6 +48,7 @@ def post_series_series_id_introduction(
     series_id: int,
     introduction: m.IntroductionCreate,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_introduction = sm.Introduction(
         introduction_name=introduction.introduction_name,
@@ -71,6 +72,7 @@ def patch_introduction_introduction_id(
     introduction: m.IntroductionPatch,
     introduction_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_introduction = m.Introduction.db(db).get_or_404(introduction_id)
     if introduction.introduction_name:
@@ -91,6 +93,7 @@ def patch_introduction_introduction_id(
 def delete_series_series_id(
     introduction_id: int,
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db.session.delete(m.Series.db(db).get_or_404(introduction_id))
     db.session.commit()
