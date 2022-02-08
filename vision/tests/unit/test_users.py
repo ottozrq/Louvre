@@ -38,8 +38,8 @@ def test_token(cl: ApiClient, user_admin: sm.User):
     )
 
 
-def test_user_register_flow(cl: ApiClient):
-    cl.logout
+def test_reset_password(cl: ApiClient):
+    cl.logout()
     cl(
         "/reset_password",
         method="POST",

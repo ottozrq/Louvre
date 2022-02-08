@@ -53,6 +53,7 @@ def post_landmarks_landmark_id_series(
     db_series = sm.Series(
         series_name=series.series_name,
         cover_image=series.cover_image,
+        author_id=user.user_id,
         landmark_id=landmark_id,
         description=series.description,
         price=series.price,
@@ -70,11 +71,10 @@ def post_landmarks_landmark_id_series(
 )
 def patch_series_series_id(
     series: m.SeriesPatch,
-    series_id: int,
+    db_series: sm.Series = Depends(d.user_owned_series),
     db: VisionDb = Depends(d.get_psql),
     user: sm.User = Depends(d.get_logged_in_user),
 ):
-    db_series = m.Series.db(db).get_or_404(series_id)
     if series.series_name:
         db_series.series_name = series.series_name
     if series.cover_image:
@@ -85,7 +85,7 @@ def patch_series_series_id(
         db_series.price = series.price
     db.session.commit()
     db.session.refresh(db_series)
-    return m.Series.db(db).from_id(series_id)
+    return m.Series.db(db).from_id(db_series.series_id)
 
 
 @app.delete(
@@ -95,10 +95,10 @@ def patch_series_series_id(
     include_in_schema=schema_show_all,
 )
 def delete_series_series_id(
-    series_id: int,
+    series: sm.Series = Depends(d.user_owned_series),
     db: VisionDb = Depends(d.get_psql),
     user: sm.User = Depends(d.get_logged_in_user),
 ):
-    db.session.delete(m.Series.db(db).get_or_404(series_id))
+    db.session.delete(m.Series.db(db).get_or_404(series.series_id))
     db.session.commit()
     return delete_response

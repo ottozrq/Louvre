@@ -47,14 +47,14 @@ def get_introductions_introduction_id(
     include_in_schema=schema_show_all,
 )
 def post_series_series_id_introductions(
-    series_id: int,
     introduction: m.IntroductionCreate,
+    series: sm.Series = Depends(d.user_owned_series),
     db: VisionDb = Depends(d.get_psql),
     user: sm.User = Depends(d.get_logged_in_user),
 ):
     db_introduction = sm.Introduction(
         introduction_name=introduction.introduction_name,
-        series_id=series_id,
+        series_id=series.series_id,
         language=introduction.language,
         artwork_id=introduction.artwork_id,
         introduction=introduction.introduction,
@@ -72,18 +72,17 @@ def post_series_series_id_introductions(
 )
 def patch_introductions_introduction_id(
     introduction: m.IntroductionPatch,
-    introduction_id: int,
+    db_introduction: sm.Introduction = Depends(d.user_owned_introductions),
     db: VisionDb = Depends(d.get_psql),
     user: sm.User = Depends(d.get_logged_in_user),
 ):
-    db_introduction = m.Introduction.db(db).get_or_404(introduction_id)
     if introduction.introduction_name:
         db_introduction.introduction_name = introduction.introduction_name
     if introduction.introduction:
         db_introduction.introduction = introduction.introduction
     db.session.commit()
     db.session.refresh(db_introduction)
-    return m.Introduction.db(db).from_id(introduction_id)
+    return m.Introduction.db(db).from_id(db_introduction.introduction_id)
 
 
 @app.delete(
@@ -93,10 +92,10 @@ def patch_introductions_introduction_id(
     include_in_schema=schema_show_all,
 )
 def delete_introductions_introductions_id(
-    introduction_id: int,
+    introduction: sm.Introduction = Depends(d.user_owned_introductions),
     db: VisionDb = Depends(d.get_psql),
     user: sm.User = Depends(d.get_logged_in_user),
 ):
-    db.session.delete(m.Introduction.db(db).get_or_404(introduction_id))
+    db.session.delete(m.Introduction.db(db).get_or_404(introduction.introduction_id))
     db.session.commit()
     return delete_response

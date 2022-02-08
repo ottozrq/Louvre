@@ -2,7 +2,7 @@
 import re
 import uuid
 
-# from typing import Any, Dict, List
+from typing import List
 import sqlalchemy
 from geoalchemy2 import Geography, Geometry
 from geoalchemy2.functions import ST_IsValid
@@ -161,6 +161,23 @@ class User(PsqlBase):
     role = enum_field(UserRole, server_default=UserRole.visitor, nullable=False)
     extras = Column(JSON, nullable=True)
 
+    # relations
+    series: List["Series"]
+    introductions: List["Introduction"]
+
+    def own_series(self, series_id: int) -> bool:
+        if not series_id:
+            return self.is_superuser
+        return series_id in {series.series_id for series in self.series}
+
+    def own_introduction(self, introduction_id: int) -> bool:
+        if not introduction_id:
+            return self.is_superuser
+        return introduction_id in {
+            introduction.introduction_id
+            for introduction in {series.introductions for series in self.series}
+        }
+
 
 class Landmark(GeoJsonBase, PsqlBase):
     landmark_id = seq("landmark_id")
@@ -199,18 +216,28 @@ class Series(PsqlBase):
     series_name = name_field()
     landmark_id = fk(Landmark.landmark_id)
     landmark = rel(Landmark)
+    author_id = fk(User.user_id, nullable=False)
+    author = rel(User, back_populates="series")
     language = _language_column()
     cover_image = Column(String, nullable=True)
     description = Column(String, nullable=False)
     price = Column(Float, nullable=True)
+
+    # relations
+    introductions: List["Introduction"]
 
 
 class Introduction(PsqlBase):
     introduction_id = seq("introduction_id")
     introduction_name = name_field()
     series_id = fk(Series.series_id)
-    series = rel(Series)
+    series = rel(Series, back_populates="introductions")
     artwork_id = fk(Artwork.artwork_id)
     artwork = rel(Artwork)
     language = _language_column()
     introduction = Column(JSON, nullable=True)
+
+
+User.series = rel(Series, back_populates="author")
+
+Series.introductions = rel(Introduction, back_populates="series")

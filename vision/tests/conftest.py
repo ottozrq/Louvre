@@ -138,3 +138,49 @@ def user_admin(fix):
         user_id="00000000-0000-0000-0000-000000000001",
         role=sm.UserRole.admin,
     ).create()
+
+
+@pytest.fixture
+def user_editor(fix):
+    return fixts.User(
+        fix,
+        user_email="editor@ottozhang.com",
+        password=pwd_context.hash("666666"),
+        user_id="00000000-0000-0000-0000-000000000002",
+        role=sm.UserRole.editor,
+    ).create()
+
+
+@pytest.fixture
+def landmark_1(fix):
+    return fixts.Landmark(
+        fix,
+        landmark_id=1,
+    ).create()
+
+
+@pytest.fixture
+def artwork_1(fix, landmark_1):
+    return fixts.Artwork(
+        fix,
+        artwork_id=1,
+        landmark=landmark_1,
+    ).create()
+
+
+@pytest.fixture
+def series_1(fix, landmark_1, user_editor):
+    return fixts.Series(
+        fix,
+        landmark=landmark_1,
+        author=user_editor,
+    ).create()
+
+
+@pytest.fixture
+def introduction_1(fix, artwork_1, series_1):
+    return fixts.Introduction(
+        fix,
+        artwork=artwork_1,
+        series=series_1,
+    ).create()

@@ -416,6 +416,7 @@ class SeriesCreate(SeriesPatch):
 class Series(Entity, SeriesCreate):
     series_id: PrimaryKey
     landmark: Link
+    author: Link
 
     class Config:
         db_model = sm.Series
@@ -427,6 +428,7 @@ class Series(Entity, SeriesCreate):
             series_id=series.series_id,
             series_name=series.series_name,
             landmark=Landmark.link(series.landmark),
+            author=User.link(series.author_id),
             language=series.language,
             cover_image=series.cover_image,
             description=series.description,
