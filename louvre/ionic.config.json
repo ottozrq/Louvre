@@ -1,0 +1,7 @@
+{
+  "name": "louvre",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
