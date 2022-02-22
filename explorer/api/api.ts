@@ -1111,6 +1111,12 @@ export interface Series {
      * @memberof Series
      */
     'landmark': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Series
+     */
+    'author': string;
 }
 /**
  * 
@@ -1847,6 +1853,10 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1865,10 +1875,10 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        detectImageImagesDetectPost: async (image: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        detectImageDetectPost: async (image: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'image' is not null or undefined
-            assertParamExists('detectImageImagesDetectPost', 'image', image)
-            const localVarPath = `/images/detect/`;
+            assertParamExists('detectImageDetectPost', 'image', image)
+            const localVarPath = `/detect/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1880,6 +1890,10 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
 
 
             if (image !== undefined) { 
@@ -1964,6 +1978,10 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
 
             if (image !== undefined) { 
                 localVarFormParams.append('image', image as any);
@@ -2011,8 +2029,8 @@ export const ImagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async detectImageImagesDetectPost(image: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Artwork>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.detectImageImagesDetectPost(image, options);
+        async detectImageDetectPost(image: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Artwork>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.detectImageDetectPost(image, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2067,8 +2085,8 @@ export const ImagesApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        detectImageImagesDetectPost(image: any, options?: any): AxiosPromise<Artwork> {
-            return localVarFp.detectImageImagesDetectPost(image, options).then((request) => request(axios, basePath));
+        detectImageDetectPost(image: any, options?: any): AxiosPromise<Artwork> {
+            return localVarFp.detectImageDetectPost(image, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2123,8 +2141,8 @@ export class ImagesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ImagesApi
      */
-    public detectImageImagesDetectPost(image: any, options?: AxiosRequestConfig) {
-        return ImagesApiFp(this.configuration).detectImageImagesDetectPost(image, options).then((request) => request(this.axios, this.basePath));
+    public detectImageDetectPost(image: any, options?: AxiosRequestConfig) {
+        return ImagesApiFp(this.configuration).detectImageDetectPost(image, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

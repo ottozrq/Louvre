@@ -10,7 +10,6 @@ g, editor, writer
 
 # Tourist account
 g, visitor, role_base
-g, visitor, writer
 
 # POLICIES
 p, *, /*, OPTION
@@ -24,7 +23,7 @@ p, *, /artworks*, GET
 p, *, /images*, GET
 
 p, role_base, /reset_password, POST
-p, writer, /images*, POST 
+p, role_base, /images*, POST 
 p, role_base, /series*, GET
 p, role_base, /introductions*, GET
 

@@ -70,7 +70,7 @@ export default function ArtworkCreatePage() {
           type="file"
           hidden
           onChange={(e) => {
-            api.images.postImageImagesUploadDirPost("artwork", e.target.files[0]).then(data => {
+            api.images.postImageImagesDirPost("artwork", e.target.files[0]).then(data => {
               setArtwork({ ...artwork, cover_image: data.data.file_path })
             });
           }}

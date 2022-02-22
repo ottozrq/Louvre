@@ -40,7 +40,11 @@ class ImageUploadResponse(m.Model):
     response_model=ImageUploadResponse,
     include_in_schema=schema_show_all,
 )
-def post_image(dir: str, image: UploadFile = File(...)):
+def post_image(
+    dir: str,
+    image: UploadFile = File(...),
+    user: sm.User = Depends(d.get_logged_in_user),
+):
     return ImageUploadResponse(file_path=_save_image(dir, image))
 
 
@@ -58,13 +62,17 @@ def get_image(dir: str, file_path: str):
     tags=[TAG.Images],
     include_in_schema=schema_show_all,
 )
-def delete_image(dir: str, file_path: str):
+def delete_image(
+    dir: str,
+    file_path: str,
+    user: sm.User = Depends(d.get_logged_in_user),
+):
     _delete_image(os.path.join(dir, file_path))
     return delete_response
 
 
 @app.post(
-    "/images/detect/",
+    "/detect/",
     response_model=m.Artwork,
     tags=[TAG.Images],
     include_in_schema=schema_show_all,
@@ -72,6 +80,7 @@ def delete_image(dir: str, file_path: str):
 def detect_image(
     image: UploadFile = File(...),
     db: VisionDb = Depends(d.get_psql),
+    user: sm.User = Depends(d.get_logged_in_user),
 ):
     image_path = _save_image("tmp", image)
     artworks = db.session.query(sm.Artwork.artwork_id, sm.Artwork.descriptors).all()

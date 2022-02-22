@@ -70,7 +70,7 @@ export default function LandmarkCreatePage() {
           type="file"
           hidden
           onChange={(e) => {
-            api.images.postImageImagesUploadDirPost("landmark", e.target.files[0]).then(data => {
+            api.images.postImageImagesDirPost("landmark", e.target.files[0]).then(data => {
               setLandmark({ ...landmark, cover_image: data.data.file_path })
             });
           }}

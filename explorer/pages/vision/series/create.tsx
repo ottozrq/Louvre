@@ -2,7 +2,7 @@ import { Paper, TextField, Button, Select, MenuItem } from "@material-ui/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-import { SeriesCreate, Landmark } from "../../../api";
+import { SeriesCreate, Landmark, Language } from "../../../api";
 import api from "../../../components/api";
 import Layout from "../../../components/layout";
 
@@ -54,7 +54,7 @@ export default function SeriesCreatePage() {
         style={{ margin: "10px", padding: "12px", width: "200px" }}
         id="standard-basic"
         onChange={({ target: { value } }) => {
-          setSeries({ ...series, lang: value as string })
+          setSeries({ ...series, language: Language[value as string] })
         }}
       >
         <MenuItem
@@ -78,7 +78,7 @@ export default function SeriesCreatePage() {
           type="file"
           hidden
           onChange={(e) => {
-            api.images.postImageImagesUploadDirPost("series", e.target.files[0]).then(data => {
+            api.images.postImageImagesDirPost("series", e.target.files[0]).then(data => {
               setSeries({ ...series, cover_image: data.data.file_path })
             });
           }}
@@ -110,7 +110,7 @@ export default function SeriesCreatePage() {
         onClick={async () => {
           const seriesCreate: SeriesCreate = {
             series_name: series.series_name,
-            lang: series.lang,
+            language: series.language,
             cover_image: series.cover_image,
             description: series.description,
             price: series.price,
@@ -128,7 +128,7 @@ export default function SeriesCreatePage() {
 interface SeriesCreateInterface {
   series_name?: string,
   landmark_id?: number,
-  lang?: string,
+  language?: Language,
   cover_image?: string,
   description?: string,
   price?: number,

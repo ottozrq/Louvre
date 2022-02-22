@@ -32,8 +32,7 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
     api.artworks
       .getArtworksArtworkIdArtworksArtworkIdGet(parseInt(artwork_id))
       .then((data) => (data ? setArtwork(data.data) : null));
-  }, []);
-  console.log(artwork)
+  }, [artwork_id]);
 
   return (
     <IonPage>
@@ -43,7 +42,7 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
       </IonToolbar>
       <IonContent fullscreen>
         <IonCard>
-          <img src={getImageUrl(artwork?.cover_image)}></img>
+          <img alt="artwork" src={getImageUrl(artwork?.cover_image)}></img>
           <IonCardHeader>
             <IonCardSubtitle>Louvre</IonCardSubtitle>
             <IonCardTitle>{getTranslate(artwork?.artwork_name)}</IonCardTitle>

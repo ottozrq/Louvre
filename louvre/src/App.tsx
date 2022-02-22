@@ -1,7 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonHeader,
   IonIcon,
   IonLabel,
   IonRouterOutlet,
@@ -13,7 +12,11 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { listOutline, personOutline, scanOutline } from 'ionicons/icons';
 import Artworks from './pages/Artworks/Artworks';
-import Artwork from './pages/Artwork/Artwork';
+import ArtworkPage from './pages/Artwork/Artwork';
+import LoginPage from './pages/Login/Login';
+import UserPage from './pages/User/User';
+import ScanPage from './pages/Scan/Scan';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,7 +36,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import ArtworkPage from './pages/Artwork/Artwork';
 
 setupIonicReact();
 
@@ -50,8 +52,14 @@ const App: React.FC = () => (
             component={ArtworkPage}
           >
           </Route>
-          <Route path="/tab3">
-            <Artworks />
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <Route path="/scan">
+            <ScanPage />
+          </Route>
+          <Route path="/user">
+            <UserPage />
           </Route>
           <Route exact path="/">
             <Redirect to="/artworks" />
@@ -66,9 +74,9 @@ const App: React.FC = () => (
             <IonIcon icon={scanOutline} />
             <IonLabel>Scan</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="account" href="/account">
+          <IonTabButton tab="user" href="/user">
             <IonIcon icon={personOutline} />
-            <IonLabel>Account</IonLabel>
+            <IonLabel>User</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

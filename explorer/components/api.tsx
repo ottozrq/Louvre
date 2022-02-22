@@ -8,6 +8,7 @@ import {
   LandmarksApiFactory,
   RootApiFactory,
   SeriesApiFactory,
+  UsersApiFactory,
 } from "../api";
 
 export const config = new Configuration({});
@@ -30,6 +31,7 @@ const api = {
   images: ImagesApiFactory(config),
   root: RootApiFactory(config),
   series: SeriesApiFactory(config),
+  users: UsersApiFactory(config),
 };
 
 axios.interceptors.response.use(
