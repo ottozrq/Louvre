@@ -15,8 +15,8 @@ export const config = new Configuration({});
 
 if (typeof window !== "undefined") {
   config.accessToken = window.localStorage.getItem("access_token") || "";
-  config.basePath = "http://127.0.0.1:8000";
-    // window.localStorage.getItem("base_path") || "https://vision.ottozhang.com";
+  config.basePath =
+    window.localStorage.getItem("base_path") || "https://vision.ottozhang.com";
 }
 
 export function setApiBasePath(s: string) {

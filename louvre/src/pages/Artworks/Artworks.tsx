@@ -25,7 +25,6 @@ const ArtworksPage: React.FC = () => {
       .getArtworksLandmarksLandmarkIdArtworksGet(1)
       .then((data) => (data ? setArtworks(data.data.contents) : []));
   }, []);
-  console.log(artworks);
 
   return (
     <IonPage>
@@ -38,7 +37,7 @@ const ArtworksPage: React.FC = () => {
           <IonRow>
             {
               artworks.map((artwork) => {
-                return <IonCol sizeMd="12" sizeLg="6" sizeXl="4">
+                return <IonCol key={artwork.artwork_id} sizeMd="12" sizeLg="6" sizeXl="4">
                   <ArtworkCard
                     key={artwork.artwork_id}
                     title={getTranslate(artwork.artwork_name)}
