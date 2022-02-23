@@ -97,7 +97,6 @@ def patch_series_series_id(
 def delete_series_series_id(
     series: sm.Series = Depends(d.user_owned_series),
     db: VisionDb = Depends(d.get_psql),
-    user: sm.User = Depends(d.get_logged_in_user),
 ):
     db.session.delete(m.Series.db(db).get_or_404(series.series_id))
     db.session.commit()

@@ -21,6 +21,7 @@ p, *, /token, POST
 p, *, /landmarks*, GET
 p, *, /artworks*, GET
 p, *, /images*, GET
+p, *, /detect, POST
 
 p, role_base, /reset_password, POST
 p, role_base, /images*, POST 

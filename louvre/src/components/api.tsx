@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useHistory } from "react-router";
 
 import {
   ArtworksApiFactory,
@@ -38,7 +39,7 @@ axios.interceptors.response.use(
   (c) => c,
   (e) => {
     if (e?.response?.status === 401) {
-      (window as unknown as any).location = "/login";
+      // (window as unknown as any).location = "/#/login";
     }
   }
 );
