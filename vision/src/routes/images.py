@@ -80,7 +80,6 @@ def delete_image(
 def detect_image(
     image: UploadFile = File(...),
     db: VisionDb = Depends(d.get_psql),
-    user: sm.User = Depends(d.get_logged_in_user),
 ):
     image_path = _save_image("tmp", image)
     artworks = db.session.query(sm.Artwork.artwork_id, sm.Artwork.descriptors).all()

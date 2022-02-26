@@ -29,7 +29,7 @@ p, role_base, /series*, GET
 p, role_base, /introductions*, GET
 
 p, admin, /*, (GET)|(POST)|(DELETE)|(PATCH)
-p, admin, /images* , DELETE
+p, admin, /images*, DELETE
 
 p, producer, /landmarks*, (POST)|(DELETE)|(PATCH)
 p, producer, /artworks*, (POST)|(DELETE)|(PATCH)

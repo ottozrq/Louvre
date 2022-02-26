@@ -3,6 +3,8 @@ import {
   IonCol,
   IonContent,
   IonGrid,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonPage,
   IonRow,
   IonSearchbar,
@@ -18,12 +20,23 @@ import ArtworkCard from '../../components/ItemCard/ItemCard';
 import './Artworks.css';
 
 const ArtworksPage: React.FC = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState<string>('');
   const [artworks, setArtworks] = useState<Artwork[]>([]);
-  useEffect(() => {
+  const [pageToken, setPageToken] = useState<string>('1');
+  const [isInfiniteDisabled, setInfiniteDisabled] = useState(false);
+
+  const get_artworks = () => {
     api.artworks
-      .getArtworksLandmarksLandmarkIdArtworksGet(1)
-      .then((data) => (data ? setArtworks(data.data.contents) : []));
+      .getArtworksLandmarksLandmarkIdArtworksGet(1, pageToken, 20)
+      .then((data) => {
+        setArtworks(data ? [...artworks, ...data.data.contents] : []);
+        setPageToken((parseInt(pageToken) + 1).toString());
+        setInfiniteDisabled(false);
+      });
+
+  }
+  useEffect(() => {
+    get_artworks();
   }, []);
 
   return (
@@ -49,6 +62,19 @@ const ArtworksPage: React.FC = () => {
                 </IonCol>
               })
             }
+            <IonInfiniteScroll
+              onIonInfinite={() => {
+                setInfiniteDisabled(true);
+                get_artworks();
+              }}
+              threshold="100px"
+              disabled={isInfiniteDisabled}
+            >
+              <IonInfiniteScrollContent
+                loadingSpinner="bubbles"
+                loadingText="Loading more data..."
+              ></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
           </IonRow>
         </IonGrid>
       </IonContent>

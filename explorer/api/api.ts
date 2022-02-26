@@ -1891,10 +1891,6 @@ export const ImagesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
-            // authentication _Bearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
-
 
             if (image !== undefined) { 
                 localVarFormParams.append('image', image as any);
