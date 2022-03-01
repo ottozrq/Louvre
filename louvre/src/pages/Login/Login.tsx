@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import {
+  IonButton,
+  IonContent,
   IonItem,
   IonInput,
+  IonLoading,
   IonPage,
-  IonContent,
-  IonButton,
 } from '@ionic/react';
 
 import api from '../../components/api';
@@ -14,7 +15,8 @@ import Header from '../../components/Header/Header';
 import './Login.css';
 
 const LoginPage: React.FC = () => {
-  const history = useHistory()
+  const history = useHistory();
+  const [showLoading, setShowLoading] = useState(false);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -46,15 +48,21 @@ const LoginPage: React.FC = () => {
       <IonButton
         color="light"
         onClick={() => {
+          setShowLoading(true);
           api.root.tokenTokenPost(username, password).then((data) => {
-            window.localStorage.setItem("access_token", data.data.access_token)
-            history.push('/user')
+            window.localStorage.setItem("access_token", data.data.access_token);
+            history.push('/user');
+            setShowLoading(false);
           });
         }}
       >
         Login
       </IonButton>
-
+      <IonLoading
+        isOpen={showLoading}
+        onDidDismiss={() => setShowLoading(false)}
+        message="Loading Artworks.."
+      />
     </IonPage>
   );
 };

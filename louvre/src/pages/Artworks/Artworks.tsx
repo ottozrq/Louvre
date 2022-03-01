@@ -5,6 +5,7 @@ import {
   IonGrid,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonLoading,
   IonPage,
   IonRow,
   IonSearchbar,
@@ -20,6 +21,7 @@ import ArtworkCard from '../../components/ItemCard/ItemCard';
 import './Artworks.css';
 
 const ArtworksPage: React.FC = () => {
+  const [showLoading, setShowLoading] = useState(true);
   const [searchText, setSearchText] = useState<string>('');
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [pageToken, setPageToken] = useState<string>('1');
@@ -27,11 +29,12 @@ const ArtworksPage: React.FC = () => {
 
   const get_artworks = () => {
     api.artworks
-      .getArtworksLandmarksLandmarkIdArtworksGet(1, pageToken, 20)
+      .getArtworksLandmarksLandmarkIdArtworksGet(1, pageToken, 42)
       .then((data) => {
         setArtworks(data ? [...artworks, ...data.data.contents] : []);
         setPageToken((parseInt(pageToken) + 1).toString());
         setInfiniteDisabled(false);
+        setShowLoading(false);
       });
 
   }
@@ -65,6 +68,7 @@ const ArtworksPage: React.FC = () => {
             <IonInfiniteScroll
               onIonInfinite={() => {
                 setInfiniteDisabled(true);
+                setShowLoading(true);
                 get_artworks();
               }}
               threshold="100px"
@@ -77,6 +81,11 @@ const ArtworksPage: React.FC = () => {
             </IonInfiniteScroll>
           </IonRow>
         </IonGrid>
+        <IonLoading
+          isOpen={showLoading}
+          onDidDismiss={() => setShowLoading(false)}
+          message="Loading Artworks.."
+        />
       </IonContent>
     </IonPage>
   );

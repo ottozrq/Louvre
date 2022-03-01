@@ -7,6 +7,7 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonContent,
+  IonLoading,
   IonPage,
   IonSearchbar,
   IonToolbar,
@@ -26,12 +27,16 @@ interface ArtworkPageProps
 
 const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
   const artwork_id = match.params.artwork_id;
+  const [showLoading, setShowLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [artwork, setArtwork] = useState<Artwork>();
   useEffect(() => {
     api.artworks
       .getArtworksArtworkIdArtworksArtworkIdGet(parseInt(artwork_id))
-      .then((data) => (data ? setArtwork(data.data) : null));
+      .then((data) => {
+        setArtwork(data.data)
+        setShowLoading(false);
+      });
   }, [artwork_id]);
 
   return (
@@ -51,6 +56,11 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
             {getTranslate(artwork?.description)}
           </IonCardContent>
         </IonCard>
+        <IonLoading
+          isOpen={showLoading}
+          onDidDismiss={() => setShowLoading(false)}
+          message="Loading Artworks.."
+        />
       </IonContent>
     </IonPage>
   );
