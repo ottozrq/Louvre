@@ -5,6 +5,7 @@ from pathlib import Path
 import casbin
 import jinja2
 import psycopg2.extras
+from elasticsearch import Elasticsearch
 from postgis.psycopg import register
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
@@ -111,3 +112,31 @@ class VisionEnforcer:
 
 
 enforcer = VisionEnforcer()
+
+
+class VisionSearch:
+    es: Elasticsearch
+
+    def __init__(self) -> None:
+        self.es = Elasticsearch(VF.es_endpoint, timeout=300)
+
+    def initialize(self, index_name, mappings):
+        """Create or update indices and mappings"""
+        if self.es.indices.exists(index=index_name):
+            self.es.indices.put_mapping(index=index_name, body=mappings)
+        else:
+            self.es.indices.create(
+                index=index_name,
+                body={
+                    "mappings": mappings,
+                },
+            )
+
+
+@contextmanager
+def search_session():
+    try:
+        vs = VisionSearch()
+        yield vs
+    finally:
+        vs.es.close()

@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from src.routes import algo, app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import update_json, db_geo_feature
-from utils.utils import VisionDb
+from utils.utils import VisionDb, VisionSearch
 
 
 @app.get(
@@ -91,9 +91,7 @@ def patch_artworks_artwork_id(
             artwork_model.description, artwork.description
         )
     if artwork.extra:
-        db_artwork.extra = update_json(
-            artwork_model.extra, artwork.extra
-        )
+        db_artwork.extra = update_json(artwork_model.extra, artwork.extra)
     if artwork.geometry:
         db_artwork.geometry = db_geo_feature(artwork.geometry)
     db.session.commit()
@@ -115,3 +113,26 @@ def delete_artworks_artwork_id(
     db.session.delete(m.Artwork.db(db).get_or_404(artwork_id))
     db.session.commit()
     return delete_response
+
+
+@app.get("/search/artworks/", response_model=m.ArtworkCollection, tags=[TAG.Artworks])
+def search(
+    q: str,
+    pagination: m.Pagination = Depends(d.get_pagination),
+    db: VisionDb = Depends(d.get_psql),
+    search: VisionSearch = Depends(d.get_search),
+):
+    result = search.es.search(
+        index="artwork",
+        body={
+            "query": {"match": {"_all": f"{q}"}},
+            "size": 10000,
+        },
+    )
+    ids = [hit["_id"] for hit in result.get("hits", {}).get("hits", [])]
+    return m.ArtworkCollection.paginate(
+        pagination,
+        m.Artwork.db(db)
+        .query.filter(sm.Artwork.artwork_id.in_(ids))
+        .order_by(sm.Artwork.artwork_id)
+    )

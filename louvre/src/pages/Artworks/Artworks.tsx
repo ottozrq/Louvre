@@ -36,7 +36,6 @@ const ArtworksPage: React.FC = () => {
         setInfiniteDisabled(false);
         setShowLoading(false);
       });
-
   }
   useEffect(() => {
     get_artworks();

@@ -51,6 +51,7 @@ class VisionFlags(Flags):
 
     namespace: str
     login_secret: str
+    es_endpoint: str = "http://localhost:9200"
     superuser_email: str = None
 
     # cognito_cert_1: str = Secret("jwt_public_key_cognito_1")

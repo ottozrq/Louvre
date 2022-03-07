@@ -9,7 +9,7 @@ from pydantic.types import constr
 import models as m
 import sql_models as sm
 from utils import flags
-from utils.utils import VisionDb, postgres_session
+from utils.utils import VisionDb, postgres_session, VisionSearch, search_session
 
 
 class _Bearer(OAuth2PasswordBearer):
@@ -28,6 +28,11 @@ logger.setLevel(logging.DEBUG)
 def get_psql() -> VisionDb:
     with postgres_session() as psql:
         yield psql
+
+
+def get_search() -> VisionSearch:
+    with search_session() as search:
+        yield search
 
 
 def get_pagination(
