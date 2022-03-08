@@ -59,6 +59,12 @@ export interface Artwork {
     'artwork_name': object;
     /**
      * 
+     * @type {number}
+     * @memberof Artwork
+     */
+    'artwork_rate'?: number;
+    /**
+     * 
      * @type {string}
      * @memberof Artwork
      */
@@ -173,6 +179,12 @@ export interface ArtworkCreate {
      * @memberof ArtworkCreate
      */
     'artwork_name': object;
+    /**
+     * 
+     * @type {number}
+     * @memberof ArtworkCreate
+     */
+    'artwork_rate'?: number;
 }
 /**
  * 
@@ -210,6 +222,12 @@ export interface ArtworkPatch {
      * @memberof ArtworkPatch
      */
     'artwork_name'?: object;
+    /**
+     * 
+     * @type {number}
+     * @memberof ArtworkPatch
+     */
+    'artwork_rate'?: number;
 }
 /**
  * An enumeration.
@@ -1611,6 +1629,53 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Search
+         * @param {string} q 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchSearchArtworksGet: async (q: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'q' is not null or undefined
+            assertParamExists('searchSearchArtworksGet', 'q', q)
+            const localVarPath = `/search/artworks/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1680,6 +1745,19 @@ export const ArtworksApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postArtworksLandmarksLandmarkIdArtworksPost(landmarkId, artworkCreate, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Search
+         * @param {string} q 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchSearchArtworksGet(q: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchArtworksGet(q, pageToken, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -1743,6 +1821,18 @@ export const ArtworksApiFactory = function (configuration?: Configuration, baseP
          */
         postArtworksLandmarksLandmarkIdArtworksPost(landmarkId: number, artworkCreate: ArtworkCreate, options?: any): AxiosPromise<Artwork> {
             return localVarFp.postArtworksLandmarksLandmarkIdArtworksPost(landmarkId, artworkCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Search
+         * @param {string} q 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchSearchArtworksGet(q: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
+            return localVarFp.searchSearchArtworksGet(q, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1816,6 +1906,20 @@ export class ArtworksApi extends BaseAPI {
      */
     public postArtworksLandmarksLandmarkIdArtworksPost(landmarkId: number, artworkCreate: ArtworkCreate, options?: AxiosRequestConfig) {
         return ArtworksApiFp(this.configuration).postArtworksLandmarksLandmarkIdArtworksPost(landmarkId, artworkCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Search
+     * @param {string} q 
+     * @param {string} [pageToken] 
+     * @param {number} [pageSize] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArtworksApi
+     */
+    public searchSearchArtworksGet(q: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ArtworksApiFp(this.configuration).searchSearchArtworksGet(q, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

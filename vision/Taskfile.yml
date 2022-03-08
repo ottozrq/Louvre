@@ -33,4 +33,5 @@ tasks:
   gen:
     - NAMESPACE=test VISIONFLAGS_FILE=flags.test.yml VISION_DEBUG=1 python -m  commands.export_openapi --out-file ../explorer/api/openapi.json
     - openapi-generator  generate -g typescript-axios -i ../explorer/api/openapi.json --skip-validate-spec -o ../explorer/api
+    - cp -r ../explorer/api ../louvre/src/
   search_index: PYENV_VERSION=vision python -m commands.search_index

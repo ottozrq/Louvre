@@ -22,7 +22,7 @@ def get_artworks(
         pagination,
         m.Artwork.db(db)
         .query.filter_by(landmark_id=landmark_id)
-        .order_by(sm.Artwork.artwork_rate),
+        .order_by(sm.Artwork.artwork_rate, sm.Artwork.artwork_id),
     )
 
 
@@ -137,5 +137,5 @@ def search(
         pagination,
         m.Artwork.db(db)
         .query.filter(sm.Artwork.artwork_id.in_(ids))
-        .order_by(sm.Artwork.artwork_rate)
+        .order_by(sm.Artwork.artwork_rate, sm.Artwork.artwork_id)
     )

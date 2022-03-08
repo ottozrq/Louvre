@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   IonCol,
   IonContent,
@@ -14,7 +14,7 @@ import {
 
 import { Artwork } from '../../api';
 import api from "../../components/api";
-import { getTranslate } from "../../components/utils"
+import { getTranslate } from '../../components/utils';
 import Header from '../../components/Header/Header';
 
 import ArtworkCard from '../../components/ItemCard/ItemCard';
@@ -22,30 +22,58 @@ import './Artworks.css';
 
 const ArtworksPage: React.FC = () => {
   const [showLoading, setShowLoading] = useState(true);
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
   const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [pageToken, setPageToken] = useState<string>('1');
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [pageToken, setPageToken] = useState<string>("1");
   const [isInfiniteDisabled, setInfiniteDisabled] = useState(false);
 
-  const get_artworks = () => {
-    api.artworks
-      .getArtworksLandmarksLandmarkIdArtworksGet(1, pageToken, 42)
-      .then((data) => {
-        setArtworks(data ? [...artworks, ...data.data.contents] : []);
-        setPageToken((parseInt(pageToken) + 1).toString());
-        setInfiniteDisabled(false);
-        setShowLoading(false);
-      });
+  const setArtworksWithData = (data: any) => {
+    setArtworks(data ? [...artworks, ...data.data.contents] : []);
+    setTotalPages(data ? data.data.total_pages : 1);
+    setPageToken((parseInt(pageToken) + 1).toString());
+    console.log(parseInt(pageToken), data.data.total_pages, parseInt(pageToken) >= data.data.total_pages)
+    if (parseInt(pageToken) < data.data.total_pages)
+      setInfiniteDisabled(false);
+    setShowLoading(false);
   }
-  useEffect(() => {
-    get_artworks();
-  }, []);
+  const getArtworks = () => {
+    if (searchText)
+      api.artworks.searchSearchArtworksGet(searchText, pageToken, 30)
+        .then((data) => {
+          setArtworksWithData(data);
+        });
+    else
+      api.artworks
+        .getArtworksLandmarksLandmarkIdArtworksGet(1, pageToken, 30)
+        .then((data) => {
+          setArtworksWithData(data);
+        });
+  }
+  useEffect(() => getArtworks(), []);
 
   return (
     <IonPage>
       <Header name="Louvre"></Header>
       <IonToolbar>
-        <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)}></IonSearchbar>
+        <IonSearchbar
+          onIonChange={e => {
+            setSearchText(e.detail.value!)
+          }}
+          onKeyUp={e => {
+            setArtworks([]);
+            setPageToken("1");
+            if (e.key === "Enter") {
+              setInfiniteDisabled(true);
+              setShowLoading(true);
+              getArtworks();
+            }
+          }}
+          onIonClear={() => {
+            setArtworks([]);
+            setPageToken("1");
+          }}
+        ></IonSearchbar>
       </IonToolbar>
       <IonContent fullscreen>
         <IonGrid>
@@ -68,7 +96,7 @@ const ArtworksPage: React.FC = () => {
               onIonInfinite={() => {
                 setInfiniteDisabled(true);
                 setShowLoading(true);
-                get_artworks();
+                getArtworks();
               }}
               threshold="100px"
               disabled={isInfiniteDisabled}
