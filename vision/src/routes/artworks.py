@@ -22,7 +22,7 @@ def get_artworks(
         pagination,
         m.Artwork.db(db)
         .query.filter_by(landmark_id=landmark_id)
-        .order_by(sm.Artwork.artwork_id),
+        .order_by(sm.Artwork.artwork_rate),
     )
 
 
@@ -125,8 +125,9 @@ def search(
     result = search.es.search(
         index="artwork",
         body={
+            "_source": ["id"],
             "query": {"match": {"_all": f"{q}"}},
-            "size": 10000,
+            "size": 1000,
         },
     )
     ids = [hit["_id"] for hit in result.get("hits", {}).get("hits", [])]
@@ -134,5 +135,5 @@ def search(
         pagination,
         m.Artwork.db(db)
         .query.filter(sm.Artwork.artwork_id.in_(ids))
-        .order_by(sm.Artwork.artwork_id)
+        .order_by(sm.Artwork.artwork_rate)
     )
