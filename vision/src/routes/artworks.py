@@ -94,6 +94,8 @@ def patch_artworks_artwork_id(
         db_artwork.extra = update_json(artwork_model.extra, artwork.extra)
     if artwork.geometry:
         db_artwork.geometry = db_geo_feature(artwork.geometry)
+    if artwork.artwork_rate:
+        db_artwork.artwork_rate = artwork.artwork_rate
     db.session.commit()
     db.session.refresh(db_artwork)
     return m.Artwork.db(db).from_id(artwork_id)

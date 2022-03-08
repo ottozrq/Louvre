@@ -15,6 +15,7 @@ from sqlalchemy import (
     Enum,
     Float,
     ForeignKey,
+    Integer,
     String,
     func,
     select,
@@ -198,6 +199,7 @@ class Landmark(GeoJsonBase, PsqlBase):
 class Artwork(GeoJsonBase, PsqlBase):
     artwork_id = seq("artwork_id")
     artwork_name = Column(JSON, nullable=False)
+    artwork_rate = Column(Integer, nullable=True)
     landmark_id = fk(Landmark.landmark_id)
     landmark = rel(Landmark)
     cover_image = Column(String, nullable=True)

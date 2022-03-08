@@ -366,6 +366,7 @@ class LandmarkCollection(EntityCollection[Landmark]):
 
 class ArtworkPatch(ItemPatchBase):
     artwork_name: Dict[str, Any] = None
+    artwork_rate: int = None
 
 
 class ArtworkCreate(ArtworkPatch):
