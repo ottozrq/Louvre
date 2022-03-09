@@ -1,6 +1,7 @@
 from typing import Dict
 
 from fastapi import Depends
+from sqlalchemy import nullslast
 
 from src.routes import algo, app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import update_json, db_geo_feature
@@ -22,7 +23,7 @@ def get_artworks(
         pagination,
         m.Artwork.db(db)
         .query.filter_by(landmark_id=landmark_id)
-        .order_by(sm.Artwork.artwork_rate, sm.Artwork.artwork_id),
+        .order_by(nullslast(sm.Artwork.artwork_rate.desc), sm.Artwork.artwork_id),
     )
 
 
@@ -137,5 +138,5 @@ def search(
         pagination,
         m.Artwork.db(db)
         .query.filter(sm.Artwork.artwork_id.in_(ids))
-        .order_by(sm.Artwork.artwork_rate, sm.Artwork.artwork_id)
+        .order_by(nullslast(sm.Artwork.artwork_rate.desc), sm.Artwork.artwork_id),
     )
