@@ -6,16 +6,32 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCol,
   IonContent,
+  IonIcon,
+  IonItemDivider,
   IonLoading,
   IonPage,
-  IonSearchbar,
-  IonToolbar,
+  IonRow,
+  IonSegment,
+  IonSegmentButton,
 } from '@ionic/react';
+import {
+  bookmarksOutline,
+  bookOutline,
+  calendarOutline,
+  cropOutline,
+  earthOutline,
+  gridOutline,
+  informationCircleOutline,
+  locationOutline,
+  personOutline,
+  schoolOutline,
+} from 'ionicons/icons';
 
 import { Artwork } from '../../api';
 import api from "../../components/api";
-import { getImageUrl, getTranslate } from "../../components/utils"
+import { getImageUrl, getTranslate, toJson } from "../../components/utils"
 import Header from '../../components/Header/Header';
 
 import './Artwork.css';
@@ -28,8 +44,8 @@ interface ArtworkPageProps
 const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
   const artwork_id = match.params.artwork_id;
   const [showLoading, setShowLoading] = useState(true);
-  const [searchText, setSearchText] = useState('');
   const [artwork, setArtwork] = useState<Artwork>();
+  const [segmentValue, setSegmentValue] = useState<string>("description");
   useEffect(() => {
     api.artworks
       .getArtworksArtworkIdArtworksArtworkIdGet(parseInt(artwork_id))
@@ -42,19 +58,88 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
   return (
     <IonPage>
       <Header name="Louvre" back></Header>
-      <IonToolbar>
-        <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)}></IonSearchbar>
-      </IonToolbar>
       <IonContent fullscreen>
         <IonCard>
-          <img alt="artwork" src={getImageUrl(artwork?.cover_image)}></img>
+          <img alt="artwork" className="artwork-image" src={getImageUrl(artwork?.cover_image)}></img>
           <IonCardHeader>
-            <IonCardSubtitle>Louvre</IonCardSubtitle>
+            <IonCardSubtitle>{toJson(artwork?.extra)["author"] || "Louvre"}</IonCardSubtitle>
             <IonCardTitle>{getTranslate(artwork?.artwork_name)}</IonCardTitle>
           </IonCardHeader>
-          <IonCardContent className="artwork-content">
-            {getTranslate(artwork?.description)}
-          </IonCardContent>
+          <IonSegment
+            onIonChange={e => {
+              if (e.detail.value)
+                setSegmentValue(e.detail.value)
+            }}
+            value={segmentValue}
+          >
+            <IonSegmentButton value="description">
+              <IonIcon icon={bookOutline} />
+            </IonSegmentButton>
+            <IonSegmentButton value="info">
+              <IonIcon icon={informationCircleOutline} />
+            </IonSegmentButton>
+          </IonSegment>
+          {segmentValue == "description" &&
+            <IonCardContent className="artwork-content">
+              {getTranslate(artwork?.description)}
+              {toJson(artwork?.extra)["Description/Features"] &&
+                <>
+                  <br /> <br />
+                  {toJson(artwork?.extra)["Description/Features"]}
+                </>
+              }
+              {toJson(artwork?.extra)["Object history"] &&
+                <>
+                  <br /> <br />
+                  {toJson(artwork?.extra)["Object history"]}
+                </>
+              }
+            </IonCardContent>
+          }
+          {segmentValue == "info" &&
+            <>
+              {toJson(artwork?.extra)["Category"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={gridOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Category"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["author"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={personOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["author"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["Artist/maker / School / Artistic centre"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={schoolOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Artist/maker / School / Artistic centre"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["Date"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={calendarOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Date"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["Place of origin"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={earthOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Place of origin"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["Dimensions"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={cropOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Dimensions"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["Inventory number"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={bookmarksOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Inventory number"]}</IonCol>
+                </IonRow>}
+              {toJson(artwork?.extra)["Current location"] &&
+                <IonRow className="info-row">
+                  <IonCol size="2"><IonIcon icon={locationOutline} /></IonCol>
+                  <IonCol size="10">{toJson(artwork?.extra)["Current location"]}</IonCol>
+                </IonRow>}
+            </>
+          }
         </IonCard>
         <IonLoading
           isOpen={showLoading}

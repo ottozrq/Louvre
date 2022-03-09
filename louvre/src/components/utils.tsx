@@ -10,7 +10,12 @@ export const getTranslate = (obj?: object) => {
         return parsed ? parsed[lang] ? parsed[lang] : parsed["en"] : "";
     }
     return ""
+}
 
+export const toJson = (obj?: object) => {
+    if (obj)
+        return JSON.parse(JSON.stringify(obj))
+    return {}
 }
 
 export const getImageUrl = (uri?: string) => {

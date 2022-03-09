@@ -14,7 +14,7 @@ import {
 
 import { Artwork } from '../../api';
 import api from "../../components/api";
-import { getTranslate } from '../../components/utils';
+import { getTranslate, toJson } from '../../components/utils';
 import Header from '../../components/Header/Header';
 
 import ArtworkCard from '../../components/ItemCard/ItemCard';
@@ -32,7 +32,6 @@ const ArtworksPage: React.FC = () => {
     setArtworks(data ? [...artworks, ...data.data.contents] : []);
     setTotalPages(data ? data.data.total_pages : 1);
     setPageToken((parseInt(pageToken) + 1).toString());
-    console.log(parseInt(pageToken), data.data.total_pages, parseInt(pageToken) >= data.data.total_pages)
     if (parseInt(pageToken) < data.data.total_pages)
       setInfiniteDisabled(false);
     setShowLoading(false);
@@ -85,7 +84,7 @@ const ArtworksPage: React.FC = () => {
                     key={artwork.artwork_id}
                     title={getTranslate(artwork.artwork_name)}
                     coverImage={artwork.cover_image}
-                    subTitle="Louvre"
+                    subTitle={toJson(artwork.extra)["author"] || "Louvre"}
                     href={artwork.self_link}
                   >
                   </ArtworkCard>
