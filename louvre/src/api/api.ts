@@ -743,6 +743,17 @@ export interface IntroductionPatch {
  * @enum {string}
  */
 
+export enum ItemOrder {
+    Rate = 'rate',
+    RateBackwards = 'rate_backwards'
+}
+
+/**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+
 export enum Kind {
     Artwork = 'artwork',
     Collection = 'collection',
@@ -1501,12 +1512,13 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
          * 
          * @summary Get Artworks
          * @param {number} landmarkId 
+         * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getArtworksLandmarksLandmarkIdArtworksGet: async (landmarkId: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getArtworksLandmarksLandmarkIdArtworksGet: async (landmarkId: number, order?: ItemOrder, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'landmarkId' is not null or undefined
             assertParamExists('getArtworksLandmarksLandmarkIdArtworksGet', 'landmarkId', landmarkId)
             const localVarPath = `/landmarks/{landmark_id}/artworks/`
@@ -1521,6 +1533,10 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
 
             if (pageToken !== undefined) {
                 localVarQueryParameter['page_token'] = pageToken;
@@ -1633,12 +1649,13 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
          * 
          * @summary Search
          * @param {string} q 
+         * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchArtworksGet: async (q: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        searchSearchArtworksGet: async (q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'q' is not null or undefined
             assertParamExists('searchSearchArtworksGet', 'q', q)
             const localVarPath = `/search/artworks/`;
@@ -1655,6 +1672,10 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
             }
 
             if (pageToken !== undefined) {
@@ -1712,13 +1733,14 @@ export const ArtworksApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get Artworks
          * @param {number} landmarkId 
+         * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getArtworksLandmarksLandmarkIdArtworksGet(landmarkId: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getArtworksLandmarksLandmarkIdArtworksGet(landmarkId, pageToken, pageSize, options);
+        async getArtworksLandmarksLandmarkIdArtworksGet(landmarkId: number, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getArtworksLandmarksLandmarkIdArtworksGet(landmarkId, order, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1749,13 +1771,14 @@ export const ArtworksApiFp = function(configuration?: Configuration) {
          * 
          * @summary Search
          * @param {string} q 
+         * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchSearchArtworksGet(q: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchArtworksGet(q, pageToken, pageSize, options);
+        async searchSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchArtworksGet(q, order, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1792,13 +1815,14 @@ export const ArtworksApiFactory = function (configuration?: Configuration, baseP
          * 
          * @summary Get Artworks
          * @param {number} landmarkId 
+         * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getArtworksLandmarksLandmarkIdArtworksGet(landmarkId: number, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
-            return localVarFp.getArtworksLandmarksLandmarkIdArtworksGet(landmarkId, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        getArtworksLandmarksLandmarkIdArtworksGet(landmarkId: number, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
+            return localVarFp.getArtworksLandmarksLandmarkIdArtworksGet(landmarkId, order, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1826,13 +1850,14 @@ export const ArtworksApiFactory = function (configuration?: Configuration, baseP
          * 
          * @summary Search
          * @param {string} q 
+         * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchArtworksGet(q: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
-            return localVarFp.searchSearchArtworksGet(q, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        searchSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
+            return localVarFp.searchSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1872,14 +1897,15 @@ export class ArtworksApi extends BaseAPI {
      * 
      * @summary Get Artworks
      * @param {number} landmarkId 
+     * @param {ItemOrder} [order] 
      * @param {string} [pageToken] 
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArtworksApi
      */
-    public getArtworksLandmarksLandmarkIdArtworksGet(landmarkId: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return ArtworksApiFp(this.configuration).getArtworksLandmarksLandmarkIdArtworksGet(landmarkId, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public getArtworksLandmarksLandmarkIdArtworksGet(landmarkId: number, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ArtworksApiFp(this.configuration).getArtworksLandmarksLandmarkIdArtworksGet(landmarkId, order, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1912,14 +1938,15 @@ export class ArtworksApi extends BaseAPI {
      * 
      * @summary Search
      * @param {string} q 
+     * @param {ItemOrder} [order] 
      * @param {string} [pageToken] 
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArtworksApi
      */
-    public searchSearchArtworksGet(q: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return ArtworksApiFp(this.configuration).searchSearchArtworksGet(q, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public searchSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ArtworksApiFp(this.configuration).searchSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3853,6 +3880,40 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary User
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userUserGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -3872,6 +3933,16 @@ export const UsersApiFp = function(configuration?: Configuration) {
          */
         async resetUserPasswordResetPasswordPost(resetPasswordRequest: ResetPasswordRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResetPasswordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.resetUserPasswordResetPasswordPost(resetPasswordRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary User
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userUserGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userUserGet(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3894,6 +3965,15 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         resetUserPasswordResetPasswordPost(resetPasswordRequest: ResetPasswordRequest, options?: any): AxiosPromise<ResetPasswordResponse> {
             return localVarFp.resetUserPasswordResetPasswordPost(resetPasswordRequest, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary User
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userUserGet(options?: any): AxiosPromise<User> {
+            return localVarFp.userUserGet(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -3914,6 +3994,17 @@ export class UsersApi extends BaseAPI {
      */
     public resetUserPasswordResetPasswordPost(resetPasswordRequest: ResetPasswordRequest, options?: AxiosRequestConfig) {
         return UsersApiFp(this.configuration).resetUserPasswordResetPasswordPost(resetPasswordRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary User
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public userUserGet(options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userUserGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

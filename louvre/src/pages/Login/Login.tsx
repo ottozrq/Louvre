@@ -10,6 +10,7 @@ import {
 } from '@ionic/react';
 
 import api from '../../components/api';
+import { login } from '../../components/utils';
 import Header from '../../components/Header/Header';
 
 import './Login.css';
@@ -50,13 +51,15 @@ const LoginPage: React.FC = () => {
         onClick={() => {
           setShowLoading(true);
           api.root.tokenTokenPost(username, password).then((data) => {
-            window.localStorage.setItem("access_token", data.data.access_token);
+            login(data.data.access_token);
             history.push('/user');
+            setShowLoading(false);
+          }).catch(() => {
             setShowLoading(false);
           });
         }}
       >
-        Login
+        Sign in
       </IonButton>
       <IonLoading
         isOpen={showLoading}

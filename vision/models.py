@@ -321,6 +321,11 @@ class LoginResponse(Model):
     token_type: Literal["bearer"] = "bearer"
 
 
+class ItemOrder(AutoEnum):
+    rate = auto()
+    rate_backwards = auto()
+
+
 class ItemPatchBase(Model):
     cover_image: str = None
     description: Dict[str, Any] = None
@@ -387,6 +392,7 @@ class Artwork(Entity, ArtworkCreate):
             artwork_id=artwork.artwork_id,
             landmark=Landmark.link(artwork.landmark),
             artwork_name=artwork.artwork_name,
+            artwork_rate=artwork.artwork_rate,
             cover_image=artwork.cover_image,
             description=artwork.description,
             extra=artwork.extra,

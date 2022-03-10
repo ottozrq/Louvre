@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IonCol,
   IonContent,
@@ -12,7 +12,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 
-import { Artwork } from '../../api';
+import { Artwork, ItemOrder } from '../../api';
 import api from "../../components/api";
 import { getTranslate, toJson } from '../../components/utils';
 import Header from '../../components/Header/Header';
@@ -38,13 +38,13 @@ const ArtworksPage: React.FC = () => {
   }
   const getArtworks = () => {
     if (searchText)
-      api.artworks.searchSearchArtworksGet(searchText, pageToken, 30)
+      api.artworks.searchSearchArtworksGet(searchText, ItemOrder.Rate, pageToken, 30)
         .then((data) => {
           setArtworksWithData(data);
         });
     else
       api.artworks
-        .getArtworksLandmarksLandmarkIdArtworksGet(1, pageToken, 30)
+        .getArtworksLandmarksLandmarkIdArtworksGet(1, ItemOrder.Rate, pageToken, 30)
         .then((data) => {
           setArtworksWithData(data);
         });
@@ -110,7 +110,7 @@ const ArtworksPage: React.FC = () => {
         <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
-          message="Loading Artworks.."
+          message={"Loading Artworks.. (" + pageToken + "/" + totalPages + ")"}
         />
       </IonContent>
     </IonPage>

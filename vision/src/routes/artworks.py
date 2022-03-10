@@ -8,6 +8,14 @@ from utils.sql_utils import update_json, db_geo_feature
 from utils.utils import VisionDb, VisionSearch
 
 
+def _artwork_order(order: m.ItemOrder):
+    return (
+        sm.Artwork.artwork_rate.desc()
+        if order == m.ItemOrder.rate_backwards
+        else nullslast(sm.Artwork.artwork_rate.desc())
+    )
+
+
 @app.get(
     "/landmarks/{landmark_id}/artworks/",
     response_model=m.ArtworkCollection,
@@ -16,6 +24,7 @@ from utils.utils import VisionDb, VisionSearch
 )
 def get_artworks(
     landmark_id: int,
+    order: m.ItemOrder = m.ItemOrder.rate,
     pagination: m.Pagination = Depends(d.get_pagination),
     db: VisionDb = Depends(d.get_psql),
 ):
@@ -23,7 +32,10 @@ def get_artworks(
         pagination,
         m.Artwork.db(db)
         .query.filter_by(landmark_id=landmark_id)
-        .order_by(nullslast(sm.Artwork.artwork_rate.desc()), sm.Artwork.artwork_id),
+        .order_by(
+            _artwork_order(order),
+            sm.Artwork.artwork_id,
+        ),
     )
 
 
@@ -121,6 +133,7 @@ def delete_artworks_artwork_id(
 @app.get("/search/artworks/", response_model=m.ArtworkCollection, tags=[TAG.Artworks])
 def search(
     q: str,
+    order: m.ItemOrder = m.ItemOrder.rate,
     pagination: m.Pagination = Depends(d.get_pagination),
     db: VisionDb = Depends(d.get_psql),
     search: VisionSearch = Depends(d.get_search),
@@ -138,5 +151,5 @@ def search(
         pagination,
         m.Artwork.db(db)
         .query.filter(sm.Artwork.artwork_id.in_(ids))
-        .order_by(nullslast(sm.Artwork.artwork_rate.desc()), sm.Artwork.artwork_id),
+        .order_by(_artwork_order(order), sm.Artwork.artwork_id),
     )
