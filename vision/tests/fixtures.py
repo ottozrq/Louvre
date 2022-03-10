@@ -44,6 +44,7 @@ class Artwork(BaseFix):
     cover_image = "art.jpg"
     geometry = "POINT(1 1)"
     description = {"en": "This is Art"}
+    artwork_rate = 0
     extra = {}
     descriptors = []
 

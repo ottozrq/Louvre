@@ -99,3 +99,13 @@ def reset_user_password(
     db.session.commit()
     db.session.refresh(user)
     return ResetPasswordResponse()
+
+
+@app.get(
+    "/user/",
+    response_model=m.User,
+    tags=[TAG.Users],
+    include_in_schema=schema_show_all,
+)
+def user(user: sm.User = Depends(d.get_logged_in_user),):
+    return m.User.from_db(user)

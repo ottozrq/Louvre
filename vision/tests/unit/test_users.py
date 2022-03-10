@@ -23,7 +23,7 @@ def test_token(cl: ApiClient, user_admin: sm.User):
         method="POST",
         data={"password": "wrong", "username": "otto@ottozhang.com"},
         as_dict=True,
-        status=status.HTTP_401_UNAUTHORIZED
+        status=status.HTTP_401_UNAUTHORIZED,
     )
     assert (
         m.LoginResponse.from_response(
@@ -72,3 +72,7 @@ def test_reset_password(cl: ApiClient):
         )
         == ResetPasswordResponse(success=True)
     )
+
+
+def test_user(cl: ApiClient, user_admin: sm.User):
+    assert m.User.from_response(cl("user")) == m.User.from_db(user_admin)
