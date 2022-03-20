@@ -26,6 +26,8 @@ const UserPage: React.FC = () => {
     }
     api.users.userUserGet().then((data) => {
       setUser(data.data);
+    }).catch(() => {
+      history.replace("/login");
     });
   }, [history]);
 
