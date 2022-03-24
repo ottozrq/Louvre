@@ -82,7 +82,7 @@ def detect_image(
     db: VisionDb = Depends(d.get_psql),
 ):
     image_path = _save_image("tmp", image)
-    artworks = db.session.query(sm.Artwork.artwork_id, sm.Artwork.descriptors).all()
-    matched_id = match_image(image_path, artworks)
+    matched_id = match_image(image_path, db)
     _delete_image("tmp", image_path)
+    print(matched_id)
     return m.Artwork.db(db).from_id(matched_id)

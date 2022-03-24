@@ -35,3 +35,5 @@ tasks:
     - openapi-generator  generate -g typescript-axios -i ../explorer/api/openapi.json --skip-validate-spec -o ../explorer/api
     - cp -r ../explorer/api ../louvre/src/
   search_index: PYENV_VERSION=vision python -m commands.search_index
+  detect_poc: PYENV_VERSION=vision python -m commands.detect_poc
+  recalculate_descriptors: PYENV_VERSION=vision python -m commands.recalculate_descriptors
