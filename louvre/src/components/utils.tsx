@@ -1,4 +1,5 @@
 import { SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { UserRole } from '../api';
 
 import { config } from './api';
 
@@ -34,7 +35,7 @@ export const login = (accessToken: string) => {
   config.accessToken = accessToken;
 }
 
-export const validateUserToken = () => {
+const decodedToken = () => {
   if (!config.accessToken)
     return false;
   const base64Url = config.accessToken.toString().split(".")[1];
@@ -42,36 +43,25 @@ export const validateUserToken = () => {
   const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
     return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(""));
-  if (JSON.parse(jsonPayload)["exp"] >= Date.now()) {
+  return JSON.parse(jsonPayload);
+}
+
+export const validateUserToken = () => {
+  if (decodedToken()["exp"] >= Date.now()) {
     logout();
     return false;
   }
   return true;
 }
 
-type Callback<T> = (value?: T) => void;
-type DispatchWithCallback<T> = (value: T, callback?: Callback<T>) => void;
-
-function useStateCallback<T>(initialState: T | (() => T)): [T, DispatchWithCallback<SetStateAction<T>>] {
-  const [state, _setState] = useState(initialState);
-
-  const callbackRef = useRef<Callback<T>>();
-  const isFirstCallbackCall = useRef<boolean>(true);
-
-  const setState = useCallback((setStateAction: SetStateAction<T>, callback?: Callback<T>): void => {
-    callbackRef.current = callback;
-    _setState(setStateAction);
-  }, []);
-
-  useEffect(() => {
-    if (isFirstCallbackCall.current) {
-      isFirstCallbackCall.current = false;
-      return;
-    }
-    callbackRef.current?.(state);
-  }, [state]);
-
-  return [state, setState];
+export const isAdmin = () => {
+  if (decodedToken()["role"] == UserRole.Admin)
+    return true
+  return false
 }
 
-export default useStateCallback;
+export const isEditor = () => {
+  if (decodedToken()["role"] == UserRole.Admin || decodedToken()["exp"] == UserRole.Editor)
+    return true
+  return false
+}

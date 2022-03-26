@@ -36,7 +36,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import ArtworkRatePage from './pages/ArtworkRate/ArtworkRate';
 
 setupIonicReact();
 
@@ -52,9 +51,6 @@ const App: React.FC = () => (
             path="/artworks/:artwork_id"
             component={ArtworkPage}
           >
-          </Route>
-          <Route exact path="/artwork_rate">
-            <ArtworkRatePage />
           </Route>
           <Route path="/login">
             <LoginPage />

@@ -1,7 +1,7 @@
 from typing import Dict
 
 from fastapi import Depends
-from sqlalchemy import nullslast
+from sqlalchemy import nullslast, or_
 
 from src.routes import algo, app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import update_json, db_geo_feature
@@ -32,6 +32,7 @@ def get_artworks(
         pagination,
         m.Artwork.db(db)
         .query.filter_by(landmark_id=landmark_id)
+        .filter(or_(sm.Artwork.artwork_rate != 0, sm.Artwork.artwork_rate == None))
         .order_by(
             _artwork_order(order),
             sm.Artwork.artwork_id,
@@ -107,7 +108,7 @@ def patch_artworks_artwork_id(
         db_artwork.extra = update_json(artwork_model.extra, artwork.extra)
     if artwork.geometry:
         db_artwork.geometry = db_geo_feature(artwork.geometry)
-    if artwork.artwork_rate:
+    if artwork.artwork_rate is not None:
         db_artwork.artwork_rate = artwork.artwork_rate
     db.session.commit()
     db.session.refresh(db_artwork)

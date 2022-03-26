@@ -31,6 +31,7 @@ def token(
             access_token=jwt.encode(
                 {
                     "user_id": user.user_id,
+                    "role": user.role,
                     "exp": datetime.utcnow() + timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS),
                 },
                 VF.login_secret,

@@ -43,7 +43,7 @@ const UserPage: React.FC = () => {
           <IonLabel slot='end'>{user?.role}</IonLabel>
         </IonItem>
         {user?.role === UserRole.Admin &&
-          <IonItem onClick={() => history.push('/artwork_rate')}>
+          <IonItem onClick={() => history.push('/artworks/-1')}>
             <IonLabel>Rate Artworks</IonLabel>
             <IonIcon icon={chevronForwardOutline}></IonIcon>
           </IonItem>

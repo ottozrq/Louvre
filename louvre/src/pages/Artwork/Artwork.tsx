@@ -14,6 +14,7 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
+  IonToolbar,
 } from '@ionic/react';
 import {
   bookmarksOutline,
@@ -26,11 +27,12 @@ import {
   locationOutline,
   personOutline,
   schoolOutline,
+  starOutline
 } from 'ionicons/icons';
 
-import { Artwork } from '../../api';
+import { Artwork, ItemOrder } from '../../api';
 import api from "../../components/api";
-import { getImageUrl, getTranslate, toJson } from "../../components/utils"
+import { getImageUrl, getTranslate, toJson, isAdmin } from "../../components/utils"
 import Header from '../../components/Header/Header';
 
 import './Artwork.css';
@@ -41,17 +43,31 @@ interface ArtworkPageProps
   }> { }
 
 const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
-  const artwork_id = match.params.artwork_id;
+  const artwork_id = parseInt(match.params.artwork_id);
   const [showLoading, setShowLoading] = useState(true);
   const [artwork, setArtwork] = useState<Artwork>();
-  const [segmentValue, setSegmentValue] = useState<string>("description");
-  useEffect(() => {
-    api.artworks
-      .getArtworksArtworkIdArtworksArtworkIdGet(parseInt(artwork_id))
+  const [segmentValue, setSegmentValue] = useState<string>(artwork_id === -1 ? "rate" : "description");
+  const [artworkRate, setArtworkRate] = useState<string>();
+  const getArtwork = () => {
+    setShowLoading(true);
+    api.artworks.getArtworksLandmarksLandmarkIdArtworksGet(1, ItemOrder.RateBackwards, "1", 1)
       .then((data) => {
-        setArtwork(data.data)
+        setArtwork(data.data.contents[0]);
         setShowLoading(false);
+        setArtworkRate(data.data.contents[0].artwork_rate?.toString());
       });
+  }
+  useEffect(() => {
+    if (artwork_id === -1)
+      getArtwork();
+    else
+      api.artworks
+        .getArtworksArtworkIdArtworksArtworkIdGet(artwork_id)
+        .then((data) => {
+          setArtwork(data.data)
+          setShowLoading(false);
+          setArtworkRate(data.data.artwork_rate?.toString());
+        });
   }, [artwork_id]);
 
   return (
@@ -77,6 +93,11 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
             <IonSegmentButton value="info">
               <IonIcon icon={informationCircleOutline} />
             </IonSegmentButton>
+            {isAdmin() &&
+              <IonSegmentButton value="rate">
+                <IonIcon icon={starOutline} />
+              </IonSegmentButton>
+            }
           </IonSegment>
           {segmentValue === "description" &&
             <IonCardContent className="artwork-content">
@@ -138,6 +159,34 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
                   <IonCol size="10">{toJson(artwork?.extra)["Current location"]}</IonCol>
                 </IonRow>}
             </>
+          }
+           {
+            segmentValue === "rate" &&
+            <IonToolbar>
+              <IonSegment
+                onIonChange={e => {
+                  if (e.detail.value)
+                    setArtworkRate(e.detail.value)
+                  if (artwork) {
+                    api.artworks.patchArtworksArtworkIdArtworksArtworkIdPatch(
+                      artwork?.artwork_id,
+                      { artwork_rate: e.detail.value ? parseInt(e.detail.value) : 0 }
+                    );
+                    if (artwork_id === -1)
+                      getArtwork();
+                  }
+                }}
+                value={artworkRate}
+              >
+                {
+                  Array.from(Array(5).keys()).map((index) => {
+                    return <IonSegmentButton key={index} value={index.toString()} color="light">
+                      {index}
+                    </IonSegmentButton>
+                  })
+                }
+              </IonSegment>
+            </IonToolbar>
           }
         </IonCard>
         <IonLoading
