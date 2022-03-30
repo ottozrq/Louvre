@@ -184,3 +184,11 @@ def introduction_1(fix, artwork_1, series_1):
         artwork=artwork_1,
         series=series_1,
     ).create()
+
+
+@pytest.fixture
+def activity_1(fix):
+    return fixts.Activity(
+        fix,
+        activity_id=1,
+    ).create()

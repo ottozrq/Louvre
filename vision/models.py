@@ -25,6 +25,7 @@ from utils.visionmodels import AutoLink, Model, Link
 
 
 class OpenAPITag(AutoEnum):
+    Activity = auto()
     Artworks = auto()
     Images = auto()
     Introductions = auto()
@@ -35,6 +36,7 @@ class OpenAPITag(AutoEnum):
 
 
 class Kind(AutoEnum):
+    activity = auto()
     artwork = auto()
     collection = auto()
     introduction = auto()
@@ -44,6 +46,8 @@ class Kind(AutoEnum):
 
     @property
     def plural(self) -> str:
+        if self.value == "activity":
+            return "activities"
         return f"{self.value}s"
 
 
@@ -482,4 +486,36 @@ class Introduction(Entity, IntroductionCreate):
 
 
 class IntroductionCollection(EntityCollection[Introduction]):
+    pass
+
+
+class ActivityPatch(ItemPatchBase):
+    activity_name: Dict[str, Any] = None
+
+
+class ActivityCreate(ActivityPatch):
+    activity_name: Dict[str, Any]
+
+
+class Activity(Entity, ActivityCreate):
+    activity_id: PrimaryKey
+
+    class Config:
+        db_model = sm.Activity
+        kind = Kind.activity
+
+    @classmethod
+    def from_db(cls, activity: sm.Activity):
+        return cls(
+            activity_id=activity.activity_id,
+            activity_name=activity.activity_name,
+            cover_image=activity.cover_image,
+            description=activity.description,
+            extra=activity.extra,
+            geometry=activity.geojson,
+            **cls.links(activity),
+        )
+
+
+class ActivityCollection(EntityCollection[Activity]):
     pass

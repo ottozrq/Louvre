@@ -67,6 +67,7 @@ def test_patch_artworks_artwork_id(cl: ApiClient, mocker, landmark_1, artwork_1)
         description={"en": "This is Art", "fr": "This is Art fr"},
         landmark=f"/landmarks/{landmark_1.landmark_id}",
         extra={"edit": "sth"},
+        artwork_rate=1,
         geometry=m.GeometryElement(coordinates=[2, 2], type=m.GeometryType.Point),
         artwork_name={"en": "Art", "fr": "Art fr"},
         self_link=f"/artworks/{artwork.artwork_id}",

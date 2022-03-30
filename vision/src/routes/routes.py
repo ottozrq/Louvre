@@ -1,5 +1,6 @@
 from src.routes import (
     root,
+    activity,
     artworks,
     images,
     introductions,
@@ -10,6 +11,7 @@ from src.routes import (
 
 __all__ = (
     root,
+    activity,
     artworks,
     images,
     introductions,

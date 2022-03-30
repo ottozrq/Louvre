@@ -44,7 +44,7 @@ class Artwork(BaseFix):
     cover_image = "art.jpg"
     geometry = "POINT(1 1)"
     description = {"en": "This is Art"}
-    artwork_rate = 0
+    artwork_rate = 1
     extra = {}
     descriptors = []
 
@@ -67,3 +67,12 @@ class Introduction(BaseFix):
     series = subFactoryGet(Series)
     language = sm.Language.en
     introduction = {"content": "This is Louvre introductions"}
+
+
+class Activity(BaseFix):
+    MODEL = sm.Activity
+    activity_name = {"en": "activity"}
+    cover_image = "louvre.jpg"
+    geometry = "POINT(1 1)"
+    description = {"en": "This is an activity"}
+    extra = {}

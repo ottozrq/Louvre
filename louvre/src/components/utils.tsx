@@ -1,4 +1,3 @@
-import { SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { UserRole } from '../api';
 
 import { config } from './api';
@@ -55,13 +54,13 @@ export const validateUserToken = () => {
 }
 
 export const isAdmin = () => {
-  if (decodedToken()["role"] == UserRole.Admin)
+  if (decodedToken()["role"] === UserRole.Admin)
     return true
   return false
 }
 
 export const isEditor = () => {
-  if (decodedToken()["role"] == UserRole.Admin || decodedToken()["exp"] == UserRole.Editor)
+  if (decodedToken()["role"] === UserRole.Admin || decodedToken()["exp"] === UserRole.Editor)
     return true
   return false
 }

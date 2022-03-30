@@ -243,3 +243,11 @@ class Introduction(PsqlBase):
 User.series = rel(Series, back_populates="author")
 
 Series.introductions = rel(Introduction, back_populates="series")
+
+
+class Activity(GeoJsonBase, PsqlBase):
+    activity_id = seq("activity_id")
+    activity_name = Column(JSON, nullable=True)
+    description = Column(JSON, nullable=True)
+    cover_image = Column(String, nullable=True)
+    extra = Column(JSON, nullable=True)
