@@ -2,7 +2,7 @@ from typing import Dict
 
 from fastapi import Depends
 
-from src.routes import algo, app, d, delete_response, m, schema_show_all, sm, TAG
+from src.routes import app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import db_geo_feature, update_json
 from utils.utils import VisionDb
 
@@ -48,6 +48,7 @@ def post_activities(
 ):
     db_activity = sm.Activity(
         activity_name=activity.activity_name,
+        activity_unique_id=activity.activity_unique_id,
         cover_image=activity.cover_image,
         description=activity.description,
         extra=activity.extra,

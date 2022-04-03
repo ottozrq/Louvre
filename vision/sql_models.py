@@ -247,6 +247,7 @@ Series.introductions = rel(Introduction, back_populates="series")
 
 class Activity(GeoJsonBase, PsqlBase):
     activity_id = seq("activity_id")
+    activity_unique_id = Column(String, nullable=True)
     activity_name = Column(JSON, nullable=True)
     description = Column(JSON, nullable=True)
     cover_image = Column(String, nullable=True)

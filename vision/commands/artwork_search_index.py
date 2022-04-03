@@ -46,7 +46,7 @@ INDEX_NAME = "artwork"
 
 def main():
     vs = VisionSearch()
-    vs.initialize(INDEX_NAME, MAPPING, INDEX_NAME)
+    vs.initialize(INDEX_NAME, MAPPING)
     with postgres_session() as db:
         artworks = db.session.query(sm.Artwork).all()
     for artwork in artworks:

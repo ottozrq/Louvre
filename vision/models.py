@@ -495,6 +495,7 @@ class ActivityPatch(ItemPatchBase):
 
 class ActivityCreate(ActivityPatch):
     activity_name: Dict[str, Any]
+    activity_unique_id: str = None
 
 
 class Activity(Entity, ActivityCreate):
