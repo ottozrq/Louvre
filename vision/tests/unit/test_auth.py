@@ -28,6 +28,8 @@ def test_all_routes(cl: ApiClient, path: str, route: BaseRoute):
                 "/images/",
                 "/detect/",
                 "/search/artworks/",
+                "/activities/",
+                "/search/activities/",
             }
         )
         or path == "/"

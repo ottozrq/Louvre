@@ -67,6 +67,8 @@ def create_activity(row):
                 else None
             )
             activity.extra = row["fields"]
+            activity.start_time = row["fields"].get("date_start")
+            activity.end_time = row["fields"].get("date_end")
         else:
             activity = sm.Activity(
                 activity_name={"fr": row["fields"]["title"]},
@@ -77,6 +79,8 @@ def create_activity(row):
                 if row.get("geometry", None)
                 else None,
                 extra=row["fields"],
+                start_time=row["fields"].get("date_start"),
+                end_time=row["fields"].get("date_end"),
             )
         print(activity.activity_name)
         vs.es.index(
@@ -87,7 +91,9 @@ def create_activity(row):
                 "name": activity.activity_name,
                 "description": activity.description,
                 "category": activity.extra.get("category"),
-                "keywords": activity.extra.get("keywords"),
+                "keywords": activity.extra.get("tags").split(";")
+                if activity.extra.get("tags")
+                else [],
                 "start_time": activity.extra.get("date_start"),
                 "end_time": activity.extra.get("date_end"),
             },

@@ -137,7 +137,7 @@ class GeoJsonBase:
 
     @property
     def geojson(self):
-        return self._geojson or {"geometry": {"type": "Polygon", "coordinates": []}}
+        return self._geojson or None
 
 
 class UserRole(AutoEnum):
@@ -252,3 +252,5 @@ class Activity(GeoJsonBase, PsqlBase):
     description = Column(JSON, nullable=True)
     cover_image = Column(String, nullable=True)
     extra = Column(JSON, nullable=True)
+    start_time = Column(DateTime, nullable=True)
+    end_time = Column(DateTime, nullable=True)

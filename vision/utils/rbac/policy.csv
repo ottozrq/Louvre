@@ -23,6 +23,7 @@ p, *, /artworks*, GET
 p, *, /images*, GET
 p, *, /detect, POST
 p, *, /search*, GET
+p, *, /activities*, GET
 
 p, role_base, /reset_password, POST
 p, role_base, /images*, POST 
