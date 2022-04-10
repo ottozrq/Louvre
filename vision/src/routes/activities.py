@@ -2,7 +2,7 @@ import datetime
 from typing import Dict
 
 from fastapi import Depends
-from sqlalchemy import and_
+from sqlalchemy import and_, nullslast, or_
 
 from src.routes import app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import db_geo_feature, update_json
@@ -20,7 +20,15 @@ def get_activities(
     db: VisionDb = Depends(d.get_psql),
 ):
     return m.ActivityCollection.paginate(
-        pagination, m.Activity.db(db).query.order_by(sm.Activity.activity_id)
+        pagination,
+        m.Activity.db(db)
+        .query.filter(
+            or_(
+                sm.Activity.end_time >= datetime.datetime.now(),
+                sm.Activity.end_time == None,
+            )
+        )
+        .order_by(nullslast(sm.Activity.start_time.desc())),
     )
 
 

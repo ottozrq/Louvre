@@ -3,6 +3,7 @@ import postgis
 import pytest
 import sqlalchemy
 import testing.postgresql
+from datetime import datetime
 from fastapi import testclient
 from passlib.context import CryptContext
 from sqlalchemy.orm import scoped_session
