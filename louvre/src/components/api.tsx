@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import {
+  ActivityApiFactory,
   ArtworksApiFactory,
   Configuration,
   IntroductionsApiFactory,
@@ -25,6 +26,7 @@ export function setApiBasePath(s: string) {
 }
 
 const api = {
+  activities: ActivityApiFactory(config),
   artworks: ArtworksApiFactory(config),
   landmarks: LandmarksApiFactory(config),
   introductions: IntroductionsApiFactory(config),

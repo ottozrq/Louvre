@@ -17,16 +17,15 @@ interface ContainerProps {
   href?: string;
 }
 
-const ArtworkCard: React.FC<ContainerProps> = ({ title, subTitle, coverImage, href }) => {
+const ItemCard: React.FC<ContainerProps> = ({ title, subTitle, coverImage, href }) => {
   const history = useHistory()
-
   return (
     <IonItem
       className="card-container"
       onClick={() => { if (href) history.push(href) }}
     >
       <IonThumbnail className="card-image">
-        <img src={getImageUrl(coverImage)} />
+        <img src={coverImage} />
       </IonThumbnail>
       <IonLabel>
         <IonCardTitle className="card-title">{title}</IonCardTitle>
@@ -36,4 +35,4 @@ const ArtworkCard: React.FC<ContainerProps> = ({ title, subTitle, coverImage, hr
   );
 };
 
-export default ArtworkCard;
+export default ItemCard;

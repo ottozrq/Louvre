@@ -12,45 +12,47 @@ import {
   IonToolbar,
 } from '@ionic/react';
 
-import { Artwork, ItemOrder } from '../../api';
+import { Activity } from '../../api';
 import api from "../../components/api";
-import { getTranslate, getImageUrl, toJson} from '../../components/utils';
+import { getTranslate, toJson } from '../../components/utils';
 import Header from '../../components/Header/Header';
 
-import ItemCard from '../../components/ItemCard/ItemCard';
-import './Artworks.css';
+import BigItemCard from '../../components/BigItemCard/BigItemCard';
+import './Activities.css';
 
-const ArtworksPage: React.FC = () => {
+const ActivitiesPage: React.FC = () => {
   const [showLoading, setShowLoading] = useState(true);
   const [searchText, setSearchText] = useState<string>("");
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [pageToken, setPageToken] = useState<string>("1");
   const [isInfiniteDisabled, setInfiniteDisabled] = useState(false);
 
-  const setArtworksWithData = (data: any) => {
-    setArtworks(data ? [...artworks, ...data.data.contents] : []);
+  const setActivitiesWithData = (data: any) => {
+    setActivities(data ? [...activities, ...data.data.contents] : []);
     setTotalPages(data ? data.data.total_pages : 1);
     setPageToken((parseInt(pageToken) + 1).toString());
     if (parseInt(pageToken) < data.data.total_pages)
       setInfiniteDisabled(false);
     setShowLoading(false);
   }
-  const getArtworks = () => {
+  const getActivities = () => {
     if (searchText)
-      api.artworks.searchSearchArtworksGet(searchText, ItemOrder.Rate, pageToken, 30)
+      api.activities.searchSearchActivitiesGet(searchText, undefined, undefined, pageToken, 30)
         .then((data) => {
-          setArtworksWithData(data);
+          setActivitiesWithData(data);
         });
     else
-      api.artworks
-        .getArtworksLandmarksLandmarkIdArtworksGet(1, ItemOrder.Rate, pageToken, 30)
+      api.activities
+        .getActivitiesActivitiesGet(pageToken, 30)
         .then((data) => {
-          setArtworksWithData(data);
+          setActivitiesWithData(data);
         });
   }
-  useEffect(() => getArtworks(), []);
-
+  useEffect(() => getActivities(), []);
+  const showDate = (startDate: string, endDate: string) => {
+    return (startDate ? startDate.split("T")[0] : "") + (endDate ? " - " + endDate.split("T")[0] : "")
+  }
   return (
     <IonPage>
       <Header name="Louvre"></Header>
@@ -60,16 +62,16 @@ const ArtworksPage: React.FC = () => {
             setSearchText(e.detail.value!)
           }}
           onKeyUp={e => {
-            setArtworks([]);
+            setActivities([]);
             setPageToken("1");
             if (e.key === "Enter") {
               setInfiniteDisabled(true);
               setShowLoading(true);
-              getArtworks();
+              getActivities();
             }
           }}
           onIonClear={() => {
-            setArtworks([]);
+            setActivities([]);
             setPageToken("1");
           }}
         ></IonSearchbar>
@@ -78,16 +80,17 @@ const ArtworksPage: React.FC = () => {
         <IonGrid>
           <IonRow>
             {
-              artworks.map((artwork) => {
-                return <IonCol key={artwork.artwork_id} sizeMd="12" sizeLg="6" sizeXl="4">
-                  <ItemCard
-                    key={artwork.artwork_id}
-                    title={getTranslate(artwork.artwork_name)}
-                    coverImage={getImageUrl(artwork.cover_image)}
-                    subTitle={toJson(artwork.extra)["author"] || "Louvre"}
-                    href={artwork.self_link}
+              activities.map((activity) => {
+                return <IonCol key={activity.activity_id}>
+                  <BigItemCard
+                    key={activity.activity_id}
+                    title={getTranslate(activity.activity_name)}
+                    coverImage={activity.cover_image}
+                    subTitle={showDate(toJson(activity.extra)["date_start"], toJson(activity.extra)["date_end"])}
+                    subTitle2={toJson(activity.extra)["lead_text"]}
+                    href={activity.self_link}
                   >
-                  </ItemCard>
+                  </BigItemCard>
                 </IonCol>
               })
             }
@@ -95,7 +98,7 @@ const ArtworksPage: React.FC = () => {
               onIonInfinite={() => {
                 setInfiniteDisabled(true);
                 setShowLoading(true);
-                getArtworks();
+                getActivities();
               }}
               threshold="100px"
               disabled={isInfiniteDisabled}
@@ -110,11 +113,11 @@ const ArtworksPage: React.FC = () => {
         <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
-          message={"Loading Artworks.. (" + pageToken + "/" + totalPages + ")"}
+          message={"Loading Activities.. (" + pageToken + "/" + totalPages + ")"}
         />
       </IonContent>
     </IonPage>
   );
 };
 
-export default ArtworksPage;
+export default ActivitiesPage;

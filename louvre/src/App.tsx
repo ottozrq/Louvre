@@ -11,6 +11,8 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { listOutline, personOutline, scanOutline } from 'ionicons/icons';
+import Activities from './pages/Activities/Activities';
+import ActivityPage from './pages/Activity/Activity';
 import Artworks from './pages/Artworks/Artworks';
 import ArtworkPage from './pages/Artwork/Artwork';
 import LoginPage from './pages/Login/Login';
@@ -44,6 +46,13 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
+          <Route exact path="/activities">
+            <Activities />
+          </Route>
+          <Route exact
+            path="/activities/:activity_id"
+            component={ActivityPage}
+          ></Route>
           <Route exact path="/artworks">
             <Artworks />
           </Route>

@@ -7,7 +7,7 @@ export const lang: string = "cn";
 export const getTranslate = (obj?: object) => {
   if (obj) {
     const parsed = JSON.parse(JSON.stringify(obj))
-    return parsed ? parsed[lang] ? parsed[lang] : parsed["en"] : "";
+    return parsed ? parsed[lang] ? parsed[lang] : parsed["fr"] : "";
   }
   return ""
 }

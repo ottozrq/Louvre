@@ -24,6 +24,202 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface Activity
+ */
+export interface Activity {
+    /**
+     * 
+     * @type {string}
+     * @memberof Activity
+     */
+    'cover_image'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof Activity
+     */
+    'description'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof Activity
+     */
+    'extra'?: object;
+    /**
+     * 
+     * @type {GeometryElement | GeometryCollection}
+     * @memberof Activity
+     */
+    'geometry'?: GeometryElement | GeometryCollection;
+    /**
+     * 
+     * @type {object}
+     * @memberof Activity
+     */
+    'activity_name': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof Activity
+     */
+    'activity_unique_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Activity
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof Activity
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {number}
+     * @memberof Activity
+     */
+    'activity_id': number;
+}
+/**
+ * 
+ * @export
+ * @interface ActivityCollection
+ */
+export interface ActivityCollection {
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityCollection
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof ActivityCollection
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityCollection
+     */
+    'page_token': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityCollection
+     */
+    'next_page_token': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityCollection
+     */
+    'page_size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityCollection
+     */
+    'total_size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityCollection
+     */
+    'total_pages': number;
+    /**
+     * 
+     * @type {Array<Activity>}
+     * @memberof ActivityCollection
+     */
+    'contents': Array<Activity>;
+}
+/**
+ * 
+ * @export
+ * @interface ActivityCreate
+ */
+export interface ActivityCreate {
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityCreate
+     */
+    'cover_image'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityCreate
+     */
+    'description'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityCreate
+     */
+    'extra'?: object;
+    /**
+     * 
+     * @type {GeometryElement | GeometryCollection}
+     * @memberof ActivityCreate
+     */
+    'geometry'?: GeometryElement | GeometryCollection;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityCreate
+     */
+    'activity_name': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityCreate
+     */
+    'activity_unique_id'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ActivityPatch
+ */
+export interface ActivityPatch {
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityPatch
+     */
+    'cover_image'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityPatch
+     */
+    'description'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityPatch
+     */
+    'extra'?: object;
+    /**
+     * 
+     * @type {GeometryElement | GeometryCollection}
+     * @memberof ActivityPatch
+     */
+    'geometry'?: GeometryElement | GeometryCollection;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityPatch
+     */
+    'activity_name'?: object;
+}
+/**
+ * 
+ * @export
  * @interface Artwork
  */
 export interface Artwork {
@@ -755,6 +951,7 @@ export enum ItemOrder {
  */
 
 export enum Kind {
+    Activity = 'activity',
     Artwork = 'artwork',
     Collection = 'collection',
     Introduction = 'introduction',
@@ -1429,6 +1626,513 @@ export interface ValidationError {
      */
     'type': string;
 }
+
+/**
+ * ActivityApi - axios parameter creator
+ * @export
+ */
+export const ActivityApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Delete Activities Activity Id
+         * @param {number} activityId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteActivitiesActivityIdActivitiesActivityIdDelete: async (activityId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'activityId' is not null or undefined
+            assertParamExists('deleteActivitiesActivityIdActivitiesActivityIdDelete', 'activityId', activityId)
+            const localVarPath = `/activities/{activity_id}/`
+                .replace(`{${"activity_id"}}`, encodeURIComponent(String(activityId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get Activities
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getActivitiesActivitiesGet: async (pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/activities/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get Activities Activity Id
+         * @param {number} activityId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getActivitiesActivityIdActivitiesActivityIdGet: async (activityId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'activityId' is not null or undefined
+            assertParamExists('getActivitiesActivityIdActivitiesActivityIdGet', 'activityId', activityId)
+            const localVarPath = `/activities/{activity_id}/`
+                .replace(`{${"activity_id"}}`, encodeURIComponent(String(activityId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Patch Activities Activity Id
+         * @param {number} activityId 
+         * @param {ActivityPatch} activityPatch 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchActivitiesActivityIdActivitiesActivityIdPatch: async (activityId: number, activityPatch: ActivityPatch, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'activityId' is not null or undefined
+            assertParamExists('patchActivitiesActivityIdActivitiesActivityIdPatch', 'activityId', activityId)
+            // verify required parameter 'activityPatch' is not null or undefined
+            assertParamExists('patchActivitiesActivityIdActivitiesActivityIdPatch', 'activityPatch', activityPatch)
+            const localVarPath = `/activities/{activity_id}/`
+                .replace(`{${"activity_id"}}`, encodeURIComponent(String(activityId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(activityPatch, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Post Activities
+         * @param {ActivityCreate} activityCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postActivitiesActivitiesPost: async (activityCreate: ActivityCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'activityCreate' is not null or undefined
+            assertParamExists('postActivitiesActivitiesPost', 'activityCreate', activityCreate)
+            const localVarPath = `/activities/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication _Bearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "_Bearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(activityCreate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Search
+         * @param {string} q 
+         * @param {string} [fields] 
+         * @param {string} [date] 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchSearchActivitiesGet: async (q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'q' is not null or undefined
+            assertParamExists('searchSearchActivitiesGet', 'q', q)
+            const localVarPath = `/search/activities/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (fields !== undefined) {
+                localVarQueryParameter['fields'] = fields;
+            }
+
+            if (date !== undefined) {
+                localVarQueryParameter['date'] = date;
+            }
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ActivityApi - functional programming interface
+ * @export
+ */
+export const ActivityApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ActivityApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Delete Activities Activity Id
+         * @param {number} activityId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteActivitiesActivityIdActivitiesActivityIdDelete(activityId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteActivitiesActivityIdActivitiesActivityIdDelete(activityId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get Activities
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getActivitiesActivitiesGet(pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getActivitiesActivitiesGet(pageToken, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get Activities Activity Id
+         * @param {number} activityId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getActivitiesActivityIdActivitiesActivityIdGet(activityId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Activity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getActivitiesActivityIdActivitiesActivityIdGet(activityId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Patch Activities Activity Id
+         * @param {number} activityId 
+         * @param {ActivityPatch} activityPatch 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patchActivitiesActivityIdActivitiesActivityIdPatch(activityId: number, activityPatch: ActivityPatch, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Activity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.patchActivitiesActivityIdActivitiesActivityIdPatch(activityId, activityPatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Post Activities
+         * @param {ActivityCreate} activityCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postActivitiesActivitiesPost(activityCreate: ActivityCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Activity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postActivitiesActivitiesPost(activityCreate, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Search
+         * @param {string} q 
+         * @param {string} [fields] 
+         * @param {string} [date] 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchSearchActivitiesGet(q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ActivityApi - factory interface
+ * @export
+ */
+export const ActivityApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ActivityApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Delete Activities Activity Id
+         * @param {number} activityId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteActivitiesActivityIdActivitiesActivityIdDelete(activityId: number, options?: any): AxiosPromise<object> {
+            return localVarFp.deleteActivitiesActivityIdActivitiesActivityIdDelete(activityId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get Activities
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getActivitiesActivitiesGet(pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
+            return localVarFp.getActivitiesActivitiesGet(pageToken, pageSize, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get Activities Activity Id
+         * @param {number} activityId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getActivitiesActivityIdActivitiesActivityIdGet(activityId: number, options?: any): AxiosPromise<Activity> {
+            return localVarFp.getActivitiesActivityIdActivitiesActivityIdGet(activityId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Patch Activities Activity Id
+         * @param {number} activityId 
+         * @param {ActivityPatch} activityPatch 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchActivitiesActivityIdActivitiesActivityIdPatch(activityId: number, activityPatch: ActivityPatch, options?: any): AxiosPromise<Activity> {
+            return localVarFp.patchActivitiesActivityIdActivitiesActivityIdPatch(activityId, activityPatch, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Post Activities
+         * @param {ActivityCreate} activityCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postActivitiesActivitiesPost(activityCreate: ActivityCreate, options?: any): AxiosPromise<Activity> {
+            return localVarFp.postActivitiesActivitiesPost(activityCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Search
+         * @param {string} q 
+         * @param {string} [fields] 
+         * @param {string} [date] 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchSearchActivitiesGet(q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
+            return localVarFp.searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ActivityApi - object-oriented interface
+ * @export
+ * @class ActivityApi
+ * @extends {BaseAPI}
+ */
+export class ActivityApi extends BaseAPI {
+    /**
+     * 
+     * @summary Delete Activities Activity Id
+     * @param {number} activityId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public deleteActivitiesActivityIdActivitiesActivityIdDelete(activityId: number, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).deleteActivitiesActivityIdActivitiesActivityIdDelete(activityId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get Activities
+     * @param {string} [pageToken] 
+     * @param {number} [pageSize] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public getActivitiesActivitiesGet(pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).getActivitiesActivitiesGet(pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get Activities Activity Id
+     * @param {number} activityId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public getActivitiesActivityIdActivitiesActivityIdGet(activityId: number, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).getActivitiesActivityIdActivitiesActivityIdGet(activityId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Patch Activities Activity Id
+     * @param {number} activityId 
+     * @param {ActivityPatch} activityPatch 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public patchActivitiesActivityIdActivitiesActivityIdPatch(activityId: number, activityPatch: ActivityPatch, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).patchActivitiesActivityIdActivitiesActivityIdPatch(activityId, activityPatch, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Post Activities
+     * @param {ActivityCreate} activityCreate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public postActivitiesActivitiesPost(activityCreate: ActivityCreate, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).postActivitiesActivitiesPost(activityCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Search
+     * @param {string} q 
+     * @param {string} [fields] 
+     * @param {string} [date] 
+     * @param {string} [pageToken] 
+     * @param {number} [pageSize] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public searchSearchActivitiesGet(q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 /**
  * ArtworksApi - axios parameter creator
