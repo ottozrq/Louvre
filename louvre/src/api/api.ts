@@ -1832,7 +1832,7 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 
          * @summary Search
-         * @param {string} q 
+         * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
          * @param {string} [pageToken] 
@@ -1840,9 +1840,7 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchActivitiesGet: async (q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'q' is not null or undefined
-            assertParamExists('searchSearchActivitiesGet', 'q', q)
+        searchSearchActivitiesGet: async (q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/search/activities/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1956,7 +1954,7 @@ export const ActivityApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Search
-         * @param {string} q 
+         * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
          * @param {string} [pageToken] 
@@ -1964,7 +1962,7 @@ export const ActivityApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchSearchActivitiesGet(q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
+        async searchSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2033,7 +2031,7 @@ export const ActivityApiFactory = function (configuration?: Configuration, baseP
         /**
          * 
          * @summary Search
-         * @param {string} q 
+         * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
          * @param {string} [pageToken] 
@@ -2041,7 +2039,7 @@ export const ActivityApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchActivitiesGet(q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
+        searchSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
             return localVarFp.searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
@@ -2119,7 +2117,7 @@ export class ActivityApi extends BaseAPI {
     /**
      * 
      * @summary Search
-     * @param {string} q 
+     * @param {string} [q] 
      * @param {string} [fields] 
      * @param {string} [date] 
      * @param {string} [pageToken] 
@@ -2128,7 +2126,7 @@ export class ActivityApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ActivityApi
      */
-    public searchSearchActivitiesGet(q: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+    public searchSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
         return ActivityApiFp(this.configuration).searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }

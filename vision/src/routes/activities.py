@@ -122,31 +122,35 @@ def delete_activities_activity_id(
     "/search/activities/", response_model=m.ActivityCollection, tags=[TAG.Activity]
 )
 def search(
-    q: str,
+    q: str = None,
     fields: str = None,
     date: str = None,
     pagination: m.Pagination = Depends(d.get_pagination),
     db: VisionDb = Depends(d.get_psql),
     search: VisionSearch = Depends(d.get_search),
 ):
-    query = {"match": {"_all": q}}
-    if fields:
-        query = {
-            "multi_match": {
-                "query": q,
-                "fields": fields.split(","),
+    if q:
+        query = {"match": {"_all": q}}
+        if fields:
+            query = {
+                "multi_match": {
+                    "query": q,
+                    "fields": fields.split(","),
+                }
             }
-        }
-    result = search.es.search(
-        index="activity",
-        body={
-            "_source": ["id"],
-            "query": query,
-            "size": 1000,
-        },
-    )
-    ids = [hit["_id"] for hit in result.get("hits", {}).get("hits", [])]
-    activities = m.Activity.db(db).query.filter(sm.Activity.activity_id.in_(ids))
+        result = search.es.search(
+            index="activity",
+            body={
+                # "_source": ["id"],
+                "query": query,
+                "size": 1000,
+            },
+        )
+        print(result.get("hits", {}).get("hits", []))
+        ids = [hit["_source"]["id"] for hit in result.get("hits", {}).get("hits", [])]
+        activities = m.Activity.db(db).query.filter(sm.Activity.activity_id.in_(ids))
+    else:
+        activities = m.Activity.db(db).query
     if date:
         date = datetime.datetime.strptime(date, "%Y-%m-%d")
         activities = activities.filter(
@@ -157,5 +161,5 @@ def search(
         )
     return m.ActivityCollection.paginate(
         pagination,
-        activities,
+        activities.order_by(nullslast(sm.Activity.start_time.desc())),
     )

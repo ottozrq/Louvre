@@ -37,7 +37,7 @@ MAPPING = {
             },
         },
         "category": {"type": "text", "copy_to": ["_all"]},
-        "keywords": {"type": "keyword", "copy_to": ["_all"]},
+        "keywords": {"type": "text", "copy_to": ["_all"]},
         "start_date": {"type": "date", "format": "YYYY-MM-dd'T'HH:mm:ss"},
         "end_date": {"type": "date", "format": "YYYY-MM-dd'T'HH:mm:ss"},
     },
@@ -91,9 +91,7 @@ def create_activity(row):
                 "name": activity.activity_name,
                 "description": activity.description,
                 "category": activity.extra.get("category"),
-                "keywords": activity.extra.get("tags").split(";")
-                if activity.extra.get("tags")
-                else [],
+                "keywords": activity.extra.get("tags"),
                 "start_time": activity.extra.get("date_start"),
                 "end_time": activity.extra.get("date_end"),
             },
