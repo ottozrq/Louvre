@@ -183,6 +183,19 @@ export interface ActivityCreate {
 /**
  * 
  * @export
+ * @interface ActivityKeywords
+ */
+export interface ActivityKeywords {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ActivityKeywords
+     */
+    'keywords': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface ActivityPatch
  */
 export interface ActivityPatch {
@@ -1831,7 +1844,37 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Search
+         * @summary Search Activities Keywords
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchActivitiesKeywordsSearchActivitiesKeywordsGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/search/activities/keywords`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Search Activities
          * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
@@ -1840,7 +1883,7 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchActivitiesGet: async (q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        searchActivitiesSearchActivitiesGet: async (q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/search/activities/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1953,7 +1996,17 @@ export const ActivityApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Search
+         * @summary Search Activities Keywords
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchActivitiesKeywordsSearchActivitiesKeywordsGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityKeywords>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchActivitiesKeywordsSearchActivitiesKeywordsGet(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Search Activities
          * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
@@ -1962,8 +2015,8 @@ export const ActivityApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options);
+        async searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchActivitiesSearchActivitiesGet(q, fields, date, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2030,7 +2083,16 @@ export const ActivityApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
-         * @summary Search
+         * @summary Search Activities Keywords
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchActivitiesKeywordsSearchActivitiesKeywordsGet(options?: any): AxiosPromise<ActivityKeywords> {
+            return localVarFp.searchActivitiesKeywordsSearchActivitiesKeywordsGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Search Activities
          * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
@@ -2039,8 +2101,8 @@ export const ActivityApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
-            return localVarFp.searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
+            return localVarFp.searchActivitiesSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2116,7 +2178,18 @@ export class ActivityApi extends BaseAPI {
 
     /**
      * 
-     * @summary Search
+     * @summary Search Activities Keywords
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public searchActivitiesKeywordsSearchActivitiesKeywordsGet(options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).searchActivitiesKeywordsSearchActivitiesKeywordsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Search Activities
      * @param {string} [q] 
      * @param {string} [fields] 
      * @param {string} [date] 
@@ -2126,8 +2199,8 @@ export class ActivityApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ActivityApi
      */
-    public searchSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return ActivityApiFp(this.configuration).searchSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).searchActivitiesSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2349,7 +2422,7 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Search
+         * @summary Search Artworks
          * @param {string} q 
          * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
@@ -2357,9 +2430,9 @@ export const ArtworksApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchArtworksGet: async (q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        searchArtworksSearchArtworksGet: async (q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'q' is not null or undefined
-            assertParamExists('searchSearchArtworksGet', 'q', q)
+            assertParamExists('searchArtworksSearchArtworksGet', 'q', q)
             const localVarPath = `/search/artworks/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2471,7 +2544,7 @@ export const ArtworksApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Search
+         * @summary Search Artworks
          * @param {string} q 
          * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
@@ -2479,8 +2552,8 @@ export const ArtworksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.searchSearchArtworksGet(q, order, pageToken, pageSize, options);
+        async searchArtworksSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ArtworkCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchArtworksSearchArtworksGet(q, order, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2550,7 +2623,7 @@ export const ArtworksApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
-         * @summary Search
+         * @summary Search Artworks
          * @param {string} q 
          * @param {ItemOrder} [order] 
          * @param {string} [pageToken] 
@@ -2558,8 +2631,8 @@ export const ArtworksApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
-            return localVarFp.searchSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        searchArtworksSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ArtworkCollection> {
+            return localVarFp.searchArtworksSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2638,7 +2711,7 @@ export class ArtworksApi extends BaseAPI {
 
     /**
      * 
-     * @summary Search
+     * @summary Search Artworks
      * @param {string} q 
      * @param {ItemOrder} [order] 
      * @param {string} [pageToken] 
@@ -2647,8 +2720,8 @@ export class ArtworksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ArtworksApi
      */
-    public searchSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return ArtworksApiFp(this.configuration).searchSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public searchArtworksSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ArtworksApiFp(this.configuration).searchArtworksSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

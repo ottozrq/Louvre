@@ -38,7 +38,7 @@ const ArtworksPage: React.FC = () => {
   }
   const getArtworks = () => {
     if (searchText)
-      api.artworks.searchSearchArtworksGet(searchText, ItemOrder.Rate, pageToken, 30)
+      api.artworks.searchArtworksSearchArtworksGet(searchText, ItemOrder.Rate, pageToken, 30)
         .then((data) => {
           setArtworksWithData(data);
         });

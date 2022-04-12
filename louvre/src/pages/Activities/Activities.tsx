@@ -5,6 +5,8 @@ import {
   IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonItem,
+  IonList,
   IonLoading,
   IonPage,
   IonSearchbar,
@@ -18,7 +20,7 @@ import {
 
 import { Activity } from '../../api';
 import api from "../../components/api";
-import { getTranslate, toJson} from '../../components/utils';
+import { getTranslate, toJson } from '../../components/utils';
 import Header from '../../components/Header/Header';
 
 import BigItemCard from '../../components/BigItemCard/BigItemCard';
@@ -29,11 +31,14 @@ const ActivitiesPage: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [searchDate, setSearchDate] = useState<string>();
   const [searchField, setSearchField] = useState<string>("");
+  const [searchFields, setSearchFields] = useState<string[]>([]);
+  const [showFields, setShowFields] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [pageToken, setPageToken] = useState<string>("1");
   const [isInfiniteDisabled, setInfiniteDisabled] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const searchbarRef = React.useRef<any>();
 
   const setActivitiesWithData = (data: any) => {
     setActivities(data ? [...activities, ...data.data.contents] : []);
@@ -45,9 +50,9 @@ const ActivitiesPage: React.FC = () => {
   }
   const getActivities = () => {
     if (searchText || searchDate || searchField)
-      api.activities.searchSearchActivitiesGet(
+      api.activities.searchActivitiesSearchActivitiesGet(
         searchText ? searchText : undefined,
-        searchField ? searchField: undefined,
+        searchField ? searchField : undefined,
         searchDate ? searchDate : undefined,
         pageToken,
         30,
@@ -62,9 +67,22 @@ const ActivitiesPage: React.FC = () => {
           setActivitiesWithData(data);
         });
   }
-  useEffect(() => getActivities(), []);
+  useEffect(() => {
+    getActivities();
+    api.activities
+      .searchActivitiesKeywordsSearchActivitiesKeywordsGet()
+      .then((data) => {
+        setSearchFields(data.data.keywords);
+      });
+  }, []);
   const showDate = (startDate: string, endDate: string) => {
     return (startDate ? startDate.split("T")[0] : "") + (endDate ? " - " + endDate.split("T")[0] : "")
+  }
+  const setKeywordsSearchText = (keyword: string) => {
+    setSearchText(keyword);
+    setShowFields(false);
+    searchbarRef.current.value = keyword;
+    searchbarRef.current.setFocus()
   }
   return (
     <IonPage>
@@ -73,9 +91,21 @@ const ActivitiesPage: React.FC = () => {
         <IonSelect
           value={searchField}
           slot="secondary"
+          onFocus={() => {
+            if (searchField === "keywords") {
+              setShowFields(true);
+            }
+          }}
           onIonChange={(e) => {
-            var results = e.detail.value
+            const results = e.detail.value
             setSearchField(results)
+            if (results === "keywords") {
+              setActivities([]);
+              setPageToken("1");
+              setShowFields(true);
+            } else {
+              setShowFields(false);
+            }
           }}
         >
           <IonSelectOption value="">All</IonSelectOption>
@@ -83,6 +113,7 @@ const ActivitiesPage: React.FC = () => {
           <IonSelectOption value="keywords">Category</IonSelectOption>
         </IonSelect>
         <IonSearchbar
+          ref={searchbarRef}
           onIonChange={e => {
             setSearchText(e.detail.value!)
           }}
@@ -128,6 +159,15 @@ const ActivitiesPage: React.FC = () => {
               console.log(e.detail.value)
             }}
           ></IonDatetime>
+        }
+        {showFields &&
+          <IonList>
+            <IonItem onClick={() => setKeywordsSearchText("")}>All</IonItem>
+            {searchFields.map((keyword) => {
+              return <IonItem onClick={() => setKeywordsSearchText(keyword)}>{keyword}</IonItem>
+            })
+            }
+          </IonList>
         }
         {
           activities.map((activity) => {
