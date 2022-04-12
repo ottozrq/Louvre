@@ -520,3 +520,7 @@ class Activity(Entity, ActivityCreate):
 
 class ActivityCollection(EntityCollection[Activity]):
     pass
+
+
+class ActivityKeywords(Model):
+    keywords: List[str]

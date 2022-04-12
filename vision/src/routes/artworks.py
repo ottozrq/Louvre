@@ -132,7 +132,7 @@ def delete_artworks_artwork_id(
 
 
 @app.get("/search/artworks/", response_model=m.ArtworkCollection, tags=[TAG.Artworks])
-def search(
+def search_artworks(
     q: str,
     order: m.ItemOrder = m.ItemOrder.rate,
     pagination: m.Pagination = Depends(d.get_pagination),

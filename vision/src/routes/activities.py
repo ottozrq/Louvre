@@ -121,7 +121,7 @@ def delete_activities_activity_id(
 @app.get(
     "/search/activities/", response_model=m.ActivityCollection, tags=[TAG.Activity]
 )
-def search(
+def search_activities(
     q: str = None,
     fields: str = None,
     date: str = None,
@@ -163,3 +163,24 @@ def search(
         pagination,
         activities.order_by(nullslast(sm.Activity.start_time.desc())),
     )
+
+
+@app.get(
+    "/search/activities/keywords",
+    response_model=m.ActivityKeywords,
+    tags=[TAG.Activity],
+)
+def search_activities_keywords(
+    db: VisionDb = Depends(d.get_psql),
+):
+    keywords_db = (
+        db.session.query(sm.Activity.extra.op("->>")("tags"))
+        .group_by(sm.Activity.extra.op("->>")("tags"))
+        .all()
+    )
+    keywords = []
+    for keyword in keywords_db:
+        for k in keyword[0].split(";") if keyword[0] else []:
+            if k not in keywords:
+                keywords.append(k)
+    return m.ActivityKeywords(keywords=keywords)
