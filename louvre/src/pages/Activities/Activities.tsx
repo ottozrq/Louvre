@@ -82,7 +82,7 @@ const ActivitiesPage: React.FC = () => {
     setSearchText(keyword);
     setShowFields(false);
     searchbarRef.current.value = keyword;
-    searchbarRef.current.setFocus()
+    searchbarRef.current.setFocus();
   }
   return (
     <IonPage>
@@ -156,7 +156,7 @@ const ActivitiesPage: React.FC = () => {
             onIonChange={(e) => {
               setSearchDate(e.detail.value ? e.detail.value.split("T")[0] : "");
               setShowCalendar(false);
-              console.log(e.detail.value)
+              searchbarRef.current.setFocus();
             }}
           ></IonDatetime>
         }
