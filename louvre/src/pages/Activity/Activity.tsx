@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import L from "leaflet";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { RouteComponentProps } from 'react-router';
 import {
   IonCard,
@@ -36,17 +38,21 @@ import { getImageUrl, getTranslate, toJson, isAdmin } from "../../components/uti
 import Header from '../../components/Header/Header';
 
 import './Activity.css';
+import 'leaflet/dist/leaflet.css';
 
 interface ActivityPageProps
   extends RouteComponentProps<{
     activity_id: string;
   }> { }
 
+const icon = L.icon({ iconUrl: "/assets/images/marker-icon.png" });
+
 const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
   const activity_id = parseInt(match.params.activity_id);
   const [showLoading, setShowLoading] = useState(true);
   const [activity, setActivity] = useState<Activity>();
   const [segmentValue, setSegmentValue] = useState<string>("info");
+
   useEffect(() => {
     api.activities
       .getActivitiesActivityIdActivitiesActivityIdGet(activity_id)
@@ -140,10 +146,26 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
                   <IonCol size="10">{toJson(activity?.extra)["price_detail"]}</IonCol>
                 </IonRow>}
               {toJson(activity?.extra)["address_street"] &&
-                <IonRow className="info-row">
-                  <IonCol size="2"><IonIcon icon={locationOutline} /></IonCol>
-                  <IonCol size="10">{toJson(activity?.extra)["address_street"] + ", " + toJson(activity?.extra)["address_zipcode"] + ", " + toJson(activity?.extra)["address_city"]}</IonCol>
-                </IonRow>}
+                <>
+                  <IonRow className="info-row">
+                    <IonCol size="2"><IonIcon icon={locationOutline} /></IonCol>
+                    <IonCol size="10">{toJson(activity?.extra)["address_street"] + ", " + toJson(activity?.extra)["address_zipcode"] + ", " + toJson(activity?.extra)["address_city"]}</IonCol>
+                  </IonRow>
+                  <MapContainer
+                    className="map"
+                    center={toJson(activity?.extra)["lat_lon"]}
+                    zoom={16}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={toJson(activity?.extra)["lat_lon"]} icon={icon}>
+                      {/* <Popup>
+                        A pretty CSS3 popup. <br /> Easily customizable.
+                      </Popup> */}
+                    </Marker>
+                  </MapContainer>
+                </>}
               {toJson(activity?.extra)["transport"] &&
                 <IonRow className="info-row">
                   <IonCol size="2"><IonIcon icon={busOutline} /></IonCol>

@@ -14,12 +14,12 @@ dist/
 downloads/
 eggs/
 .eggs/
-images/
 lib/
 lib64/
 parts/
 sdist/
 var/
+vision/images/
 wheels/
 *.egg-info/
 .installed.cfg

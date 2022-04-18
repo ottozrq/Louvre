@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, useHistory } from 'react-router';
 import {
-  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -11,7 +10,6 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonItem,
   IonList,
   IonLoading,
   IonPage,
