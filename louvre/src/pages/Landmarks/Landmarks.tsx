@@ -34,6 +34,7 @@ const LandmarksPage: React.FC = () => {
     setShowLoading(false);
   }
   const getLandmarks = () => {
+    setInfiniteDisabled(true);
     api.landmarks
       .getLandmarksLandmarksGet(pageToken, 30)
       .then((data) => {

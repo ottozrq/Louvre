@@ -29,7 +29,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { IonReactRouter } from '@ionic/react-router';
-import { listOutline, personOutline, scanOutline } from 'ionicons/icons';
+import { listOutline, locationOutline, personOutline, scanOutline } from 'ionicons/icons';
 import Activities from './pages/Activities/Activities';
 import ActivityPage from './pages/Activity/Activity';
 import ArtworksPage from './pages/Artworks/Artworks';
@@ -84,13 +84,13 @@ const App: React.FC = () => (
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
+          <IonTabButton tab="landmarks" href="/landmarks">
+            <IonIcon icon={locationOutline} />
+            <IonLabel>Scan</IonLabel>
+          </IonTabButton>
           <IonTabButton tab="activities" href="/activities">
             <IonIcon icon={listOutline} />
             <IonLabel>Activities</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="scan" href="/scan">
-            <IonIcon icon={scanOutline} />
-            <IonLabel>Scan</IonLabel>
           </IonTabButton>
           <IonTabButton tab="user" href="/user">
             <IonIcon icon={personOutline} />
