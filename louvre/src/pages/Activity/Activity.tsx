@@ -58,7 +58,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
 
   return (
     <IonPage>
-      <Header name="Louvre" back></Header>
+      <Header name="Activity" back></Header>
       <IonContent fullscreen>
         <IonCard>
           <img alt="artwork" className="artwork-image" src={activity?.cover_image}></img>

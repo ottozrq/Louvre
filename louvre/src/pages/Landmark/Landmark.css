@@ -1,0 +1,17 @@
+.artwork-image {
+    width: 100%;
+}
+
+.artwork-content {
+    text-align: justify;
+}
+
+.info-row {
+    margin: 10px 20px;
+    font-size: large;
+    text-align: justify;
+}
+
+.show-all {
+    text-align: center;
+}

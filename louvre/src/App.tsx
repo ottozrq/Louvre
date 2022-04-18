@@ -9,16 +9,6 @@ import {
   IonTabs,
   setupIonicReact
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { listOutline, personOutline, scanOutline } from 'ionicons/icons';
-import Activities from './pages/Activities/Activities';
-import ActivityPage from './pages/Activity/Activity';
-import Artworks from './pages/Artworks/Artworks';
-import ArtworkPage from './pages/Artwork/Artwork';
-import LoginPage from './pages/Login/Login';
-import UserPage from './pages/User/User';
-import ScanPage from './pages/Scan/Scan';
-
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,6 +28,17 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { IonReactRouter } from '@ionic/react-router';
+import { listOutline, personOutline, scanOutline } from 'ionicons/icons';
+import Activities from './pages/Activities/Activities';
+import ActivityPage from './pages/Activity/Activity';
+import ArtworksPage from './pages/Artworks/Artworks';
+import ArtworkPage from './pages/Artwork/Artwork';
+import LandmarkPage from './pages/Landmark/Landmark';
+import LandmarksPage from './pages/Landmarks/Landmarks';
+import LoginPage from './pages/Login/Login';
+import UserPage from './pages/User/User';
+import ScanPage from './pages/Scan/Scan';
 
 setupIonicReact();
 
@@ -53,31 +54,39 @@ const App: React.FC = () => (
             path="/activities/:activity_id"
             component={ActivityPage}
           ></Route>
-          <Route exact path="/artworks">
-            <Artworks />
-          </Route>
           <Route exact
             path="/artworks/:artwork_id"
             component={ArtworkPage}
           >
           </Route>
-          <Route path="/login">
+          <Route exact path="/landmarks">
+            <LandmarksPage />
+          </Route>
+          <Route exact
+            path="/landmarks/:landmark_id"
+            component={LandmarkPage}
+          ></Route>
+          <Route exact
+            path="/landmarks/:landmark_id/artworks"
+            component={ArtworksPage}
+          ></Route>
+          <Route exact path="/login">
             <LoginPage />
           </Route>
-          <Route path="/scan">
+          <Route exact path="/scan">
             <ScanPage />
           </Route>
-          <Route path="/user">
+          <Route exact path="/user">
             <UserPage />
           </Route>
           <Route exact path="/">
-            <Redirect to="/artworks" />
+            <Redirect to="/activities" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="artworks" href="/artworks">
+          <IonTabButton tab="activities" href="/activities">
             <IonIcon icon={listOutline} />
-            <IonLabel>Artworks</IonLabel>
+            <IonLabel>Activities</IonLabel>
           </IonTabButton>
           <IonTabButton tab="scan" href="/scan">
             <IonIcon icon={scanOutline} />

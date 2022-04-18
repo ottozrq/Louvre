@@ -86,7 +86,7 @@ const ActivitiesPage: React.FC = () => {
   }
   return (
     <IonPage>
-      <Header name="Louvre"></Header>
+      <Header name="Activities"></Header>
       <IonToolbar>
         <IonSelect
           value={searchField}

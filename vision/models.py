@@ -349,6 +349,7 @@ class LandmarkCreate(LandmarkPatch):
 
 class Landmark(Entity, LandmarkCreate):
     landmark_id: PrimaryKey
+    artworks: Link
 
     class Config:
         db_model = sm.Landmark
@@ -364,6 +365,7 @@ class Landmark(Entity, LandmarkCreate):
             cover_image=landmark.cover_image,
             description=landmark.description,
             extra=landmark.extra,
+            artworks=f"{Landmark.link(landmark.landmark_id)}/artworks",
             geometry=landmark.geojson,
             **cls.links(landmark),
         )

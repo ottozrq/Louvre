@@ -72,7 +72,7 @@ const ArtworkPage: React.FC<ArtworkPageProps> = ({ match }) => {
 
   return (
     <IonPage>
-      <Header name="Louvre" back></Header>
+      <Header name="Artwork" back></Header>
       <IonContent fullscreen>
         <IonCard>
           <img alt="artwork" className="artwork-image" src={getImageUrl(artwork?.cover_image)}></img>

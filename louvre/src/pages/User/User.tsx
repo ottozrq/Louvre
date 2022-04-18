@@ -33,7 +33,7 @@ const UserPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Header name="Louvre"></Header>
+      <Header name="User"></Header>
       <IonContent>
         <IonItem>
           <h1>Hi {user?.first_name}!</h1>

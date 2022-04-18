@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Header name="Louvre"></Header>
+      <Header name="Login"></Header>
       <IonContent>
         <IonItem>
           <IonInput

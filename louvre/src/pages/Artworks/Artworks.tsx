@@ -53,7 +53,7 @@ const ArtworksPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Header name="Louvre"></Header>
+      <Header name="Artworks"></Header>
       <IonToolbar>
         <IonSearchbar
           onIonChange={e => {

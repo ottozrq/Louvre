@@ -42,6 +42,7 @@ def test_post_landmarks(cl: ApiClient, mocker):
         city="Paris",
         self_link=f"/landmarks/{landmark.landmark_id}",
         kind=m.Kind.landmark,
+        artworks=f"/landmarks/{landmark.landmark_id}/artworks",
         landmark_id=landmark.landmark_id,
     )
 
@@ -72,6 +73,7 @@ def test_put_landmarks_landmark_id(cl: ApiClient, mocker, landmark_1):
         city="Paris",
         self_link=f"/landmarks/{landmark.landmark_id}",
         kind=m.Kind.landmark,
+        artworks=f"/landmarks/{landmark.landmark_id}/artworks",
         landmark_id=landmark.landmark_id,
     )
 

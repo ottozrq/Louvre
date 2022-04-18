@@ -166,7 +166,7 @@ def search_activities(
 
 
 @app.get(
-    "/search/activities/keywords",
+    "/search/activities/keywords/",
     response_model=m.ActivityKeywords,
     tags=[TAG.Activity],
 )

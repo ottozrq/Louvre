@@ -1039,6 +1039,12 @@ export interface Landmark {
      * @memberof Landmark
      */
     'landmark_id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Landmark
+     */
+    'artworks': string;
 }
 /**
  * 
@@ -1849,7 +1855,7 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
          * @throws {RequiredError}
          */
         searchActivitiesKeywordsSearchActivitiesKeywordsGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/search/activities/keywords`;
+            const localVarPath = `/search/activities/keywords/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
