@@ -2,7 +2,7 @@ import datetime
 from typing import Dict
 
 from fastapi import Depends
-from sqlalchemy import and_, nullslast, or_
+from sqlalchemy import and_, or_
 
 from src.routes import app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import db_geo_feature, update_json

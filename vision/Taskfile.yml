@@ -38,3 +38,4 @@ tasks:
   detect_poc: PYENV_VERSION=vision python -m commands.detect_poc
   recalculate_descriptors: PYENV_VERSION=vision python -m commands.recalculate_descriptors
   fetch_activities: PYENV_VERSION=vision python -m commands.fetch_activities
+  a2g: PYENV_VERSION=vision python -m commands.activities_to_geometry

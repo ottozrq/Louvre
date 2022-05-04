@@ -1,6 +1,7 @@
 # import pathlib
 import re
 import uuid
+from datetime import datetime
 
 from typing import List
 import sqlalchemy
@@ -245,6 +246,16 @@ User.series = rel(Series, back_populates="author")
 Series.introductions = rel(Introduction, back_populates="series")
 
 
+class Geometry(GeoJsonBase, PsqlBase):
+    geometry_id = seq("geometry_id")
+    geometry_name = Column(JSON, nullable=True)
+    geometry_type = Column(String, nullable=True)
+    description = Column(JSON, nullable=True)
+    extra = Column(JSON, nullable=True)
+    display = Column(Boolean, server_default="TRUE", nullable=False)
+    self_link = Column(String, nullable=True)
+
+
 class Activity(GeoJsonBase, PsqlBase):
     activity_id = seq("activity_id")
     activity_unique_id = Column(String, nullable=True)
@@ -254,3 +265,18 @@ class Activity(GeoJsonBase, PsqlBase):
     extra = Column(JSON, nullable=True)
     start_time = Column(DateTime, nullable=True)
     end_time = Column(DateTime, nullable=True)
+
+    def to_geometry(self):
+        return Geometry(
+            geometry_name=self.activity_name,
+            geometry_type="activity",
+            description=self.description,
+            extra=self.extra,
+            geometry=self.geometry,
+            display=True
+            if not self.start_time
+            or self.start_time < datetime.now()
+            and self.end_time > datetime.now()
+            else False,
+            self_link=f"activities/{self.activity_id}",
+        )

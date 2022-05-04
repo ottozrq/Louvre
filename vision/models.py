@@ -27,6 +27,7 @@ from utils.visionmodels import AutoLink, Model, Link
 class OpenAPITag(AutoEnum):
     Activity = auto()
     Artworks = auto()
+    Geometry = auto()
     Images = auto()
     Introductions = auto()
     Landmarks = auto()
@@ -39,6 +40,7 @@ class Kind(AutoEnum):
     activity = auto()
     artwork = auto()
     collection = auto()
+    geometry = auto()
     introduction = auto()
     landmark = auto()
     series = auto()
@@ -48,6 +50,8 @@ class Kind(AutoEnum):
     def plural(self) -> str:
         if self.value == "activity":
             return "activities"
+        if self.value == "geometry":
+            return "geometries"
         return f"{self.value}s"
 
 
@@ -526,3 +530,53 @@ class ActivityCollection(EntityCollection[Activity]):
 
 class ActivityKeywords(Model):
     keywords: List[str]
+
+
+class GeometryItem(Entity):
+    geometry_id: PrimaryKey
+    geometry_name: Dict[str, Any]
+    geometry_type: str
+    item_link: Link
+    display: bool = True
+
+    class Config:
+        db_model = sm.Geometry
+        kind = Kind.geometry
+
+    @classmethod
+    def from_db(cls, geometry: sm.Geometry):
+        return cls(
+            geometry_id=geometry.geometry_id,
+            geometry_name=geometry.geometry_name,
+            geometry_type=geometry.geometry_type,
+            geometry=geometry.geojson,
+            item_link=geometry.self_link,
+            **cls.links(geometry),
+        )
+
+
+class GeometryItemDetailed(GeometryItem):
+    geometry_id: PrimaryKey
+    geometry_name: Dict[str, Any]
+    geometry_type: str
+    description: Dict[str, Any] = None
+    extra: Dict[str, Any] = None
+    item_link: Link
+    display: bool = True
+
+    @classmethod
+    def from_db(cls, geometry: sm.Geometry):
+        return cls(
+            geometry_id=geometry.geometry_id,
+            geometry_name=geometry.geometry_name,
+            geometry_type=geometry.geometry_type,
+            description=geometry.description,
+            extra=geometry.extra,
+            geometry=geometry.geojson,
+            item_link=geometry.self_link,
+            **cls.links(geometry),
+        )
+
+
+class GeometryItemCollection(EntityCollection[GeometryItem]):
+    pass
