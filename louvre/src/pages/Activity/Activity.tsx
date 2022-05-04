@@ -1,5 +1,5 @@
 import L from "leaflet";
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { RouteComponentProps } from 'react-router';
 import {
@@ -38,7 +38,6 @@ import { getImageUrl, getTranslate, toJson, isAdmin } from "../../components/uti
 import Header from '../../components/Header/Header';
 
 import './Activity.css';
-import 'leaflet/dist/leaflet.css';
 
 interface ActivityPageProps
   extends RouteComponentProps<{
@@ -152,7 +151,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
                     <IonCol size="10">{toJson(activity?.extra)["address_street"] + ", " + toJson(activity?.extra)["address_zipcode"] + ", " + toJson(activity?.extra)["address_city"]}</IonCol>
                   </IonRow>
                   <MapContainer
-                    className="map"
+                    className="activity-map"
                     center={toJson(activity?.extra)["lat_lon"]}
                     zoom={16}
                   >

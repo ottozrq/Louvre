@@ -5,7 +5,7 @@ import typer
 from shapely.geometry import shape
 
 import sql_models as sm
-from utils.utils import VisionSearch, postgres_session
+from utils.utils import postgres_session, VisionSearch
 
 
 MAPPING = {
@@ -52,7 +52,10 @@ def create_activity(row):
     with postgres_session() as db:
         activity = (
             db.session.query(sm.Activity)
-            .filter(sm.Activity.activity_unique_id == row["recordid"])
+            .filter(
+                sm.Activity.activity_name.op("->>")("fr")
+                == row["fields"]["title"]
+            )
             .all()
         )
         if len(activity) > 0:

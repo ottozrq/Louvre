@@ -28,7 +28,7 @@ def get_activities(
                 sm.Activity.end_time == None,
             )
         )
-        .order_by(nullslast(sm.Activity.start_time.desc())),
+        .order_by(sm.Activity.inserted_at.desc()),
     )
 
 
@@ -161,7 +161,7 @@ def search_activities(
         )
     return m.ActivityCollection.paginate(
         pagination,
-        activities.order_by(nullslast(sm.Activity.start_time.desc())),
+        activities.order_by(sm.Activity.inserted_at.desc()),
     )
 
 
