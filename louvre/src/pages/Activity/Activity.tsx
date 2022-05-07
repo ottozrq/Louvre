@@ -32,7 +32,7 @@ import {
   walletOutline
 } from 'ionicons/icons';
 
-import { Activity, ItemOrder } from '../../api';
+import { Activity } from '../../api';
 import api from "../../components/api";
 import { getImageUrl, getTranslate, toJson, isAdmin } from "../../components/utils"
 import Header from '../../components/Header/Header';

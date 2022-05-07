@@ -536,6 +536,7 @@ class GeometryItem(Entity):
     geometry_id: PrimaryKey
     geometry_name: Dict[str, Any]
     geometry_type: str
+    geometry: Geometry
     item_link: Link
     display: bool = True
 
@@ -556,12 +557,8 @@ class GeometryItem(Entity):
 
 
 class GeometryItemDetailed(GeometryItem):
-    geometry_id: PrimaryKey
-    geometry_name: Dict[str, Any]
-    geometry_type: str
     description: Dict[str, Any] = None
     extra: Dict[str, Any] = None
-    item_link: Link
     display: bool = True
 
     @classmethod

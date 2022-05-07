@@ -31,6 +31,7 @@ def test_all_routes(cl: ApiClient, path: str, route: BaseRoute):
                 "/activities/",
                 "/search/activities/",
                 "/search/activities/keywords/",
+                "/geometries/",
             }
         )
         or path == "/"

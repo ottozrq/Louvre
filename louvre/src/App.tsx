@@ -29,7 +29,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { IonReactRouter } from '@ionic/react-router';
-import { listOutline, locationOutline, personOutline, scanOutline } from 'ionicons/icons';
+import { listOutline, locationOutline, mapOutline, personOutline, scanOutline } from 'ionicons/icons';
 import Activities from './pages/Activities/Activities';
 import ActivityPage from './pages/Activity/Activity';
 import ArtworksPage from './pages/Artworks/Artworks';
@@ -37,8 +37,9 @@ import ArtworkPage from './pages/Artwork/Artwork';
 import LandmarkPage from './pages/Landmark/Landmark';
 import LandmarksPage from './pages/Landmarks/Landmarks';
 import LoginPage from './pages/Login/Login';
-import UserPage from './pages/User/User';
+import MapPage from './pages/Map/Map';
 import ScanPage from './pages/Scan/Scan';
+import UserPage from './pages/User/User';
 
 setupIonicReact();
 
@@ -73,6 +74,9 @@ const App: React.FC = () => (
           <Route exact path="/login">
             <LoginPage />
           </Route>
+          <Route exact path="/map">
+            <MapPage />
+          </Route>
           <Route exact path="/scan">
             <ScanPage />
           </Route>
@@ -91,6 +95,10 @@ const App: React.FC = () => (
           <IonTabButton tab="activities" href="/activities">
             <IonIcon icon={listOutline} />
             <IonLabel>Activities</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="map" href="/map">
+            <IonIcon icon={mapOutline} />
+            <IonLabel>Map</IonLabel>
           </IonTabButton>
           <IonTabButton tab="user" href="/user">
             <IonIcon icon={personOutline} />
