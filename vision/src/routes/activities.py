@@ -2,7 +2,9 @@ import datetime
 from typing import Dict
 
 from fastapi import Depends
+from geoalchemy2.elements import WKTElement
 from sqlalchemy import and_, or_
+from sqlalchemy.sql import func
 
 from src.routes import app, d, delete_response, m, schema_show_all, sm, TAG
 from utils.sql_utils import db_geo_feature, update_json
@@ -125,6 +127,9 @@ def search_activities(
     q: str = None,
     fields: str = None,
     date: str = None,
+    lat: float = None,
+    lon: float = None,
+    range: int = 3000,
     pagination: m.Pagination = Depends(d.get_pagination),
     db: VisionDb = Depends(d.get_psql),
     search: VisionSearch = Depends(d.get_search),
@@ -151,6 +156,14 @@ def search_activities(
         activities = m.Activity.db(db).query.filter(sm.Activity.activity_id.in_(ids))
     else:
         activities = m.Activity.db(db).query
+    if lat and lon and range:
+        activities = activities.filter(
+            func.ST_DWithin(
+                func.ST_GeogFromWKB(WKTElement(f"POINT({lon} {lat})", srid=4326)),
+                sm.Geometry.geometry,
+                range
+            )
+        )
     if date:
         date = datetime.datetime.strptime(date, "%Y-%m-%d")
         activities = activities.filter(

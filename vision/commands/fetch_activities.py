@@ -85,8 +85,6 @@ def create_activity(row):
                 start_time=row["fields"].get("date_start"),
                 end_time=row["fields"].get("date_end"),
             )
-            geometry = activity.to_geometry()
-            db.session.add(geometry)
         print(activity.activity_name)
         vs.es.index(
             index=INDEX_NAME,

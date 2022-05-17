@@ -14,7 +14,7 @@ from src.routes import app, d, m, schema_show_all, sm, TAG, VisionDb
 def get_geometries(
     lat: float = 48.8566,
     lon: float = 2.3522,
-    range: int = 100,
+    range: int = 3000,
     db: VisionDb = Depends(d.get_psql),
     pagination: m.Pagination = Depends(d.get_pagination),
 ):

@@ -266,6 +266,18 @@ class Activity(GeoJsonBase, PsqlBase):
     start_time = Column(DateTime, nullable=True)
     end_time = Column(DateTime, nullable=True)
 
+    @property
+    def _start_time(self):
+        if isinstance(self.start_time, str):
+            return datetime.strptime(self.start_time.split('+')[0], '%Y-%m-%dT%H:%M:%S')
+        return self.start_time
+
+    @property
+    def _end_time(self):
+        if isinstance(self.end_time, str):
+            return datetime.strptime(self.end_time.split('+')[0], '%Y-%m-%dT%H:%M:%S')
+        return self.end_time
+
     def to_geometry(self):
         return Geometry(
             geometry_name=self.activity_name,
@@ -274,9 +286,10 @@ class Activity(GeoJsonBase, PsqlBase):
             extra=self.extra,
             geometry=self.geometry,
             display=True
-            if not self.start_time
-            or self.start_time < datetime.now()
-            and self.end_time > datetime.now()
+            if self.start_time
+            and self._start_time < datetime.now()
+            and self.end_time
+            and self._end_time > datetime.now()
             else False,
             self_link=f"activities/{self.activity_id}",
         )
