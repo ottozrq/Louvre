@@ -504,6 +504,29 @@ class ActivityCreate(ActivityPatch):
     activity_unique_id: str = None
 
 
+class ActivityBrief(Entity):
+    activity_id: PrimaryKey
+    activity_name: Dict[str, Any]
+    description: Dict[str, Any]
+    cover_image: str
+    geometry: Geometry = None
+
+    class Config:
+        db_model = sm.Activity
+        kind = Kind.activity
+
+    @classmethod
+    def from_db(cls, activity: sm.Activity):
+        return cls(
+            activity_id=activity.activity_id,
+            activity_name=activity.activity_name,
+            cover_image=activity.cover_image,
+            description=activity.description,
+            geometry=activity.geojson,
+            **cls.links(activity),
+        )
+
+
 class Activity(Entity, ActivityCreate):
     activity_id: PrimaryKey
 
@@ -524,7 +547,7 @@ class Activity(Entity, ActivityCreate):
         )
 
 
-class ActivityCollection(EntityCollection[Activity]):
+class ActivityCollection(EntityCollection[ActivityBrief]):
     pass
 
 

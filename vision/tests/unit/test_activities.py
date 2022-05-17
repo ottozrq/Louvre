@@ -9,7 +9,7 @@ def test_get_activities_activity_id(cl: ApiClient, activity_1):
 
 def test_get_activities(cl: ApiClient, activity_1):
     assert m.ActivityCollection.from_response(cl("/activities")).contents == [
-        m.Activity.from_db(activity_1)
+        m.ActivityBrief.from_db(activity_1)
     ]
 
 
