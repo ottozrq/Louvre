@@ -156,12 +156,17 @@ def search_activities(
         activities = m.Activity.db(db).query.filter(sm.Activity.activity_id.in_(ids))
     else:
         activities = m.Activity.db(db).query
-    if lat and lon and range:
+    if lat is not None and lon is not None and range:
         activities = activities.filter(
+            and_(
+                sm.Activity.start_time <= datetime.datetime.now(),
+                sm.Activity.end_time >= datetime.datetime.now(),
+            )
+        ).filter(
             func.ST_DWithin(
                 func.ST_GeogFromWKB(WKTElement(f"POINT({lon} {lat})", srid=4326)),
-                sm.Geometry.geometry,
-                range
+                sm.Activity.geometry,
+                range,
             )
         )
     if date:

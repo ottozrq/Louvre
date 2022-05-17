@@ -36,6 +36,7 @@ import { Activity } from '../../api';
 import api from "../../components/api";
 import { getImageUrl, getTranslate, toJson, isAdmin } from "../../components/utils"
 import Header from '../../components/Header/Header';
+import MapMarker from "../../components/Map/MapMarker/MapMarker";
 
 import './Activity.css';
 
@@ -44,7 +45,10 @@ interface ActivityPageProps
     activity_id: string;
   }> { }
 
-const icon = L.icon({ iconUrl: "/assets/images/marker-icon.png" });
+const icon = L.icon({
+  iconUrl: "/assets/images/activity.png",
+  iconSize: new L.Point(40, 40),
+});
 
 const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
   const activity_id = parseInt(match.params.activity_id);
@@ -56,7 +60,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
     api.activities
       .getActivitiesActivityIdActivitiesActivityIdGet(activity_id)
       .then((data) => {
-        setActivity(data.data)
+        setActivity(data.data);
         setShowLoading(false);
       });
   }, [activity_id]);
@@ -158,11 +162,11 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ match }) => {
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={toJson(activity?.extra)["lat_lon"]} icon={icon}>
-                      {/* <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                      </Popup> */}
-                    </Marker>
+                    <MapMarker
+                      popup={false}
+                      type="activity"
+                      geometry={activity?.geometry}>
+                    </MapMarker>
                   </MapContainer>
                 </>}
               {toJson(activity?.extra)["transport"] &&

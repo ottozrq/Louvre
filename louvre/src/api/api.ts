@@ -735,6 +735,116 @@ export interface GeometryElement {
     'type': GeometryType;
 }
 /**
+ * 
+ * @export
+ * @interface GeometryItem
+ */
+export interface GeometryItem {
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometryItem
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof GeometryItem
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {number}
+     * @memberof GeometryItem
+     */
+    'geometry_id': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof GeometryItem
+     */
+    'geometry_name': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometryItem
+     */
+    'geometry_type': string;
+    /**
+     * 
+     * @type {GeometryElement | GeometryCollection}
+     * @memberof GeometryItem
+     */
+    'geometry': GeometryElement | GeometryCollection;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometryItem
+     */
+    'item_link': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GeometryItem
+     */
+    'display'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface GeometryItemCollection
+ */
+export interface GeometryItemCollection {
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometryItemCollection
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof GeometryItemCollection
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometryItemCollection
+     */
+    'page_token': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometryItemCollection
+     */
+    'next_page_token': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GeometryItemCollection
+     */
+    'page_size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GeometryItemCollection
+     */
+    'total_size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GeometryItemCollection
+     */
+    'total_pages': number;
+    /**
+     * 
+     * @type {Array<GeometryItem>}
+     * @memberof GeometryItemCollection
+     */
+    'contents': Array<GeometryItem>;
+}
+/**
  * An enumeration.
  * @export
  * @enum {string}
@@ -967,6 +1077,7 @@ export enum Kind {
     Activity = 'activity',
     Artwork = 'artwork',
     Collection = 'collection',
+    Geometry = 'geometry',
     Introduction = 'introduction',
     Landmark = 'landmark',
     Series = 'series',
@@ -2728,6 +2839,144 @@ export class ArtworksApi extends BaseAPI {
      */
     public searchArtworksSearchArtworksGet(q: string, order?: ItemOrder, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
         return ArtworksApiFp(this.configuration).searchArtworksSearchArtworksGet(q, order, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * GeometryApi - axios parameter creator
+ * @export
+ */
+export const GeometryApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get Geometries
+         * @param {number} [lat] 
+         * @param {number} [lon] 
+         * @param {number} [range] 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGeometriesGeometriesGet: async (lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/geometries/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (lat !== undefined) {
+                localVarQueryParameter['lat'] = lat;
+            }
+
+            if (lon !== undefined) {
+                localVarQueryParameter['lon'] = lon;
+            }
+
+            if (range !== undefined) {
+                localVarQueryParameter['range'] = range;
+            }
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GeometryApi - functional programming interface
+ * @export
+ */
+export const GeometryApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GeometryApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get Geometries
+         * @param {number} [lat] 
+         * @param {number} [lon] 
+         * @param {number} [range] 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometryItemCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometriesGeometriesGet(lat, lon, range, pageToken, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * GeometryApi - factory interface
+ * @export
+ */
+export const GeometryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GeometryApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get Geometries
+         * @param {number} [lat] 
+         * @param {number} [lon] 
+         * @param {number} [range] 
+         * @param {string} [pageToken] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<GeometryItemCollection> {
+            return localVarFp.getGeometriesGeometriesGet(lat, lon, range, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GeometryApi - object-oriented interface
+ * @export
+ * @class GeometryApi
+ * @extends {BaseAPI}
+ */
+export class GeometryApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get Geometries
+     * @param {number} [lat] 
+     * @param {number} [lon] 
+     * @param {number} [range] 
+     * @param {string} [pageToken] 
+     * @param {number} [pageSize] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GeometryApi
+     */
+    public getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return GeometryApiFp(this.configuration).getGeometriesGeometriesGet(lat, lon, range, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

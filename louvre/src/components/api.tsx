@@ -10,6 +10,7 @@ import {
   RootApiFactory,
   SeriesApiFactory,
   UsersApiFactory,
+  GeometryApiFactory,
 } from "../api";
 
 export const config = new Configuration({});
@@ -28,6 +29,7 @@ export function setApiBasePath(s: string) {
 const api = {
   activities: ActivityApiFactory(config),
   artworks: ArtworksApiFactory(config),
+  geometries: GeometryApiFactory(config),
   landmarks: LandmarksApiFactory(config),
   introductions: IntroductionsApiFactory(config),
   images: ImagesApiFactory(config),
