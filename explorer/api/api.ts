@@ -114,12 +114,6 @@ export interface ActivityBrief {
     'activity_name': object;
     /**
      * 
-     * @type {object}
-     * @memberof ActivityBrief
-     */
-    'description': object;
-    /**
-     * 
      * @type {string}
      * @memberof ActivityBrief
      */
@@ -130,6 +124,61 @@ export interface ActivityBrief {
      * @memberof ActivityBrief
      */
     'geometry'?: GeometryElement | GeometryCollection;
+}
+/**
+ * 
+ * @export
+ * @interface ActivityBriefCollection
+ */
+export interface ActivityBriefCollection {
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityBriefCollection
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof ActivityBriefCollection
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityBriefCollection
+     */
+    'page_token': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityBriefCollection
+     */
+    'next_page_token': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityBriefCollection
+     */
+    'page_size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityBriefCollection
+     */
+    'total_size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityBriefCollection
+     */
+    'total_pages': number;
+    /**
+     * 
+     * @type {Array<ActivityBrief>}
+     * @memberof ActivityBriefCollection
+     */
+    'contents': Array<ActivityBrief>;
 }
 /**
  * 
@@ -181,10 +230,10 @@ export interface ActivityCollection {
     'total_pages': number;
     /**
      * 
-     * @type {Array<ActivityBrief>}
+     * @type {Array<Activity>}
      * @memberof ActivityCollection
      */
-    'contents': Array<ActivityBrief>;
+    'contents': Array<Activity>;
 }
 /**
  * 
@@ -2199,7 +2248,7 @@ export const ActivityApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
+        async searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection | ActivityBriefCollection>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.searchActivitiesSearchActivitiesGet(q, fields, date, lat, lon, range, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2288,7 +2337,7 @@ export const ActivityApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
+        searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection | ActivityBriefCollection> {
             return localVarFp.searchActivitiesSearchActivitiesGet(q, fields, date, lat, lon, range, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };

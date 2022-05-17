@@ -12,7 +12,7 @@ import MapMarker from "../../components/Map/MapMarker/MapMarker";
 
 import './Map.css';
 import 'leaflet/dist/leaflet.css'
-import { Activity, GeometryItem } from '../../api';
+import { Activity } from '../../api';
 import api from '../../components/api';
 import { getTranslate } from '../../components/utils';
 

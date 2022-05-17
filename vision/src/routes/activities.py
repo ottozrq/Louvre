@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict
+from typing import Dict, Union
 
 from fastapi import Depends
 from geoalchemy2.elements import WKTElement
@@ -121,7 +121,9 @@ def delete_activities_activity_id(
 
 
 @app.get(
-    "/search/activities/", response_model=m.ActivityCollection, tags=[TAG.Activity]
+    "/search/activities/",
+    response_model=Union[m.ActivityCollection, m.ActivityBriefCollection],
+    tags=[TAG.Activity],
 )
 def search_activities(
     q: str = None,
@@ -177,9 +179,16 @@ def search_activities(
                 sm.Activity.end_time >= date,
             )
         )
-    return m.ActivityCollection.paginate(
-        pagination,
-        activities.order_by(sm.Activity.inserted_at.desc()),
+    return (
+        m.ActivityCollection.paginate(
+            pagination,
+            activities.order_by(sm.Activity.inserted_at.desc()),
+        )
+        if pagination.page_size is None or pagination.page_size < 30
+        else m.ActivityBriefCollection.paginate(
+            pagination,
+            activities.order_by(sm.Activity.inserted_at.desc()),
+        )
     )
 
 

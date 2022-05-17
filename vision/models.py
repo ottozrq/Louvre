@@ -507,7 +507,6 @@ class ActivityCreate(ActivityPatch):
 class ActivityBrief(Entity):
     activity_id: PrimaryKey
     activity_name: Dict[str, Any]
-    description: Dict[str, Any]
     cover_image: str
     geometry: Geometry = None
 
@@ -521,7 +520,6 @@ class ActivityBrief(Entity):
             activity_id=activity.activity_id,
             activity_name=activity.activity_name,
             cover_image=activity.cover_image,
-            description=activity.description,
             geometry=activity.geojson,
             **cls.links(activity),
         )
@@ -547,7 +545,11 @@ class Activity(Entity, ActivityCreate):
         )
 
 
-class ActivityCollection(EntityCollection[ActivityBrief]):
+class ActivityCollection(EntityCollection[Activity]):
+    pass
+
+
+class ActivityBriefCollection(EntityCollection[ActivityBrief]):
     pass
 
 
