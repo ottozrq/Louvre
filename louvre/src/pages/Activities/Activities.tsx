@@ -54,6 +54,9 @@ const ActivitiesPage: React.FC = () => {
         searchText ? searchText : undefined,
         searchField ? searchField : undefined,
         searchDate ? searchDate : undefined,
+        undefined,
+        undefined,
+        undefined,
         pageToken,
         30,
       )

@@ -85,6 +85,55 @@ export interface Activity {
 /**
  * 
  * @export
+ * @interface ActivityBrief
+ */
+export interface ActivityBrief {
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityBrief
+     */
+    'self_link': string;
+    /**
+     * 
+     * @type {Kind}
+     * @memberof ActivityBrief
+     */
+    'kind': Kind;
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityBrief
+     */
+    'activity_id': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityBrief
+     */
+    'activity_name': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ActivityBrief
+     */
+    'description': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof ActivityBrief
+     */
+    'cover_image': string;
+    /**
+     * 
+     * @type {GeometryElement | GeometryCollection}
+     * @memberof ActivityBrief
+     */
+    'geometry'?: GeometryElement | GeometryCollection;
+}
+/**
+ * 
+ * @export
  * @interface ActivityCollection
  */
 export interface ActivityCollection {
@@ -132,10 +181,10 @@ export interface ActivityCollection {
     'total_pages': number;
     /**
      * 
-     * @type {Array<Activity>}
+     * @type {Array<ActivityBrief>}
      * @memberof ActivityCollection
      */
-    'contents': Array<Activity>;
+    'contents': Array<ActivityBrief>;
 }
 /**
  * 
@@ -1995,12 +2044,15 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
          * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
+         * @param {number} [lat] 
+         * @param {number} [lon] 
+         * @param {number} [range] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchActivitiesSearchActivitiesGet: async (q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        searchActivitiesSearchActivitiesGet: async (q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/search/activities/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2023,6 +2075,18 @@ export const ActivityApiAxiosParamCreator = function (configuration?: Configurat
 
             if (date !== undefined) {
                 localVarQueryParameter['date'] = date;
+            }
+
+            if (lat !== undefined) {
+                localVarQueryParameter['lat'] = lat;
+            }
+
+            if (lon !== undefined) {
+                localVarQueryParameter['lon'] = lon;
+            }
+
+            if (range !== undefined) {
+                localVarQueryParameter['range'] = range;
             }
 
             if (pageToken !== undefined) {
@@ -2127,13 +2191,16 @@ export const ActivityApiFp = function(configuration?: Configuration) {
          * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
+         * @param {number} [lat] 
+         * @param {number} [lon] 
+         * @param {number} [range] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.searchActivitiesSearchActivitiesGet(q, fields, date, pageToken, pageSize, options);
+        async searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchActivitiesSearchActivitiesGet(q, fields, date, lat, lon, range, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2213,13 +2280,16 @@ export const ActivityApiFactory = function (configuration?: Configuration, baseP
          * @param {string} [q] 
          * @param {string} [fields] 
          * @param {string} [date] 
+         * @param {number} [lat] 
+         * @param {number} [lon] 
+         * @param {number} [range] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
-            return localVarFp.searchActivitiesSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<ActivityCollection> {
+            return localVarFp.searchActivitiesSearchActivitiesGet(q, fields, date, lat, lon, range, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2310,14 +2380,17 @@ export class ActivityApi extends BaseAPI {
      * @param {string} [q] 
      * @param {string} [fields] 
      * @param {string} [date] 
+     * @param {number} [lat] 
+     * @param {number} [lon] 
+     * @param {number} [range] 
      * @param {string} [pageToken] 
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ActivityApi
      */
-    public searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return ActivityApiFp(this.configuration).searchActivitiesSearchActivitiesGet(q, fields, date, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public searchActivitiesSearchActivitiesGet(q?: string, fields?: string, date?: string, lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).searchActivitiesSearchActivitiesGet(q, fields, date, lat, lon, range, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
