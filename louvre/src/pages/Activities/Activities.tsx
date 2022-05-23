@@ -58,14 +58,14 @@ const ActivitiesPage: React.FC = () => {
         undefined,
         undefined,
         pageToken,
-        30,
+        20,
       )
         .then((data) => {
           setActivitiesWithData(data);
         });
     else
       api.activities
-        .getActivitiesActivitiesGet(pageToken, 30)
+        .getActivitiesActivitiesGet(pageToken, 20)
         .then((data) => {
           setActivitiesWithData(data);
         });
