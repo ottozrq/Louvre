@@ -253,7 +253,6 @@ class Geometry(GeoJsonBase, PsqlBase):
     description = Column(JSON, nullable=True)
     extra = Column(JSON, nullable=True)
     display = Column(Boolean, server_default="TRUE", nullable=False)
-    self_link = Column(String, nullable=True)
 
 
 class Activity(GeoJsonBase, PsqlBase):
