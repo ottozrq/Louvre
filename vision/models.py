@@ -244,6 +244,7 @@ class EntityCollection(pydantic.generics.GenericModel, Entity, Generic[EntityT])
 
 class GeometryType(AutoEnum):
     Point = auto()
+    MultiPoint = auto()
     LineString = auto()
     Polygon = auto()
     MultiPolygon = auto()
@@ -559,10 +560,10 @@ class ActivityKeywords(Model):
 
 class GeometryItem(Entity):
     geometry_id: PrimaryKey
-    geometry_name: Dict[str, Any]
     geometry_type: str
     geometry: Geometry
-    item_link: Link
+    geometry_name: Dict[str, Any] = None
+    extra: Dict[str, Any] = None
     display: bool = True
 
     class Config:
@@ -576,26 +577,8 @@ class GeometryItem(Entity):
             geometry_name=geometry.geometry_name,
             geometry_type=geometry.geometry_type,
             geometry=geometry.geojson,
-            item_link=geometry.self_link,
-            **cls.links(geometry),
-        )
-
-
-class GeometryItemDetailed(GeometryItem):
-    description: Dict[str, Any] = None
-    extra: Dict[str, Any] = None
-    display: bool = True
-
-    @classmethod
-    def from_db(cls, geometry: sm.Geometry):
-        return cls(
-            geometry_id=geometry.geometry_id,
-            geometry_name=geometry.geometry_name,
-            geometry_type=geometry.geometry_type,
             description=geometry.description,
             extra=geometry.extra,
-            geometry=geometry.geojson,
-            item_link=geometry.self_link,
             **cls.links(geometry),
         )
 

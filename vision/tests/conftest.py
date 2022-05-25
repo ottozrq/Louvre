@@ -193,3 +193,11 @@ def activity_1(fix):
         fix,
         activity_id=1,
     ).create()
+
+
+@pytest.fixture
+def geometry_1(fix):
+    return fixts.Geometry(
+        fix,
+        geometry_id=1,
+    ).create()

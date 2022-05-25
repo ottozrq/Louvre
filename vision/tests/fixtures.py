@@ -76,3 +76,10 @@ class Activity(BaseFix):
     geometry = "POINT(1 1)"
     description = {"en": "This is an activity"}
     extra = {}
+
+
+class Geometry(BaseFix):
+    MODEL = sm.Geometry
+    geometry_name = {"en": "geom"}
+    geometry_type = "geom"
+    geometry = "POINT(1 1)"

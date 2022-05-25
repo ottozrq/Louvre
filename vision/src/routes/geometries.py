@@ -15,19 +15,22 @@ def get_geometries(
     lat: float = 48.8566,
     lon: float = 2.3522,
     range: int = 3000,
+    geometry_type: str = None,
     db: VisionDb = Depends(d.get_psql),
     pagination: m.Pagination = Depends(d.get_pagination),
 ):
-    return m.GeometryItemCollection.paginate(
-        pagination,
-        m.GeometryItem.db(db)
-        .query.filter(
-            sm.Geometry.display
-        ).filter(
+    geometry_items = m.GeometryItem.db(db).query.filter(sm.Geometry.display)
+    if geometry_type:
+        geometry_items = geometry_items.filter(
+            sm.Geometry.geometry_type == geometry_type
+        )
+    geometry_items = (
+        geometry_items.filter(
             func.ST_DWithin(
                 func.ST_GeogFromWKB(WKTElement(f"POINT({lon} {lat})", srid=4326)),
                 sm.Geometry.geometry,
-                range
+                range,
             )
-        ),
-    )
+        )
+    ).order_by(sm.Geometry.geometry_id)
+    return m.GeometryItemCollection.paginate(pagination, geometry_items)
