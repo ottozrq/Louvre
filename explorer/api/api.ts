@@ -858,12 +858,6 @@ export interface GeometryItem {
     'geometry_id': number;
     /**
      * 
-     * @type {object}
-     * @memberof GeometryItem
-     */
-    'geometry_name': object;
-    /**
-     * 
      * @type {string}
      * @memberof GeometryItem
      */
@@ -876,10 +870,16 @@ export interface GeometryItem {
     'geometry': GeometryElement | GeometryCollection;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof GeometryItem
      */
-    'item_link': string;
+    'geometry_name'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof GeometryItem
+     */
+    'extra'?: object;
     /**
      * 
      * @type {boolean}
@@ -950,6 +950,7 @@ export interface GeometryItemCollection {
 
 export enum GeometryType {
     Point = 'Point',
+    MultiPoint = 'MultiPoint',
     LineString = 'LineString',
     Polygon = 'Polygon',
     MultiPolygon = 'MultiPolygon',
@@ -2977,12 +2978,13 @@ export const GeometryApiAxiosParamCreator = function (configuration?: Configurat
          * @param {number} [lat] 
          * @param {number} [lon] 
          * @param {number} [range] 
+         * @param {string} [geometryType] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGeometriesGeometriesGet: async (lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getGeometriesGeometriesGet: async (lat?: number, lon?: number, range?: number, geometryType?: string, pageToken?: string, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/geometries/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3005,6 +3007,10 @@ export const GeometryApiAxiosParamCreator = function (configuration?: Configurat
 
             if (range !== undefined) {
                 localVarQueryParameter['range'] = range;
+            }
+
+            if (geometryType !== undefined) {
+                localVarQueryParameter['geometry_type'] = geometryType;
             }
 
             if (pageToken !== undefined) {
@@ -3042,13 +3048,14 @@ export const GeometryApiFp = function(configuration?: Configuration) {
          * @param {number} [lat] 
          * @param {number} [lon] 
          * @param {number} [range] 
+         * @param {string} [geometryType] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometryItemCollection>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometriesGeometriesGet(lat, lon, range, pageToken, pageSize, options);
+        async getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, geometryType?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometryItemCollection>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometriesGeometriesGet(lat, lon, range, geometryType, pageToken, pageSize, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3067,13 +3074,14 @@ export const GeometryApiFactory = function (configuration?: Configuration, baseP
          * @param {number} [lat] 
          * @param {number} [lon] 
          * @param {number} [range] 
+         * @param {string} [geometryType] 
          * @param {string} [pageToken] 
          * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<GeometryItemCollection> {
-            return localVarFp.getGeometriesGeometriesGet(lat, lon, range, pageToken, pageSize, options).then((request) => request(axios, basePath));
+        getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, geometryType?: string, pageToken?: string, pageSize?: number, options?: any): AxiosPromise<GeometryItemCollection> {
+            return localVarFp.getGeometriesGeometriesGet(lat, lon, range, geometryType, pageToken, pageSize, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3091,14 +3099,15 @@ export class GeometryApi extends BaseAPI {
      * @param {number} [lat] 
      * @param {number} [lon] 
      * @param {number} [range] 
+     * @param {string} [geometryType] 
      * @param {string} [pageToken] 
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GeometryApi
      */
-    public getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
-        return GeometryApiFp(this.configuration).getGeometriesGeometriesGet(lat, lon, range, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public getGeometriesGeometriesGet(lat?: number, lon?: number, range?: number, geometryType?: string, pageToken?: string, pageSize?: number, options?: AxiosRequestConfig) {
+        return GeometryApiFp(this.configuration).getGeometriesGeometriesGet(lat, lon, range, geometryType, pageToken, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

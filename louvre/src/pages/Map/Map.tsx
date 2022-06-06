@@ -12,7 +12,7 @@ import MapMarker from "../../components/Map/MapMarker/MapMarker";
 
 import './Map.css';
 import 'leaflet/dist/leaflet.css'
-import { Activity } from '../../api';
+import { Activity, GeometryItem } from '../../api';
 import api from '../../components/api';
 import { getTranslate } from '../../components/utils';
 
@@ -26,9 +26,11 @@ const MapComponent: React.FC = () => {
 
 const MapPage: React.FC = () => {
   const history = useHistory();
-  const [showLoading, setShowLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<any>([48.8566, 2.3522]);
+  const [range, setRange] = useState<number>(1000);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [geoItems, setGeoItems] = useState<GeometryItem[]>([]);
   useEffect(() => {
     api.activities.searchActivitiesSearchActivitiesGet(
       undefined,
@@ -36,10 +38,18 @@ const MapPage: React.FC = () => {
       undefined,
       currentLocation[0],
       currentLocation[1],
-      3000).then((data) => {
-        setActivities(data.data.contents);
-      });
-    printCurrentPosition();
+      range
+    ).then((data) => {
+      setActivities(data.data.contents);
+    });
+    api.geometries.getGeometriesGeometriesGet(
+      currentLocation[0],
+      currentLocation[1],
+      range
+    ).then((data) => {
+      setGeoItems(data.data.contents);
+    });
+    // printCurrentPosition();
   }, [currentLocation]);
 
   const printCurrentPosition = async () => {
@@ -73,8 +83,16 @@ const MapPage: React.FC = () => {
                 href={activity?.self_link}
               >
               </MapMarker>
-            })
-            }
+            })}
+            {geoItems.map((geoItem) => {
+              return <MapMarker
+                key={geoItem.geometry_id}
+                popup={true}
+                type={geoItem.geometry_type}
+                geometry={geoItem.geometry}
+                extra={geoItem.extra}
+              ></MapMarker>
+            })}
           </LayerGroup>
           <MapMarker
             popup={false}
