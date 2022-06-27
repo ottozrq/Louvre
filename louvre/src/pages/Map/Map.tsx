@@ -28,7 +28,7 @@ const MapPage: React.FC = () => {
   const history = useHistory();
   const [showLoading, setShowLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<any>([48.8566, 2.3522]);
-  const [range, setRange] = useState<number>(1000);
+  const [range, setRange] = useState<number>(1500);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [geoItems, setGeoItems] = useState<GeometryItem[]>([]);
   useEffect(() => {
@@ -49,7 +49,7 @@ const MapPage: React.FC = () => {
     ).then((data) => {
       setGeoItems(data.data.contents);
     });
-    // printCurrentPosition();
+    printCurrentPosition();
   }, [currentLocation]);
 
   const printCurrentPosition = async () => {

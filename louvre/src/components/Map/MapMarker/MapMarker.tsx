@@ -30,6 +30,21 @@ const meIcon = L.icon({
   iconSize: new L.Point(25, 25),
 });
 
+const waterIcon = L.icon({
+  iconUrl: "/assets/images/water.png",
+  iconSize: new L.Point(30, 30),
+});
+
+const wifiIcon = L.icon({
+  iconUrl: "/assets/images/wifi.png",
+  iconSize: new L.Point(30, 30),
+});
+
+const toiletIcon = L.icon({
+  iconUrl: "/assets/images/toilet.png",
+  iconSize: new L.Point(30, 30),
+});
+
 const lonLat2LatLon: any = (lonLat: Array<number>) => {
   return [lonLat[1], lonLat[0]];
 }
@@ -80,7 +95,13 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
         </Polygon>
       }
       {type == "drinking_water" &&
-        <></>
+        < Marker position={lonLat2LatLon(geometry["coordinates"])} icon={waterIcon}>
+          {popup &&
+            <Popup>
+              <h3>{extra["voie"]}</h3>
+              <p><b>Type: </b>{extra["type_objet"]}</p>
+            </Popup>}
+        </Marker>
       }
       {type == "market" &&
         <Polygon
@@ -93,11 +114,24 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
             </Popup>}
         </Polygon>
       }
-      {type == "toilet" &&
-        <></>
+            {type == "toilet" &&
+        < Marker position={lonLat2LatLon(geometry["coordinates"][0])} icon={toiletIcon}>
+          {popup &&
+            <Popup>
+              <h3>{extra["adresse"]}</h3>
+              <p><b>type: </b>{extra["type"]}</p>
+              <p><b>hour: </b>{extra["horaire"]}</p>
+              <p><b>pmr: </b>{extra["acces_pmr"]}</p>
+            </Popup>}
+        </Marker>
       }
       {type == "wifi" &&
-        <></>
+        < Marker position={lonLat2LatLon(geometry["coordinates"])} icon={wifiIcon}>
+          {popup &&
+            <Popup>
+              <p>{extra["nom_site"]}</p>
+            </Popup>}
+        </Marker>
       }
     </>
   );
