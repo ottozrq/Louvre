@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { LayerGroup, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
+import { LayerGroup, MapContainer, TileLayer, useMap } from 'react-leaflet'
 import { useHistory } from 'react-router';
 import {
+  IonCard,
+  IonCol,
   IonContent,
+  IonIcon,
   IonLoading,
   IonPage,
+  IonRow,
 } from '@ionic/react';
-import { Geolocation, Position } from '@capacitor/geolocation';
+import { Geolocation } from '@capacitor/geolocation';
 
 import MapMarker from "../../components/Map/MapMarker/MapMarker";
 
@@ -15,6 +19,7 @@ import 'leaflet/dist/leaflet.css'
 import { Activity, GeometryItem } from '../../api';
 import api from '../../components/api';
 import { getTranslate } from '../../components/utils';
+import { accessibilityOutline, leafOutline, manOutline, storefrontOutline, waterOutline, wifiOutline } from 'ionicons/icons';
 
 const MapComponent: React.FC = () => {
   const map = useMap();
@@ -31,33 +36,50 @@ const MapPage: React.FC = () => {
   const [range, setRange] = useState<number>(1500);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [geoItems, setGeoItems] = useState<GeometryItem[]>([]);
+  const [geoType, setGeoType] = useState<string | undefined>(undefined);
   useEffect(() => {
-    api.activities.searchActivitiesSearchActivitiesGet(
-      undefined,
-      undefined,
-      undefined,
-      currentLocation[0],
-      currentLocation[1],
-      range
-    ).then((data) => {
-      setActivities(data.data.contents);
-    });
-    api.geometries.getGeometriesGeometriesGet(
-      currentLocation[0],
-      currentLocation[1],
-      range
-    ).then((data) => {
-      setGeoItems(data.data.contents);
-    });
+    if (! geoType || geoType === "activity")
+      api.activities.searchActivitiesSearchActivitiesGet(
+        undefined,
+        undefined,
+        undefined,
+        currentLocation[0],
+        currentLocation[1],
+        range
+      ).then((data) => {
+        setActivities(data.data.contents);
+      });
+    else
+      setActivities([]);
+    if (! geoType || geoType !== "activity")
+      api.geometries.getGeometriesGeometriesGet(
+        currentLocation[0],
+        currentLocation[1],
+        range,
+        geoType
+      ).then((data) => {
+        setGeoItems(data.data.contents);
+      });
+    else
+      setGeoItems([]);
     printCurrentPosition();
-  }, [currentLocation]);
+  }, [currentLocation, range, geoType]);
 
   const printCurrentPosition = async () => {
     const coordinates = await Geolocation.getCurrentPosition();
     setCurrentLocation([coordinates.coords.latitude, coordinates.coords.longitude]);
     console.log('Current position:', coordinates);
     setShowLoading(false);
+    
+    // mapRef.flyTo()
   };
+
+  const geoTypeFilter = (gt: string) => {
+    if (geoType !== gt)
+      setGeoType(gt);
+    else
+      setGeoType(undefined);
+  }
 
   return (
     <IonPage className="scan-container">
@@ -100,6 +122,16 @@ const MapPage: React.FC = () => {
             geometry={currentLocation}>
           </MapMarker>
         </MapContainer>
+        <IonCard className='map-tool-box'>
+          <IonRow>
+            <IonCol><IonIcon color={geoType === 'activity'? "primary": ""} src={accessibilityOutline} onClick={()=> geoTypeFilter("activity")}/></IonCol>
+            <IonCol><IonIcon color={geoType === 'cool_green'? "primary": ""} src={leafOutline} onClick={()=> geoTypeFilter("cool_green")}/></IonCol>
+            <IonCol><IonIcon color={geoType === 'drinking_water'? "primary": ""} src={waterOutline} onClick={()=> geoTypeFilter("drinking_water")}/></IonCol>
+            <IonCol><IonIcon color={geoType === 'wifi'? "primary": ""} src={wifiOutline} onClick={()=> geoTypeFilter("wifi")}/></IonCol>
+            <IonCol><IonIcon color={geoType === 'toilet'? "primary": ""} src={manOutline} onClick={()=> geoTypeFilter("toilet")}/></IonCol>
+            <IonCol><IonIcon color={geoType === 'market'? "primary": ""} src={storefrontOutline} onClick={()=> geoTypeFilter("market")}/></IonCol>
+          </IonRow>
+        </IonCard>
         <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}

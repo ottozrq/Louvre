@@ -1,11 +1,4 @@
-import L, { popup } from "leaflet";
-import {
-  IonBackButton,
-  IonButtons,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/react';
+import L from "leaflet";
 import { useHistory } from 'react-router';
 import { Marker, Popup, Polygon } from 'react-leaflet'
 import './MapMarker.css';
@@ -61,7 +54,6 @@ const purpleOptions = { color: 'purple' }
 
 const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cover_image, href, extra }) => {
   const history = useHistory();
-  console.log(type);
   return (
     <>
       {geometry["type"] === "Point" && type === "activity" &&
@@ -69,6 +61,7 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
           {popup &&
             <Popup>
               <img
+                alt="cover"
                 src={cover_image}
                 onClick={() => {
                   if (href)
@@ -83,7 +76,7 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
         < Marker position={geometry} icon={meIcon}>
         </Marker>
       }
-      {type == "cool_green" &&
+      {type === "cool_green" &&
         <Polygon
           pathOptions={limeOptions}
           positions={allLonLat2LatLon(geometry["coordinates"][0])}>
@@ -94,7 +87,7 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
             </Popup>}
         </Polygon>
       }
-      {type == "drinking_water" &&
+      {type === "drinking_water" &&
         < Marker position={lonLat2LatLon(geometry["coordinates"])} icon={waterIcon}>
           {popup &&
             <Popup>
@@ -103,7 +96,7 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
             </Popup>}
         </Marker>
       }
-      {type == "market" &&
+      {type === "market" &&
         <Polygon
           pathOptions={purpleOptions}
           positions={allLonLat2LatLon(geometry["coordinates"][0])}>
@@ -114,7 +107,7 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
             </Popup>}
         </Polygon>
       }
-            {type == "toilet" &&
+            {type === "toilet" &&
         < Marker position={lonLat2LatLon(geometry["coordinates"][0])} icon={toiletIcon}>
           {popup &&
             <Popup>
@@ -125,7 +118,7 @@ const MapMarker: React.FC<ContainerProps> = ({ popup, geometry, name, type, cove
             </Popup>}
         </Marker>
       }
-      {type == "wifi" &&
+      {type === "wifi" &&
         < Marker position={lonLat2LatLon(geometry["coordinates"])} icon={wifiIcon}>
           {popup &&
             <Popup>
