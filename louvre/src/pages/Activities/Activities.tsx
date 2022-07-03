@@ -150,19 +150,19 @@ const ActivitiesPage: React.FC = () => {
           }}
         ></IonIcon>
       </IonToolbar>
+      {
+        showCalendar &&
+        <IonDatetime
+          className="calendar"
+          presentation="date"
+          onIonChange={(e) => {
+            setSearchDate(e.detail.value ? e.detail.value.split("T")[0] : "");
+            setShowCalendar(false);
+            searchbarRef.current.setFocus();
+          }}
+        ></IonDatetime>
+      }
       <IonContent fullscreen>
-        {
-          showCalendar &&
-          <IonDatetime
-            className="calendar"
-            presentation="date"
-            onIonChange={(e) => {
-              setSearchDate(e.detail.value ? e.detail.value.split("T")[0] : "");
-              setShowCalendar(false);
-              searchbarRef.current.setFocus();
-            }}
-          ></IonDatetime>
-        }
         {showFields &&
           <IonList>
             <IonItem onClick={() => setKeywordsSearchText("")}>All</IonItem>

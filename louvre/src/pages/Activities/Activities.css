@@ -3,5 +3,9 @@
 }
 
 .calendar {
-    margin: 10px auto;
+    /* margin: 10px auto; */
+    left: 5%;
+    top: 100px;
+    position: absolute;
+    z-index: 1000;
 }
