@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonLoading,
   IonPage,
+  IonRange,
   IonRow,
 } from '@ionic/react';
 import { Geolocation } from '@capacitor/geolocation';
@@ -33,29 +34,30 @@ const MapPage: React.FC = () => {
   const history = useHistory();
   const [showLoading, setShowLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<any>([48.8566, 2.3522]);
-  const [range, setRange] = useState<number>(1500);
+  const [range, setRange] = useState<number>(15);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [geoItems, setGeoItems] = useState<GeometryItem[]>([]);
   const [geoType, setGeoType] = useState<string | undefined>(undefined);
   useEffect(() => {
-    if (! geoType || geoType === "activity")
+    console.log(range);
+    if (!geoType || geoType === "activity")
       api.activities.searchActivitiesSearchActivitiesGet(
         undefined,
         undefined,
         undefined,
         currentLocation[0],
         currentLocation[1],
-        range
+        range * 100
       ).then((data) => {
         setActivities(data.data.contents);
       });
     else
       setActivities([]);
-    if (! geoType || geoType !== "activity")
+    if (!geoType || geoType !== "activity")
       api.geometries.getGeometriesGeometriesGet(
         currentLocation[0],
         currentLocation[1],
-        range,
+        range * 100,
         geoType
       ).then((data) => {
         setGeoItems(data.data.contents);
@@ -70,7 +72,6 @@ const MapPage: React.FC = () => {
     setCurrentLocation([coordinates.coords.latitude, coordinates.coords.longitude]);
     console.log('Current position:', coordinates);
     setShowLoading(false);
-    
     // mapRef.flyTo()
   };
 
@@ -124,13 +125,14 @@ const MapPage: React.FC = () => {
         </MapContainer>
         <IonCard className='map-tool-box'>
           <IonRow>
-            <IonCol><IonIcon color={geoType === 'activity'? "primary": ""} src={accessibilityOutline} onClick={()=> geoTypeFilter("activity")}/></IonCol>
-            <IonCol><IonIcon color={geoType === 'cool_green'? "primary": ""} src={leafOutline} onClick={()=> geoTypeFilter("cool_green")}/></IonCol>
-            <IonCol><IonIcon color={geoType === 'drinking_water'? "primary": ""} src={waterOutline} onClick={()=> geoTypeFilter("drinking_water")}/></IonCol>
-            <IonCol><IonIcon color={geoType === 'wifi'? "primary": ""} src={wifiOutline} onClick={()=> geoTypeFilter("wifi")}/></IonCol>
-            <IonCol><IonIcon color={geoType === 'toilet'? "primary": ""} src={manOutline} onClick={()=> geoTypeFilter("toilet")}/></IonCol>
-            <IonCol><IonIcon color={geoType === 'market'? "primary": ""} src={storefrontOutline} onClick={()=> geoTypeFilter("market")}/></IonCol>
+            <IonCol><IonIcon color={geoType === 'activity' ? "primary" : ""} src={accessibilityOutline} onClick={() => geoTypeFilter("activity")} /></IonCol>
+            <IonCol><IonIcon color={geoType === 'cool_green' ? "primary" : ""} src={leafOutline} onClick={() => geoTypeFilter("cool_green")} /></IonCol>
+            <IonCol><IonIcon color={geoType === 'drinking_water' ? "primary" : ""} src={waterOutline} onClick={() => geoTypeFilter("drinking_water")} /></IonCol>
+            <IonCol><IonIcon color={geoType === 'wifi' ? "primary" : ""} src={wifiOutline} onClick={() => geoTypeFilter("wifi")} /></IonCol>
+            <IonCol><IonIcon color={geoType === 'toilet' ? "primary" : ""} src={manOutline} onClick={() => geoTypeFilter("toilet")} /></IonCol>
+            <IonCol><IonIcon color={geoType === 'market' ? "primary" : ""} src={storefrontOutline} onClick={() => geoTypeFilter("market")} /></IonCol>
           </IonRow>
+          <IonRange min={10} max={40} value={range} onIonKnobMoveEnd={({ detail }) => setRange(detail.value as number)}></IonRange>
         </IonCard>
         <IonLoading
           isOpen={showLoading}
